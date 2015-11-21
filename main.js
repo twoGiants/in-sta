@@ -8,8 +8,10 @@ main();
 
 function main() {
     // call a function every "delay" seconds "duration" times
-    var delay = 43200;
+    var delay = 43200000;
     var duration = 3;
+    
+    console.log("...App start...\n\n");
     
     var intId = setInterval(function() {
         var timestamp = new Date();
