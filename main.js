@@ -4,7 +4,9 @@ var request = require("request");
 var cheerio = require("cheerio");
 var fs = require("fs");
 
-main();
+console.log("Hello World!");
+
+//main();
 
 function main() {
     // call a function every "delay" seconds "duration" times
