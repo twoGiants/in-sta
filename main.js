@@ -7,7 +7,6 @@ var fs = require("fs");
 // -----------------------------------------------------
 var mongojs = require("mongojs");
 
-// ??
 var ip_addr = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 var port = process.env.OPENSHIFT_NODEJS_PORT || '27017';
 
@@ -21,16 +20,44 @@ if (process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
         process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
         process.env.OPENSHIFT_APP_NAME;
 }
-
-var db = mongojs(connection_string, ['log']);
-var myCollection = db.collection('log');
-
+var collectionName = 'instagram';
+var db = mongojs(connection_string, [collectionName]);
+var myCollection = db.collection(collectionName);
 
 myCollection.find(function (err, docs) {
     console.log(JSON.stringify(docs, null, '\t'));
-    db.close();
 });
-console.log("Hello World!");
+
+insertData();
+
+function insertData() {
+    var document = {
+        "ig_user": "stazzmatazz",
+        "ig_user_id": "739298907",
+        "ig_user_statistics": [
+            {
+                "followers": "31167",
+                "followings": "4336",
+                "timestamp": "1452624753720"
+            }
+        ]
+    };
+    
+    myCollection.update({
+        "ig_user": "stazzmatazz"
+    }, document, {
+        upsert: true
+    }, function (err, doc) {
+        if (err) console.error(err.message);
+        console.log(JSON.stringify(doc, null, '\t'));
+        
+        myCollection.find(function (err, docs) {
+            console.log(JSON.stringify(docs, null, '\t'));
+            db.close();
+        });
+    });
+}
+
 // -----------------------------------------------------
 
 
