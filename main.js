@@ -4,7 +4,35 @@ var request = require("request");
 var cheerio = require("cheerio");
 var fs = require("fs");
 
+// -----------------------------------------------------
+var mongojs = require("mongojs");
+
+// ??
+var ip_addr = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
+var port = process.env.OPENSHIFT_NODEJS_PORT || '27017';
+
+// default to a 'localhost' configuration:
+var connection_string = ip_addr + ':' + port + '/nodejs';
+// if OPENSHIFT env variable are present, use the available connection info:
+if (process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
+    connection_string = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
+        process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
+        process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
+        process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
+        process.env.OPENSHIFT_APP_NAME;
+}
+
+var db = mongojs(connection_string, ['log']);
+var myCollection = db.collection('log');
+
+
+myCollection.find(function (err, docs) {
+    console.log(JSON.stringify(docs, null, '\t'));
+    db.close();
+});
 console.log("Hello World!");
+// -----------------------------------------------------
+
 
 //main();
 
