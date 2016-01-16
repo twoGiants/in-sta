@@ -7,6 +7,7 @@ var fs = require("fs");
 // -----------------------------------------------------
 var mongojs = require("mongojs");
 
+// ??
 var ip_addr = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 var port = process.env.OPENSHIFT_NODEJS_PORT || '27017';
 
@@ -20,13 +21,16 @@ if (process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
         process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
         process.env.OPENSHIFT_APP_NAME;
 }
-var collectionName = 'instagram';
-var db = mongojs(connection_string, [collectionName]);
-var myCollection = db.collection(collectionName);
+
+var db = mongojs(connection_string, ['log']);
+var myCollection = db.collection('log');
+
 
 myCollection.find(function (err, docs) {
     console.log(JSON.stringify(docs, null, '\t'));
+    db.close();
 });
+<<<<<<< HEAD
 
 insertData();
 
@@ -53,6 +57,9 @@ function insertData() {
     });
 }
 
+=======
+console.log("Hello World!");
+>>>>>>> parent of 8b646f8... added "instagram" collection to "nodejs" db
 // -----------------------------------------------------
 
 
