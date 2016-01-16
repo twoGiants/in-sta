@@ -50,11 +50,6 @@ function insertData() {
     }, function (err, doc) {
         if (err) console.error(err.message);
         console.log(JSON.stringify(doc, null, '\t'));
-        
-        myCollection.find(function (err, docs) {
-            console.log(JSON.stringify(docs, null, '\t'));
-            db.close();
-        });
     });
 }
 
