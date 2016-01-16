@@ -1,0 +1,27 @@
+{
+    "statistics": [{
+        "timestamp": "1413191580000",
+        "followers": "267326",
+        "followings": "1265"
+    }, {
+        "timestamp": "1413277980000",
+        "followers": "267333",
+        "followings": "1265"
+    }, {
+        "timestamp": "1413364380000",
+        "followers": "267337",
+        "followings": "1265"
+    }, {
+        "timestamp": "1413450780000",
+        "followers": "267345",
+        "followings": "1265"
+    }, {
+        "timestamp": "1413537180000",
+        "followers": "267389",
+        "followings": "1265"
+    }, {
+        "timestamp": "1413623580000",
+        "followers": "267426",
+        "followings": "1265"
+    }]
+}
