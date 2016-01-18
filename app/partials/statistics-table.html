@@ -1,0 +1,23 @@
+<table class="table">
+    <caption class="text-left"><h1>Statistics: {{ data.ig_user }}</h1></caption>
+    <tr class="table-header">
+        <th><a href="" ng-click="reverse=!reverse;order('timestamp', reverse)">Date</a></th>
+        <th class="number"><a href="" ng-click="reverse=!reverse;order('followers', reverse)">Followers</a></th>
+        <th class="number"><a href="" ng-click="reverse=!reverse;order('followings', reverse)">Followings</a></th>
+        <th class="number"><a href="" ng-click="reverse=!reverse;order('growth', reverse)">Growth</a></th>
+    </tr>
+    <tr class="data-row" ng-class-even="'even'" ng-repeat="row in data.ig_user_statistics">
+        <td>
+            {{ row.timestamp | date: 'dd.MM.yyyy' }}
+        </td>
+        <td class="number">
+            {{ row.followers }}
+        </td>
+        <td class="number">
+            {{ row.followings }}
+        </td>
+        <td class="number">
+            {{ row.growth }}
+        </td>
+    </tr>
+</table>
