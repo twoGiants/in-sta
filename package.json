@@ -25,10 +25,11 @@
         "body-parser": "~1.14.2",
         "async": "~1.5.2",
         "cheerio": "~0.19.0",
-        "request": "~2.67.0"
+        "request": "~2.67.0",
+        "bower": "latest"
     },
     "scripts": {
-        "postinstall": "bower install",
+        "postinstall": "HOME=$OPENSHIFT_REPO_DIR bower install || bower install",
 
         "prestart": "npm install",
         "start": "http-server -a localhost -p 8001 -c-1",
