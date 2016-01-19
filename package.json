@@ -29,7 +29,7 @@
         "bower": "latest"
     },
     "scripts": {
-        "postinstall": "HOME=$OPENSHIFT_REPO_DIR bower install || bower install",
+        "postinstall": "if [ -d \"$OPENSHIFT_REPO_DIR\" ]; then (export HOME=\"$OPENSHIFT_REPO_DIR\"/..; bower install) else (bower install) fi",
 
         "prestart": "npm install",
         "start": "http-server -a localhost -p 8001 -c-1",
