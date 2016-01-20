@@ -30,12 +30,16 @@ var app = express();
 var db = mongojs("instagram", ["instagram"]);
 
 // SERVER ---------------------------------------------------------
+var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+
 app.use(express.static(__dirname + '/app'));
 app.use(bodyParser.json());
 
 // start server
-app.listen(3000);
-log("Server running on port 3000");
+app.listen(port, ipaddress, function () {
+    log("Server running on port " + port);
+});
 
 // get all data from DB, send back to FE
 app.get("/statistics", function (err, res) {
