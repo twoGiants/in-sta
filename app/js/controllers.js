@@ -7,7 +7,7 @@ inStaControllers.controller('tableCtrl', ['$scope', '$filter', '$http', function
     // send request to server
     $http.get('/statistics').success(function (response) {
         // select which collection to display
-        $scope.data = response[2];
+        $scope.data = response[0];
 
         // calculate growth
         for (var i in $scope.data.ig_user_statistics) {

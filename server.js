@@ -8,6 +8,19 @@
 
 require("use-strict");
 
+// OPENSHIFT-SERVER-DB-CONFIG -------------------------------------
+var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
+var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+var connection_string = '127.0.0.1:27017/nodejs';
+
+if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
+    connection_string = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ':' +
+        process.env.OPENSHIFT_MONGODB_DB_PASSWORD + '@' +
+        process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
+        process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
+        process.env.OPENSHIFT_APP_NAME;
+}
+
 // DEBUG -----------------------------
 var debug = require("debug");
 var log = debug("server:log");
@@ -27,11 +40,7 @@ var cheerio = require("cheerio");
 var request = require("request");
 
 var app = express();
-var db = mongojs("instagram", ["instagram"]);
-
-// SERVER ---------------------------------------------------------
-var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
-var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+var db = mongojs(connection_string, ['instagram']);
 
 app.use(express.static(__dirname + '/app'));
 app.use(bodyParser.json());
@@ -53,7 +62,6 @@ app.get("/statistics", function (err, res) {
 app.get('/test', function (err, res) {
     log('I received a GET erquest from /test.');
 });
-
 
 // DB -------------------------------------------------------------
 // update !existing! user, works only with existing users
