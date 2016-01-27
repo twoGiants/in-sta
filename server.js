@@ -38,17 +38,22 @@ app.use(bodyParser.json());
 
 // start server
 app.listen(port, ipaddress, function () {
-    log("Server running on port " + port);
+    log('Server running on http://' + ipaddress + ':' + port);
 });
 
 // get all data from DB, send back to FE
 app.get("/statistics", function (err, res) {
-    log("I received a GET request from tableCtrl.")
+    log("I received a GET request from tableCtrl.");
 
     db.instagram.find(function (err, docs) {
         res.json(docs);
     });
 });
+
+app.get('/test', function (err, res) {
+    log('I received a GET erquest from /test.');
+});
+
 
 // DB -------------------------------------------------------------
 // update !existing! user, works only with existing users
@@ -122,6 +127,7 @@ function insertData() {
 }
 
 // OTHER ----------------------------------------------------------
+// get data from iconosquare
 //loop();
 
 function loop() {

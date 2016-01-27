@@ -1,5 +1,7 @@
 'use strict';
 
+// NOTHING HERE
+
 // Example code ---------------------------------------------------
 var inStaServices = angular.module('inStaServices', ['ngResource']);
 
