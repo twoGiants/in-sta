@@ -32,7 +32,7 @@
         "postinstall": "npm install bower; HOME=$OPENSHIFT_REPO_DIR bower install || bower install",
 
         "prestart": "npm install",
-        "start": "DEBUG=*:log,*:info,*:error node server.js",
+        "start": "DEBUG=*:log,*:info,*:error node server.js"
     },
     "private": true,
     "main": "server.js"
