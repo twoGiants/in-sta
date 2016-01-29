@@ -137,7 +137,7 @@ function insertData() {
 
 // OTHER ----------------------------------------------------------
 // get data from iconosquare
-//loop();
+loop();
 
 function loop() {
     var settings = {
