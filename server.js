@@ -47,7 +47,7 @@ app.use(bodyParser.json());
 
 // start server
 app.listen(port, ipaddress, function () {
-    //log('Server running on http://' + ipaddress + ':' + port);
+    log('Server running on http://' + ipaddress + ':' + port);
     console.log('Listening on ' + ipaddress + ':' + port);
 });
 
