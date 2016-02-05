@@ -1,0 +1,2 @@
+"prestart": "npm install",
+        "postinstall": "npm install bower; HOME=$OPENSHIFT_REPO_DIR bower install || bower install",
