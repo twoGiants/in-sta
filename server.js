@@ -12,6 +12,7 @@ require("use-strict");
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 var connection_string = '127.0.0.1:27017/nodejs';
+process.env.TZ = 'Europe/Berlin';
 
 if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
     connection_string = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ':' +
@@ -144,7 +145,7 @@ loop();
 info('After loop()');
 function loop() {
     var settings = {
-        desiredTime: [17, 59],
+        desiredTime: [19, 10],
         usernames: ['stazzmatazz', 'instagram', 'taylorswift', 'selenagomez', 'kimkardashian'],
         source: "http://iconosquare.com/",
         selector: [
