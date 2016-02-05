@@ -48,7 +48,7 @@ app.use(bodyParser.json());
 // start server
 app.listen(port, ipaddress, function () {
     log('Server running on http://' + ipaddress + ':' + port);
-    console.log('Listening on ' + ipaddress + ':' + port);
+//    console.log('Listening on ' + ipaddress + ':' + port);
 });
 
 // get all data from DB, send back to FE
@@ -141,7 +141,7 @@ loop();
 
 function loop() {
     var settings = {
-        desiredTime: [16, 25],
+        desiredTime: [17, 27],
         usernames: ['stazzmatazz', 'instagram', 'taylorswift', 'selenagomez', 'kimkardashian'],
         source: "http://iconosquare.com/",
         selector: [
