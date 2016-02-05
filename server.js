@@ -141,7 +141,7 @@ loop();
 
 function loop() {
     var settings = {
-        desiredTime: [16, 53],
+        desiredTime: [17, 06],
         usernames: ['stazzmatazz', 'instagram', 'taylorswift', 'selenagomez', 'kimkardashian'],
         source: "http://iconosquare.com/",
         selector: [
