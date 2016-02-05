@@ -45,11 +45,13 @@ var db = mongojs(connection_string, ['instagram']);
 app.use(express.static(__dirname + '/app'));
 app.use(bodyParser.json());
 
+info('Before app.listen().');
 // start server
 app.listen(port, ipaddress, function () {
     log('Server running on http://' + ipaddress + ':' + port);
 //    console.log('Listening on ' + ipaddress + ':' + port);
 });
+info('After app.listen().');
 
 // get all data from DB, send back to FE
 app.get("/statistics", function (err, res) {
@@ -137,11 +139,12 @@ function insertData() {
 
 // OTHER ----------------------------------------------------------
 // get data from iconosquare
+info('Before loop()');
 loop();
-
+info('After loop()');
 function loop() {
     var settings = {
-        desiredTime: [17, 06],
+        desiredTime: [17, 40],
         usernames: ['stazzmatazz', 'instagram', 'taylorswift', 'selenagomez', 'kimkardashian'],
         source: "http://iconosquare.com/",
         selector: [
@@ -150,12 +153,13 @@ function loop() {
         ]
     };
 
+    info('In loop()');
     // LOOP: grab data from source
     async.forever(function (next) {
         var currentTime = new Date();
         currentTime.getHours();
         currentTime.getMinutes();
-
+        info('In async.forever(), currentTime = ' + currentTime.getDate());
         if (currentTime.getHours() === settings.desiredTime[0] && currentTime.getMinutes() === settings.desiredTime[1]) {
             log('getRemoteData');
             setTimeout(function () {
@@ -177,7 +181,7 @@ function loop() {
 // get data from source, save data to DB
 function getRemoteData(source, username, selector, callback) {
     var userUrl = source + username;
-
+    info('In getRemoteData()');
     // send request
     request(userUrl, {
             timeout: 10000
