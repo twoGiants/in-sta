@@ -144,7 +144,7 @@ loop();
 info('After loop()');
 function loop() {
     var settings = {
-        desiredTime: [17, 40],
+        desiredTime: [17, 59],
         usernames: ['stazzmatazz', 'instagram', 'taylorswift', 'selenagomez', 'kimkardashian'],
         source: "http://iconosquare.com/",
         selector: [
@@ -157,9 +157,7 @@ function loop() {
     // LOOP: grab data from source
     async.forever(function (next) {
         var currentTime = new Date();
-        currentTime.getHours();
-        currentTime.getMinutes();
-        info('In async.forever(), currentTime = ' + currentTime.getDate());
+        info('In async.forever(), currentTime: ' + currentTime.getHours() + ':' + currentTime.getMinutes());
         if (currentTime.getHours() === settings.desiredTime[0] && currentTime.getMinutes() === settings.desiredTime[1]) {
             log('getRemoteData');
             setTimeout(function () {
@@ -167,6 +165,7 @@ function loop() {
             }, 60000);
 
         } else {
+            info('In async.forever(): went into the else');
             setTimeout(function () {
                 log('getRemoteData after waiting delay time.');
                 getRemoteData(settings.source, settings.usernames[0], settings.selector, next);
@@ -232,6 +231,7 @@ function delayInMs(desiredTime) {
     if (x >= y) {
         return (86400000 - x) + y;
     } else {
+        info('delayInMs: ' + (y - x));
         return y - x;
     }
 }
