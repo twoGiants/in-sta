@@ -140,7 +140,7 @@ function insertData() {
 loop();
 function loop() {
     var settings = {
-        desiredTime: [19, 10],
+        desiredTime: [04, 05],
         usernames: ['stazzmatazz', 'instagram', 'taylorswift', 'selenagomez', 'kimkardashian'],
         source: "http://iconosquare.com/",
         selector: [
