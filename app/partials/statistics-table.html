@@ -11,10 +11,10 @@
             {{ row.timestamp | date: 'dd.MM.yyyy' }}
         </td>
         <td class="number">
-            {{ row.followers }}
+            {{ row.followers | number }}
         </td>
         <td class="number">
-            {{ row.followings }}
+            {{ row.followings | number }}
         </td>
         <td class="number">
             {{ row.growth }}

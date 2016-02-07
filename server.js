@@ -1,3 +1,4 @@
+/*jslint node: true */
 /*
  READ THIS IF YOU HAVEN'T SEEN THIS CODE IN A WHILE
  - the webserver stuff starts from the "// SERVER" comment
@@ -14,7 +15,7 @@ var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 var connection_string = '127.0.0.1:27017/nodejs';
 process.env.TZ = 'Europe/Berlin';
 
-if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
+if (process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
     connection_string = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ':' +
         process.env.OPENSHIFT_MONGODB_DB_PASSWORD + '@' +
         process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
@@ -95,8 +96,7 @@ function deleteTestData() {
 //    {"ig_user": "instagram","ig_user_id": "25025320","ig_user_statistics": [{"followers": "120319556","followings": "354","timestamp": "1449584660080"},{"followers": "120319589","followings": "353","timestamp": "1449584660238"}]}
     var count = 1;
     var intervalId = setInterval(function () {
-        if(count-- <= 0)
-            clearInterval(intervalId);
+        if (count-- <= 0) clearInterval(intervalId);
         
         db.instagram.findAndModify({
             query: {
@@ -112,7 +112,7 @@ function deleteTestData() {
             if (err) error(err.message);
             log(JSON.stringify(doc, null, '\t'));
         });
-    }, 1000); 
+    }, 1000);
 }
 
 // inserts a new document into the collectin for "stazzmatazz"
@@ -137,7 +137,7 @@ function insertData() {
 
 // OTHER ----------------------------------------------------------
 // get data from iconosquare
-loop(); //blub
+loop();
 function loop() {
     var settings = {
         desiredTime: [04, 05],

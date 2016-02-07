@@ -1,7 +1,7 @@
 {
     "name": "in-sta-angular-seed",
     "private": true,
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "My App",
     "engines": {
         "node": ">= 0.10",
