@@ -137,7 +137,7 @@ function insertData() {
 
 // OTHER ----------------------------------------------------------
 // get data from iconosquare
-loop();
+loop(); //blub
 function loop() {
     var settings = {
         desiredTime: [04, 05],
