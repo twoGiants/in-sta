@@ -26,6 +26,7 @@
     "browserify-css": "^0.9.0"
   },
   "scripts": {
+    "shizzle": "npm uninstall jasmine-core karma-chrome-launcher karma-firefox-launcher karma-jasmine karma-junit-reporter protractor shelljs", 
     "prestart": "browserify -t browserify-css app/js/app.js -o app/js/bundle.js",
     "start": "DEBUG=*:log,*:info,*:error node server.js"
   },
