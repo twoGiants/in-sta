@@ -16,7 +16,7 @@
         "normalize.css": "3.0.3",
         "use-strict": "1.0.1",
         "express": "3.4.4",
-        "debug": "2.2.0",
+        "debug": "0.8.1",
         "mongojs": "2.3.0",
         "body-parser": "1.14.2",
         "async": "1.5.2",
