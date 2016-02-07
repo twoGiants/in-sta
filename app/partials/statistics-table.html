@@ -6,7 +6,7 @@
         <th class="number"><a href="" ng-click="reverse=!reverse;order('followings', reverse)">Followings</a></th>
         <th class="number"><a href="" ng-click="reverse=!reverse;order('growth', reverse)">Growth</a></th>
     </tr>
-    <tr class="data-row" ng-class-even="'even'" ng-repeat="row in data.ig_user_statistics">
+    <tr class="data-row" ng-class-even="'even'" ng-repeat="row in data.ig_user_statistics | orderBy:'-timestamp'">
         <td>
             {{ row.timestamp | date: 'dd.MM.yyyy' }}
         </td>
