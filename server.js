@@ -86,7 +86,7 @@ function saveData(newData, username) {
         if (err) {
             error(err.message);
         } else {
-            info('Saved data to DB.\n\n');
+            log('Saved data to DB.\n\n');
         }
     });
 }
@@ -140,7 +140,7 @@ function insertData() {
 loop();
 function loop() {
     var settings = {
-        desiredTime: [04, 05],
+        desiredTime: [11, 24],
         usernames: ['stazzmatazz', 'instagram', 'taylorswift', 'selenagomez', 'kimkardashian'],
         source: "http://iconosquare.com/",
         selector: [
@@ -154,11 +154,11 @@ function loop() {
         var currentTime = new Date();
         info('In async.forever(): currentTime: ' + currentTime.getHours() + ':' + currentTime.getMinutes());
         if (currentTime.getHours() === settings.desiredTime[0] && currentTime.getMinutes() === settings.desiredTime[1]) {
-            log('IF: getRemoteData without delay.');
+            log('IF: currentTime === desiredTime. Wait 60s.');
             setTimeout(function () {
-                getRemoteData(settings.source, settings.usernames[0], settings.selector, next);
+//                getRemoteData(settings.source, settings.usernames[0], settings.selector, next);
+                log('setTimeout: waited 60s.');
             }, 60000);
-
         } else {
             log('ELSE: getRemoteData after waiting delay time: ' + delayInMs(settings.desiredTime));
             setTimeout(function () {
