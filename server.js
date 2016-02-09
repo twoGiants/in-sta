@@ -140,7 +140,7 @@ function insertData() {
 loop();
 function loop() {
     var settings = {
-        desiredTime: [11, 24],
+        desiredTime: [11, 59],
         usernames: ['stazzmatazz', 'instagram', 'taylorswift', 'selenagomez', 'kimkardashian'],
         source: "http://iconosquare.com/",
         selector: [
@@ -151,24 +151,26 @@ function loop() {
 
     // LOOP: grab data from source
     async.forever(function (next) {
-        var currentTime = new Date();
-        info('In async.forever(): currentTime: ' + currentTime.getHours() + ':' + currentTime.getMinutes());
-        if (currentTime.getHours() === settings.desiredTime[0] && currentTime.getMinutes() === settings.desiredTime[1]) {
-            log('IF: currentTime === desiredTime. Wait 60s.');
-            setTimeout(function () {
-//                getRemoteData(settings.source, settings.usernames[0], settings.selector, next);
-                log('setTimeout: waited 60s.');
-            }, 60000);
-        } else {
-            log('ELSE: getRemoteData after waiting delay time: ' + delayInMs(settings.desiredTime));
-            setTimeout(function () {
-                getRemoteData(settings.source, settings.usernames[0], settings.selector, next);
-            }, delayInMs(settings.desiredTime));
-        }
+        log('I am in async.forever(). Waiting ' + delayInMs(settings.desiredTime) + 'ms.');
+        setTimeout(function() {
+            log('Timeout over. Calling getRemoteData().');
+            getRemoteData(settings.source, settings.usernames[0], settings.selector, next);
+        }, delayInMs(settings.desiredTime));
     }, function (err) {
         // error handling
         error(err.message);
     });
+}
+
+function delayInMsDEBUG(desiredTime, currentTime) {
+    var x = (currentTime[0] * 60 + currentTime[1]) * 60 * 1000;
+    var y = (desiredTime[0] * 60 + desiredTime[1]) * 60 * 1000;
+
+    if (x >= y) {
+        return (86400000 - x) + y;
+    } else {
+        return y - x;
+    }
 }
 
 // get data from source, save data to DB
