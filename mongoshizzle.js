@@ -23,23 +23,14 @@ var bodyParser = require("body-parser");
 
 var db = mongojs(connection_string, ['instagram']);
 
-removeSpecificElementsFromArray(0);
-removeSpecificElementsFromArray(1);
-removeSpecificElementsFromArray(2);
-removeSpecificElementsFromArray(3);
-removeSpecificElementsFromArray(4);
-removeSpecificElementsFromArray(5);
-removeSpecificElementsFromArray(6);
-removeSpecificElementsFromArray(8);
-removeSpecificElementsFromArray(10);
-
+// SERVER 5698ac26e96b1cb1bd43027d
 function removeSpecificElementsFromArray(index) {
     var myKey = 'ig_user_statistics.' + index;
     var myObj = {};
     myObj[myKey] = 1;
     log(myObj);
     db.instagram.update({
-            _id: mongojs.ObjectId('5698a70eaf3d30b021b81eb5')
+            _id: mongojs.ObjectId('5698a70eaf3d30b021b81eb5') // SERVER 5698ac26e96b1cb1bd43027d
         }, {
             $unset: myObj
         },
@@ -61,7 +52,7 @@ function removeSpecificElementsFromArray(index) {
                         } else {
                             log('$pull');
                         }
-                        db.close();
+//                        db.close();
                     });
             }
         });
