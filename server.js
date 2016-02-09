@@ -155,23 +155,13 @@ function loop() {
         setTimeout(function() {
             log('Timeout over. Calling getRemoteData().');
             getRemoteData(settings.source, settings.usernames[0], settings.selector, next);
-        }, delayInMs(settings.desiredTime));
+        }, delayInMs(settings.desiredTime)); // 5000 delayInMs(settings.desiredTime)
     }, function (err) {
         // error handling
         error(err.message);
     });
 }
 
-function delayInMsDEBUG(desiredTime, currentTime) {
-    var x = (currentTime[0] * 60 + currentTime[1]) * 60 * 1000;
-    var y = (desiredTime[0] * 60 + desiredTime[1]) * 60 * 1000;
-
-    if (x >= y) {
-        return (86400000 - x) + y;
-    } else {
-        return y - x;
-    }
-}
 
 // get data from source, save data to DB
 function getRemoteData(source, username, selector, callback) {
@@ -221,6 +211,16 @@ function getRemoteData(source, username, selector, callback) {
 function delayInMs(desiredTime) {
     var currentTime = new Date();
     var x = (currentTime.getHours() * 60 + currentTime.getMinutes()) * 60 * 1000;
+    var y = (desiredTime[0] * 60 + desiredTime[1]) * 60 * 1000;
+
+    if (x >= y) {
+        return (86400000 - x) + y;
+    } else {
+        return y - x;
+    }
+}
+function delayInMsDEBUG(desiredTime, currentTime) {
+    var x = (currentTime[0] * 60 + currentTime[1]) * 60 * 1000;
     var y = (desiredTime[0] * 60 + desiredTime[1]) * 60 * 1000;
 
     if (x >= y) {
