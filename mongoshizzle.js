@@ -23,6 +23,43 @@ var bodyParser = require("body-parser");
 
 var db = mongojs(connection_string, ['instagram']);
 
+//deleteDummyDoc();
+function deleteDummyDoc() {
+    db.instagram.remove({ 'ig_user' : 'dummy'}, function (err, doc) {
+        if (err) {
+            error(err.message);
+        }
+        log(JSON.stringify(doc, null, '\t'));
+        db.close();
+    });
+}
+
+// n > 0 !
+pushNdummyEntries(5);
+function pushNdummyEntries(n) {
+    var dummyDoc = {
+        "ig_user": 'dummy',
+        "ig_user_id": "111222333",
+        "ig_user_statistics": []
+    };
+
+    for (var i = 0; i < n; i++) {
+        dummyDoc.ig_user_statistics.push({
+            "followers": String((i + 1) * 10),
+            "followings": String(i + 10),
+            "timestamp": String(1452624753720 - (86400000 * (i + 1)))
+        });
+    }
+
+    db.instagram.insert(dummyDoc, function (err, doc) {
+        if (err) {
+            error(err.message);
+        }
+        log(JSON.stringify(doc, null, '\t'));
+        db.close();
+    });
+}
+
 // SERVER 5698ac26e96b1cb1bd43027d
 function removeSpecificElementsFromArray(index) {
     var myKey = 'ig_user_statistics.' + index;
@@ -52,7 +89,7 @@ function removeSpecificElementsFromArray(index) {
                         } else {
                             log('$pull');
                         }
-//                        db.close();
+                        //                        db.close();
                     });
             }
         });
