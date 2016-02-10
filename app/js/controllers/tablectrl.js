@@ -3,7 +3,7 @@
 module.exports = function ($scope, $filter, $http) {
     $http.get('/statistics').success(function (response) {
         // select which collection to display
-        $scope.data = response[1];
+        $scope.data = response[0];
         $scope.quantity = 14;
 
         // calculate growth
