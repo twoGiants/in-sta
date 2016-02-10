@@ -1,8 +1,11 @@
 'use strict';
+
 var angular = require('angular');
 require('angular-route');
 var tableCtrl = require('./controllers/tablectrl');
+var navigationCtrl = require('./controllers/navigationctrl');
 var statisticsTable = require('./directives/statisticstable');
+var navigationBar = require('./directives/navigationbar');
 require('jquery');
 require('./../css/app.css');
 
@@ -10,14 +13,13 @@ var inSta = angular.module('inSta', ['ngRoute']);
 
 // controllers
 inSta.controller('tableCtrl', ['$scope', '$filter', '$http', tableCtrl]);
+inSta.controller('navigationCtrl', ['$scope', navigationCtrl]);
 
 // directives
 inSta.directive('statisticsTable', [statisticsTable]);
+inSta.directive('navigationBar', [navigationBar]);
 
-
-
-
-
+// factory
 
 
 // Example code ---------------------------------------------------
