@@ -30,5 +30,5 @@
         "build": "node_modules/.bin/browserify -t browserify-css app/js/app.js -o app/js/bundle.js",
         "start": "npm run build && DEBUG=*:log,*:info,*:error node server.js"
     },
-    "main": "server.js"
+    "main": "index.js"
 }

@@ -1,3 +1,4 @@
+{{ shizzle }}
 <table class="table">
     <caption class="text-left"><h1>Statistics: {{ data.ig_user }}</h1></caption>
     <tr class="table-header">
@@ -6,7 +7,7 @@
         <th class="number"><a href="" ng-click="reverse=!reverse;order('followings', reverse)">Followings</a></th>
         <th class="number"><a href="" ng-click="reverse=!reverse;order('growth', reverse)">Growth</a></th>
     </tr>
-    <tr class="data-row" ng-class-even="'even'" ng-repeat="row in data.ig_user_statistics | orderBy:'-timestamp'">
+    <tr class="data-row" ng-class-even="'even'" ng-repeat="row in data.ig_user_statistics | orderBy:'-timestamp' | limitTo: quantity">
         <td>
             {{ row.timestamp | date: 'dd.MM.yyyy' }}
         </td>

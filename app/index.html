@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="inSta">
+
 <head>
     <title>Instagram Statistics</title>
     <style type="text/css" data-href="css/app.css"></style>
     <script src="js/bundle.js"></script>
 </head>
+
 <body>
     <!--  ------------------------------------------------------------  -->
     <div class="container">
@@ -12,7 +14,22 @@
         <statistics-table></statistics-table>
     </div>
     <!--  ------------------------------------------------------------  -->
+    <div ng-controller="exampleController">
+        <table class="friend">
+            <tr>
+                <th>Name</th>
+                <th>Phone Number</th>
+                <th>Age</th>
+            </tr>
+            <tr ng-repeat="friend in friends | orderBy:'-age'">
+                <td>{{friend.name}}</td>
+                <td>{{friend.phone}}</td>
+                <td>{{friend.age}}</td>
+            </tr>
+        </table>
+    </div>
 </body>
+
 </html>
 
 <!--

@@ -3,11 +3,11 @@
 var inStaControllers = angular.module('inStaControllers', []);
 
 inStaControllers.controller('tableCtrl', ['$scope', '$filter', '$http', function ($scope, $filter, $http) {
-
+    
     // send request to server
     $http.get('/statistics').success(function (response) {
         // select which collection to display
-        $scope.data = response[0];
+        $scope.data = response[1];
         
         // calculate growth
         for (var i in $scope.data.ig_user_statistics) {

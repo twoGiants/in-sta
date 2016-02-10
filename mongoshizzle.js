@@ -30,12 +30,11 @@ function deleteDummyDoc() {
             error(err.message);
         }
         log(JSON.stringify(doc, null, '\t'));
-        db.close();
     });
 }
 
 // n > 0 !
-pushNdummyEntries(5);
+//pushNdummyEntries(30);
 function pushNdummyEntries(n) {
     var dummyDoc = {
         "ig_user": 'dummy',
@@ -47,7 +46,7 @@ function pushNdummyEntries(n) {
         dummyDoc.ig_user_statistics.push({
             "followers": String((i + 1) * 10),
             "followings": String(i + 10),
-            "timestamp": String(1452624753720 - (86400000 * (i + 1)))
+            "timestamp": String(1452624753720 - (86400000 * (n - i)))
         });
     }
 
@@ -56,7 +55,6 @@ function pushNdummyEntries(n) {
             error(err.message);
         }
         log(JSON.stringify(doc, null, '\t'));
-        db.close();
     });
 }
 

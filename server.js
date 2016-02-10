@@ -124,7 +124,7 @@ function insertData() {
             {
                 "followers": "31167",
                 "followings": "4336",
-                "timestamp": "1452624753720"
+                "timestamp": "1452624753720" 
             }
         ]
     };
