@@ -6,7 +6,7 @@ var angular = require('angular');
 //var ngResource = require('angular-resource');
 require('angular-route');
 var tableCtrl = require('./controllers/tablectrl');
-//var exampleController = require('./controllers/examplecontroller');
+var exampleController = require('./controllers/examplecontroller');
 var inStaDirectives = require('./directives');
 require('jquery');
 require('./../css/app.css');
@@ -18,7 +18,7 @@ var inSta = angular.module('inSta', [
 
 inSta.controller('tableCtrl', ['$scope', '$filter', '$http', tableCtrl]);
 
-inSta.controller('exampleController', ['$scope', require('./controllers/examplecontroller')]);
+inSta.controller('exampleController', ['$scope', '$filter',  exampleController]);
 
 
 
@@ -44,13 +44,21 @@ inSta.controller('exampleController', ['$scope', require('./controllers/examplec
     });
 }]);*/
 },{"./../css/app.css":1,"./controllers/examplecontroller":3,"./controllers/tablectrl":4,"./directives":5,"angular":9,"angular-route":7,"jquery":11}],3:[function(require,module,exports){
-module.exports = function ($scope) {
-     $scope.friends =
-      [{name:'John', phone:'555-1212', age:10},
-       {name:'Mary', phone:'555-9876', age:19},
-       {name:'Mike', phone:'555-4321', age:21},
-       {name:'Adam', phone:'555-5678', age:35},
-       {name:'Julie', phone:'555-8765', age:29}];
+module.exports = function ($scope, $filter) {
+     var orderBy = $filter('orderBy');
+  $scope.friends = [
+    { name: 'John',    phone: '555-1212',    age: 10 },
+    { name: 'Mary',    phone: '555-9876',    age: 19 },
+    { name: 'Mike',    phone: '555-4321',    age: 21 },
+    { name: 'Adam',    phone: '555-5678',    age: 35 },
+    { name: 'Julie',   phone: '555-8765',    age: 29 }
+  ];
+  $scope.order = function(predicate) {
+    $scope.predicate = predicate;
+    $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+    $scope.friends = orderBy($scope.friends, predicate, $scope.reverse);
+  };
+  $scope.order('age', true);
 }
 },{}],4:[function(require,module,exports){
 module.exports = function ($scope, $filter, $http) {

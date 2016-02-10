@@ -15,7 +15,7 @@ var inSta = angular.module('inSta', [
 
 inSta.controller('tableCtrl', ['$scope', '$filter', '$http', tableCtrl]);
 
-inSta.controller('exampleController', ['$scope', exampleController]);
+inSta.controller('exampleController', ['$scope', '$filter',  exampleController]);
 
 
 
