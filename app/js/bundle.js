@@ -6,18 +6,19 @@ var angular = require('angular');
 //var ngResource = require('angular-resource');
 require('angular-route');
 var tableCtrl = require('./controllers/tablectrl');
-var inStaDirectives = require('./directives');
+var statisticsTable = require('./directives/statisticstable');
+//var inStaDirectives = require('./directives');
 require('jquery');
 require('./../css/app.css');
 
 var inSta = angular.module('inSta', [
-    'ngRoute',
-    'inStaDirectives'
+    'ngRoute'
+//    'inStaDirectives'
 ]);
 
 inSta.controller('tableCtrl', ['$scope', '$filter', '$http', tableCtrl]);
 
-
+inSta.directive('statisticsTable', [statisticsTable]);
 
 
 
@@ -40,7 +41,9 @@ inSta.controller('tableCtrl', ['$scope', '$filter', '$http', tableCtrl]);
         redirectTo: '/view1'
     });
 }]);*/
-},{"./../css/app.css":1,"./controllers/tablectrl":3,"./directives":4,"angular":8,"angular-route":6,"jquery":10}],3:[function(require,module,exports){
+},{"./../css/app.css":1,"./controllers/tablectrl":3,"./directives/statisticstable":4,"angular":8,"angular-route":6,"jquery":10}],3:[function(require,module,exports){
+'use strict';
+
 module.exports = function ($scope, $filter, $http) {
     $http.get('/statistics').success(function (response) {
         // select which collection to display
@@ -69,15 +72,13 @@ module.exports = function ($scope, $filter, $http) {
 },{}],4:[function(require,module,exports){
 'use strict';
 
-var inStaDirectives = angular.module('inStaDirectives', []);
-
-inStaDirectives.directive('statisticsTable', function () {
+module.exports = function() {
     return {
         restrict: 'E',
         templateUrl: 'partials/statistics-table.html',
         controller: 'tableCtrl'
     }
-});
+}
 },{}],5:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.8

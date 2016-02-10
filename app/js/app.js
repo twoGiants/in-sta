@@ -3,18 +3,19 @@ var angular = require('angular');
 //var ngResource = require('angular-resource');
 require('angular-route');
 var tableCtrl = require('./controllers/tablectrl');
-var inStaDirectives = require('./directives');
+var statisticsTable = require('./directives/statisticstable');
 require('jquery');
 require('./../css/app.css');
 
 var inSta = angular.module('inSta', [
-    'ngRoute',
-    'inStaDirectives'
+    'ngRoute'
 ]);
 
+// controllers
 inSta.controller('tableCtrl', ['$scope', '$filter', '$http', tableCtrl]);
 
-
+// directives
+inSta.directive('statisticsTable', [statisticsTable]);
 
 
 
