@@ -3,7 +3,6 @@ var angular = require('angular');
 //var ngResource = require('angular-resource');
 require('angular-route');
 var tableCtrl = require('./controllers/tablectrl');
-var exampleController = require('./controllers/examplecontroller');
 var inStaDirectives = require('./directives');
 require('jquery');
 require('./../css/app.css');
@@ -14,8 +13,6 @@ var inSta = angular.module('inSta', [
 ]);
 
 inSta.controller('tableCtrl', ['$scope', '$filter', '$http', tableCtrl]);
-
-inSta.controller('exampleController', ['$scope', '$filter',  exampleController]);
 
 
 
