@@ -78,11 +78,12 @@ module.exports = function ($scope, $filter, $http) {
 
         // sort the table
         var orderBy = $filter('orderBy');
-        $scope.order = function (predicate, reverse) {
-            $scope.data.ig_user_statistics = orderBy($scope.data.ig_user_statistics, predicate, reverse);
-            console.log('predicate: ' + predicate);
-            console.log('reverse: ' + reverse);
+        $scope.order = function (predicate) {
+            $scope.predicate = predicate;
+            $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+            $scope.data.ig_user_statistics = orderBy($scope.data.ig_user_statistics, predicate, $scope.reverse);
         };
+        $scope.order('timestamp', true);
     });
 }
 },{}],5:[function(require,module,exports){

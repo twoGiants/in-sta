@@ -1,13 +1,21 @@
-{{ shizzle }}
 <table class="table">
-    <caption class="text-left"><h1>Statistics: {{ data.ig_user }}</h1></caption>
+    <caption class="text-left">
+        <h1>Statistics: {{ data.ig_user }}</h1></caption>
     <tr class="table-header">
-        <th><a href="" ng-click="reverse=!reverse;order('timestamp', reverse)">Date</a></th>
-        <th class="number"><a href="" ng-click="reverse=!reverse;order('followers', reverse)">Followers</a></th>
-        <th class="number"><a href="" ng-click="reverse=!reverse;order('followings', reverse)">Followings</a></th>
-        <th class="number"><a href="" ng-click="reverse=!reverse;order('growth', reverse)">Growth</a></th>
+        <th>
+            <a href="" ng-click="order('timestamp')" ng-class="{reverse:reverse}">Date</a>
+        </th>
+        <th class="number">
+            <a href="" ng-click="order('followers')" ng-class="{reverse:reverse}">Followers</a>
+        </th>
+        <th class="number">
+            <a href="" ng-click="order('followings')" ng-class="{reverse:reverse}">Followings</a>
+        </th>
+        <th class="number">
+            <a href="" ng-click="order('growth')" ng-class="{reverse:reverse}">Growth</a>
+        </th>
     </tr>
-    <tr class="data-row" ng-class-even="'even'" ng-repeat="row in data.ig_user_statistics | orderBy:'-timestamp' | limitTo: quantity">
+    <tr class="data-row" ng-class-even="'even'" ng-repeat="row in data.ig_user_statistics">
         <td>
             {{ row.timestamp | date: 'dd.MM.yyyy' }}
         </td>
