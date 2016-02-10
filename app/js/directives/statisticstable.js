@@ -1,11 +1,9 @@
 'use strict';
 
-var inStaDirectives = angular.module('inStaDirectives', []);
-
-inStaDirectives.directive('statisticsTable', function () {
+module.exports = function() {
     return {
         restrict: 'E',
         templateUrl: 'partials/statistics-table.html',
         controller: 'tableCtrl'
     }
-});
+}

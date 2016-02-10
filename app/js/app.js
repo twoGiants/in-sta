@@ -1,15 +1,12 @@
 'use strict';
 var angular = require('angular');
-//var ngResource = require('angular-resource');
 require('angular-route');
 var tableCtrl = require('./controllers/tablectrl');
 var statisticsTable = require('./directives/statisticstable');
 require('jquery');
 require('./../css/app.css');
 
-var inSta = angular.module('inSta', [
-    'ngRoute'
-]);
+var inSta = angular.module('inSta', ['ngRoute']);
 
 // controllers
 inSta.controller('tableCtrl', ['$scope', '$filter', '$http', tableCtrl]);
