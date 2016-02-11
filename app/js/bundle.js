@@ -96,6 +96,8 @@ module.exports = function ($scope, $filter, $http, dataShare) {
         };
         $scope.order('timestamp', true);
     });
+
+    console.log('Hello Vagina');
     
     // call when navigation is used
     $scope.$on('data_shared', function () {
