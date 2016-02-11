@@ -16,7 +16,7 @@ var inSta = angular.module('inSta', ['ngRoute']);
 
 // controllers
 inSta.controller('tableCtrl', ['$scope', '$filter', '$http', 'dataShare', tableCtrl]);
-inSta.controller('navigationCtrl', ['$scope', 'dataShare', navigationCtrl]);
+inSta.controller('navigationCtrl', ['$scope', '$http' ,'dataShare', navigationCtrl]);
 
 // directives
 inSta.directive('statisticsTable', [statisticsTable]);
@@ -32,6 +32,14 @@ inSta.factory('dataShare', function ($rootScope) {
     };
     service.getData = function () {
         return this.data;
+    };
+    service.sendDataFromTableCtrl = function (data) {
+        this.data = data;
+        $rootScope.$broadcast('data_shared_tableCtrl');
+    };
+    service.sendDataFromNavigationCtrl = function (data) {
+        this.data = data;
+        $rootScope.$broadcast('data_shared_navigationCtrl');
     };
     return service;
 });
@@ -54,10 +62,19 @@ inSta.factory('dataShare', function ($rootScope) {
 },{"./../css/app.css":1,"./controllers/navigationctrl":3,"./controllers/tablectrl":4,"./directives/navigationbar":5,"./directives/statisticstable":6,"angular":10,"angular-route":8,"jquery":12}],3:[function(require,module,exports){
 'use strict';
 
-module.exports = function ($scope, dataShare) {
-    $scope.sendTheD = function (navPoint) {
-        dataShare.sendData(navPoint);
+module.exports = function ($scope, $http, dataShare) {
+    $scope.sendDataFromNavigationToCtrl = function (data) {
+        console.log('Sending data from navigationCtrl.');
+        dataShare.sendData(data);
     }
+    
+    $http.get('/nav').success(function (response) {
+        $scope.navigationData = response;
+        console.log('Received navigation data: ' + $scope.navigationData);
+    }, function (error_response) {
+        // error handling
+        console.log('Error: ' + error_response.status);
+    });
 }
 },{}],4:[function(require,module,exports){
 'use strict';

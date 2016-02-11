@@ -1,5 +1,8 @@
 <ul class="nav navbar-nav navbar-left">
-    <li><a href="#nav1" ng-click="sendTheD('nav1')">nav1</a></li>
-    <li><a href="#nav2" ng-click="sendTheD('nav2')">nav2</a></li>
-    <li><a href="#nav3" ng-click="sendTheD('nav3')">nav3</a></li>
+    <li><a href="#nav1" ng-click="sendDataFromNavigationToCtrl('nav1')">nav1</a></li>
+    <li><a href="#nav2" ng-click="sendDataFromNavigationToCtrl('nav2')">nav2</a></li>
+    <li><a href="#nav3" ng-click="sendDataFromNavigationToCtrl('nav3')">nav3</a></li>
+    <li ng-repeat="name in navigationData.ig_user">
+        <a href="#">{{ name }}</a>
+    </li>
 </ul>

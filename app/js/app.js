@@ -13,7 +13,7 @@ var inSta = angular.module('inSta', ['ngRoute']);
 
 // controllers
 inSta.controller('tableCtrl', ['$scope', '$filter', '$http', 'dataShare', tableCtrl]);
-inSta.controller('navigationCtrl', ['$scope', 'dataShare', navigationCtrl]);
+inSta.controller('navigationCtrl', ['$scope', '$http' ,'dataShare', navigationCtrl]);
 
 // directives
 inSta.directive('statisticsTable', [statisticsTable]);
@@ -29,6 +29,14 @@ inSta.factory('dataShare', function ($rootScope) {
     };
     service.getData = function () {
         return this.data;
+    };
+    service.sendDataFromTableCtrl = function (data) {
+        this.data = data;
+        $rootScope.$broadcast('data_shared_tableCtrl');
+    };
+    service.sendDataFromNavigationCtrl = function (data) {
+        this.data = data;
+        $rootScope.$broadcast('data_shared_navigationCtrl');
     };
     return service;
 });
