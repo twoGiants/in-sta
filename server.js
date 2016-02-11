@@ -26,21 +26,6 @@ var cheerio = require("cheerio");
 var request = require("request");
 
 // configuration ===============================================================
-process.env.TZ = 'Europe/Berlin';
-//var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
-//var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
-//var connectionStringMongoDB;
-//if (process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
-//    connectionStringMongoDB = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ':' +
-//        process.env.OPENSHIFT_MONGODB_DB_PASSWORD + '@' +
-//        process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
-//        process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
-//        process.env.OPENSHIFT_APP_NAME;
-//} else {
-//    connectionStringMongoDB = '127.0.0.1:27017/nodejs';
-//}
-
-
 var settingsObj = {
     desiredTime: [04, 05],
     usernames: ['stazzmatazz', 'lukatarman', 'instagram', 'taylorswift', 'selenagomez', 'kimkardashian'],
@@ -57,8 +42,12 @@ var settingsObj = {
         process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
         process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
         process.env.OPENSHIFT_APP_NAME) : 
-        '127.0.0.1:27017/nodejs'
+        '127.0.0.1:27017/nodejs',
+    setTimezone: function (timezone) {
+        process.env.TZ = timezone;
+    }
 };
+settingsObj.setTimezone('Europe/Berlin');
 
 var db = mongojs(settingsObj.connectionString, ['instagram']);
 
@@ -319,3 +308,18 @@ app.put('/contactlist/:id', function (req, res) {
 
     });
 });
+
+// ----- old stuff before settingsObj ------
+//process.env.TZ = 'Europe/Berlin';
+//var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
+//var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+//var connectionStringMongoDB;
+//if (process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
+//    connectionStringMongoDB = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ':' +
+//        process.env.OPENSHIFT_MONGODB_DB_PASSWORD + '@' +
+//        process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
+//        process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
+//        process.env.OPENSHIFT_APP_NAME;
+//} else {
+//    connectionStringMongoDB = '127.0.0.1:27017/nodejs';
+//}
