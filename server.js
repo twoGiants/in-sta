@@ -51,8 +51,6 @@ settingsObj.setTimezone('Europe/Berlin');
 
 var db = mongojs(settingsObj.connectionString, ['instagram']);
 
-
-
 app.use(express.static(__dirname + '/app'));
 app.use(bodyParser.json());
 
@@ -63,7 +61,11 @@ app.use(bodyParser.json());
         log("I received a GET request from tableCtrl.");
 
         db.instagram.find(function (err, docs) {
-            res.json(docs);
+            if (err) {
+                error(err.message);
+            } else {
+                res.json(docs);
+            }
         });
     });
 
@@ -79,12 +81,13 @@ app.use(bodyParser.json());
 
     app.get('/nav', function (req, res) {
         log('I received a GET request from navigationCtrl.');
-        
-        var testObj = { 
-            'ig_user': ['user1', 'user2']
-        };
-        
-        res.json(testObj);
+        db.instagram.find({}, { 'ig_user': 1 }, function (err, docs) {
+            if (err) {
+                error(err.message);
+            } else {
+                res.json(docs);
+            }
+        });
     });
 
 // start app ===================================================================
