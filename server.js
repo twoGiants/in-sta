@@ -27,20 +27,40 @@ var request = require("request");
 
 // configuration ===============================================================
 process.env.TZ = 'Europe/Berlin';
-// OPENSHIFT-SERVER-DB-CONFIG
-var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
-var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
-var connectionStringMongoDB;
-if (process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
-    connectionStringMongoDB = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ':' +
+//var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
+//var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+//var connectionStringMongoDB;
+//if (process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
+//    connectionStringMongoDB = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ':' +
+//        process.env.OPENSHIFT_MONGODB_DB_PASSWORD + '@' +
+//        process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
+//        process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
+//        process.env.OPENSHIFT_APP_NAME;
+//} else {
+//    connectionStringMongoDB = '127.0.0.1:27017/nodejs';
+//}
+
+
+var settingsObj = {
+    desiredTime: [04, 05],
+    usernames: ['stazzmatazz', 'lukatarman', 'instagram', 'taylorswift', 'selenagomez', 'kimkardashian'],
+    source: "http://iconosquare.com/",
+    selector: [
+        'a[class="followers user-action-btn"] span[class=chiffre]',
+        'a[class="followings user-action-btn"] span[class=chiffre]'
+    ],
+    ipaddress: process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1',
+    port: process.env.OPENSHIFT_NODEJS_PORT || 8080,
+    connectionString: process.env.OPENSHIFT_MONGODB_DB_PASSWORD ?
+        (process.env.OPENSHIFT_MONGODB_DB_USERNAME + ':' +
         process.env.OPENSHIFT_MONGODB_DB_PASSWORD + '@' +
         process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
         process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
-        process.env.OPENSHIFT_APP_NAME;
-} else {
-    connectionStringMongoDB = '127.0.0.1:27017/nodejs';
-}
-var db = mongojs(connectionStringMongoDB, ['instagram']);
+        process.env.OPENSHIFT_APP_NAME) : 
+        '127.0.0.1:27017/nodejs'
+};
+
+var db = mongojs(settingsObj.connectionString, ['instagram']);
 
 app.use(express.static(__dirname + '/app'));
 app.use(bodyParser.json());
@@ -48,7 +68,7 @@ app.use(bodyParser.json());
 // routes ======================================================================
     // api ---------------------------------------------------------------------
     // get all data
-    app.get("/statistics", function (err, res) {
+    app.get("/statistics", function (req, res) {
         log("I received a GET request from tableCtrl.");
 
         db.instagram.find(function (err, docs) {
@@ -56,13 +76,19 @@ app.use(bodyParser.json());
         });
     });
 
-    app.get('/test', function (err, res) {
-        log('I received a GET erquest from /test.');
+    app.get('/test/:navChoice', function (req, res) {
+        var navChoice = req.params.navChoice;
+        log('I received a GET erquest from /test/' + navChoice + '.');
+
+        var shizzle = {
+            'nizzle': 'frizzle'
+        };
+        res.json(shizzle);
     });
 
 // start app ===================================================================
-app.listen(port, ipaddress, function () {
-    log('Server running on http://' + ipaddress + ':' + port);
+app.listen(settingsObj.port, settingsObj.ipaddress, function () {
+    log('Server running on http://' + settingsObj.ipaddress + ':' + settingsObj.port);
 });
 loop();
 
@@ -230,16 +256,6 @@ function insertData() {
         log(JSON.stringify(doc, null, '\t'));
     });
 }
-
-
-
-
-
-
-
-
-
-
 
 
 

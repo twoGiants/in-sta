@@ -63,18 +63,12 @@ module.exports = function ($scope, dataShare) {
 'use strict';
 
 module.exports = function ($scope, $filter, $http, dataShare) {
+    // call on load
     $http.get('/statistics').success(function (response) {
-        // select which collection to display
-        $scope.data = response[1];
-        $scope.quantity = 14;
-        // calculate growth
-        for (var i in $scope.data.ig_user_statistics) {
-            if (i < 1) {
-                $scope.data.ig_user_statistics[i].growth = '---';
-            } else {
-                $scope.data.ig_user_statistics[i].growth = $scope.data.ig_user_statistics[i].followers - $scope.data.ig_user_statistics[i - 1].followers;
-            }
-        }
+        // setup --------------------------------------------------------
+        $scope.data = response[1]; // select which collection to display
+        $scope.quantity = 21;      // how many rows to display
+        $scope.calcGrowth($scope.data.ig_user_statistics); // calc growth    
 
         // sort the table
         var orderBy = $filter('orderBy');
@@ -86,24 +80,31 @@ module.exports = function ($scope, $filter, $http, dataShare) {
         $scope.order('timestamp', true);
     });
     
-    $scope.$on('data_shared', function() {
+    // call when navigation is used
+    $scope.$on('data_shared', function () {
         var navChoice = dataShare.getData();
-        switch (navChoice) {
-            case 'nav1':
-                console.log('You clicked nav1');
-                break;
-            case 'nav2':
-                console.log('You clicked nav2');
-                break;
-            case 'nav3':
-                console.log('You clicked nav3');
-                break;
-            default:
-                console.log('Something went wrong with the dataShare factory.');
-        };
-        
+        $http.get('/test/' + navChoice).success(function (response) {
+            console.log('Got the shizzle I requested from /test/' + navChoice + '.');
+            $scope.shizzle = response;
+        }, function (response) { // error callback
+            console.error('response.data: ' + response.data);
+            console.error('response.status: ' + response.status);
+        });
     });
+    
+    // calculate growth
+    $scope.calcGrowth = function (data) {
+        for (var i in data) {
+            if (i < 1) {
+                data[i].growth = '---';
+            } else {
+                data[i].growth = data[i].followers - data[i - 1].followers;
+            }
+        }
+    };    
 }
+
+
 
 // Example code ---------------------------------------------------
 // note AddContact bugfix in the comments of the tutorial video
