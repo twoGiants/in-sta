@@ -12,15 +12,26 @@ require('./../css/app.css');
 var inSta = angular.module('inSta', ['ngRoute']);
 
 // controllers
-inSta.controller('tableCtrl', ['$scope', '$filter', '$http', tableCtrl]);
-inSta.controller('navigationCtrl', ['$scope', navigationCtrl]);
+inSta.controller('tableCtrl', ['$scope', '$filter', '$http', 'dataShare', tableCtrl]);
+inSta.controller('navigationCtrl', ['$scope', 'dataShare', navigationCtrl]);
 
 // directives
 inSta.directive('statisticsTable', [statisticsTable]);
 inSta.directive('navigationBar', [navigationBar]);
 
 // factory
-
+inSta.factory('dataShare', function ($rootScope) {
+    var service = {};
+    service.data = false;
+    service.sendData = function (data) {
+        this.data = data;
+        $rootScope.$broadcast('data_shared');
+    };
+    service.getData = function () {
+        return this.data;
+    };
+    return service;
+});
 
 // Example code ---------------------------------------------------
 /*inSta.config(['$routeProvider', function($routeProvider) {

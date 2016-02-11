@@ -1,7 +1,7 @@
 'use strict';
 
-module.exports = function ($scope) {
-    $scope.sendData = function(navPoint) {
-        console.log('You just clicked: ' + navPoint);
+module.exports = function ($scope, dataShare) {
+    $scope.sendTheD = function (navPoint) {
+        dataShare.sendData(navPoint);
     }
 }

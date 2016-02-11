@@ -15,16 +15,25 @@ require('./../css/app.css');
 var inSta = angular.module('inSta', ['ngRoute']);
 
 // controllers
-inSta.controller('tableCtrl', ['$scope', '$filter', '$http', tableCtrl]);
-inSta.controller('navigationCtrl', ['$scope', navigationCtrl]);
+inSta.controller('tableCtrl', ['$scope', '$filter', '$http', 'dataShare', tableCtrl]);
+inSta.controller('navigationCtrl', ['$scope', 'dataShare', navigationCtrl]);
 
 // directives
 inSta.directive('statisticsTable', [statisticsTable]);
 inSta.directive('navigationBar', [navigationBar]);
 
 // factory
-inSta.factory('Test', function () {
-    return
+inSta.factory('dataShare', function ($rootScope) {
+    var service = {};
+    service.data = false;
+    service.sendData = function (data) {
+        this.data = data;
+        $rootScope.$broadcast('data_shared');
+    };
+    service.getData = function () {
+        return this.data;
+    };
+    return service;
 });
 
 // Example code ---------------------------------------------------
@@ -45,15 +54,15 @@ inSta.factory('Test', function () {
 },{"./../css/app.css":1,"./controllers/navigationctrl":3,"./controllers/tablectrl":4,"./directives/navigationbar":5,"./directives/statisticstable":6,"angular":10,"angular-route":8,"jquery":12}],3:[function(require,module,exports){
 'use strict';
 
-module.exports = function ($scope) {
-    $scope.sendData = function(navPoint) {
-        console.log('You just clicked: ' + navPoint);
+module.exports = function ($scope, dataShare) {
+    $scope.sendTheD = function (navPoint) {
+        dataShare.sendData(navPoint);
     }
 }
 },{}],4:[function(require,module,exports){
 'use strict';
 
-module.exports = function ($scope, $filter, $http) {
+module.exports = function ($scope, $filter, $http, dataShare) {
     $http.get('/statistics').success(function (response) {
         // select which collection to display
         $scope.data = response[1];
@@ -75,6 +84,24 @@ module.exports = function ($scope, $filter, $http) {
             $scope.data.ig_user_statistics = orderBy($scope.data.ig_user_statistics, predicate, $scope.reverse);
         };
         $scope.order('timestamp', true);
+    });
+    
+    $scope.$on('data_shared', function() {
+        var navChoice = dataShare.getData();
+        switch (navChoice) {
+            case 'nav1':
+                console.log('You clicked nav1');
+                break;
+            case 'nav2':
+                console.log('You clicked nav2');
+                break;
+            case 'nav3':
+                console.log('You clicked nav3');
+                break;
+            default:
+                console.log('Something went wrong with the dataShare factory.');
+        };
+        
     });
 }
 

@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function ($scope, $filter, $http) {
+module.exports = function ($scope, $filter, $http, dataShare) {
     $http.get('/statistics').success(function (response) {
         // select which collection to display
         $scope.data = response[1];
@@ -22,6 +22,24 @@ module.exports = function ($scope, $filter, $http) {
             $scope.data.ig_user_statistics = orderBy($scope.data.ig_user_statistics, predicate, $scope.reverse);
         };
         $scope.order('timestamp', true);
+    });
+    
+    $scope.$on('data_shared', function() {
+        var navChoice = dataShare.getData();
+        switch (navChoice) {
+            case 'nav1':
+                console.log('You clicked nav1');
+                break;
+            case 'nav2':
+                console.log('You clicked nav2');
+                break;
+            case 'nav3':
+                console.log('You clicked nav3');
+                break;
+            default:
+                console.log('Something went wrong with the dataShare factory.');
+        };
+        
     });
 }
 
