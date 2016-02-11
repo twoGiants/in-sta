@@ -1,11 +1,13 @@
 'use strict';
 
 module.exports = function ($scope, $http, dataShare) {
-    $scope.sendDataFromNavigationCtrl = function (data) {
-        console.log('Sending data from navigationCtrl.');
-        dataShare.sendData(data);
+    
+    // broadcast selected navigation item
+    $scope.sendDataFromNavigationCtrl = function (item) {
+        dataShare.sendData(item);
     }
     
+    // requests usernames for navigation from the be
     $http.get('/nav').success(function (response) {
         $scope.usernames = response;
         console.log('Received navigation data: ' + $scope.usernames[0].ig_user);

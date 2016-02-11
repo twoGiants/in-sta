@@ -20,10 +20,10 @@ module.exports = function ($scope, $filter, $http, dataShare) {
     
     // call when navigation is used
     $scope.$on('data_shared', function () {
-        var navChoice = dataShare.getData();
-        $http.get('/test/' + navChoice).success(function (response) {
-            console.log('Got the shizzle I requested from /test/' + navChoice + '.');
-            $scope.shizzle = response;
+        var item = dataShare.getData();
+        $http.get('/test/' + item).success(function (response) {
+            console.log('Got the shizzle I requested from /test/' + item + '.');
+            $scope.data = response[0];
         }, function (response) { // error callback
             console.error('response.data: ' + response.data);
             console.error('response.status: ' + response.status);
@@ -41,7 +41,6 @@ module.exports = function ($scope, $filter, $http, dataShare) {
         }
     };    
 }
-
 
 
 // Example code ---------------------------------------------------

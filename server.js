@@ -69,16 +69,23 @@ app.use(bodyParser.json());
         });
     });
 
-    app.get('/test/:navChoice', function (req, res) {
-        var navChoice = req.params.navChoice;
-        log('I received a GET request from /test/' + navChoice + '.');
+    // get only the user=item from the db
+    app.get('/test/:item', function (req, res) {
+        var item = req.params.item;
+        log('I received a GET request from /test/' + item + '.');
 
-        var shizzle = {
-            'nizzle': 'frizzle'
-        };
-        res.json(shizzle);
+        db.instagram.find({
+                'ig_user': item
+        }, function (err, docs) {
+            if (err) {
+                error(err.message);
+            } else {
+                res.json(docs);
+            }
+        });
     });
 
+    // get the usernames from the db
     app.get('/nav', function (req, res) {
         log('I received a GET request from navigationCtrl.');
         db.instagram.find({}, { 'ig_user': 1 }, function (err, docs) {

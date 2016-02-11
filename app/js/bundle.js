@@ -43,6 +43,12 @@ inSta.factory('dataShare', function ($rootScope) {
     };
     return service;
 });
+//inSta.factory('getUserDataFactory', function ($http) {
+//    this.getUserData = function () {
+//        return $http.get()
+//    }
+//    return this;
+//});
 
 // Example code ---------------------------------------------------
 /*inSta.config(['$routeProvider', function($routeProvider) {
@@ -63,11 +69,13 @@ inSta.factory('dataShare', function ($rootScope) {
 'use strict';
 
 module.exports = function ($scope, $http, dataShare) {
-    $scope.sendDataFromNavigationCtrl = function (data) {
-        console.log('Sending data from navigationCtrl.');
-        dataShare.sendData(data);
+    
+    // broadcast selected navigation item
+    $scope.sendDataFromNavigationCtrl = function (item) {
+        dataShare.sendData(item);
     }
     
+    // requests usernames for navigation from the be
     $http.get('/nav').success(function (response) {
         $scope.usernames = response;
         console.log('Received navigation data: ' + $scope.usernames[0].ig_user);
@@ -96,15 +104,13 @@ module.exports = function ($scope, $filter, $http, dataShare) {
         };
         $scope.order('timestamp', true);
     });
-
-    console.log('Hello Vagina');
     
     // call when navigation is used
     $scope.$on('data_shared', function () {
-        var navChoice = dataShare.getData();
-        $http.get('/test/' + navChoice).success(function (response) {
-            console.log('Got the shizzle I requested from /test/' + navChoice + '.');
-            $scope.shizzle = response;
+        var item = dataShare.getData();
+        $http.get('/test/' + item).success(function (response) {
+            console.log('Got the shizzle I requested from /test/' + item + '.');
+            $scope.data = response[0];
         }, function (response) { // error callback
             console.error('response.data: ' + response.data);
             console.error('response.status: ' + response.status);
@@ -122,7 +128,6 @@ module.exports = function ($scope, $filter, $http, dataShare) {
         }
     };    
 }
-
 
 
 // Example code ---------------------------------------------------

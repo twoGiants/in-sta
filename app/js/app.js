@@ -40,6 +40,12 @@ inSta.factory('dataShare', function ($rootScope) {
     };
     return service;
 });
+//inSta.factory('getUserDataFactory', function ($http) {
+//    this.getUserData = function () {
+//        return $http.get()
+//    }
+//    return this;
+//});
 
 // Example code ---------------------------------------------------
 /*inSta.config(['$routeProvider', function($routeProvider) {
