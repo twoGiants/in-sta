@@ -28,7 +28,9 @@
   },
   "scripts": {
     "build": "node_modules/.bin/browserify -t browserify-css app/js/app.js -o app/js/bundle.js",
-    "watch": "node_modules/.bin/watchify -t browserify-css app/js/app.js -o app/js/bundle.js",
+    "watch-fe": "node_modules/.bin/watchify -t browserify-css app/js/app.js -o app/js/bundle.js",
+    "watch-be": "DEBUG=*:log,*:info,*:error nodemon server.js",
+    "dev": "npm run watch-fe | npm run watch-be",
     "start": "npm run build && DEBUG=*:log,*:info,*:error node server.js"
   },
   "main": "index.js",

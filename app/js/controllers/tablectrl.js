@@ -39,7 +39,7 @@ module.exports = function ($scope, $filter, $http, dataShare) {
                 data[i].growth = data[i].followers - data[i - 1].followers;
             }
         }
-    };    
+    };
 }
 
 

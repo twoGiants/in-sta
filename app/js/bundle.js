@@ -43,12 +43,6 @@ inSta.factory('dataShare', function ($rootScope) {
     };
     return service;
 });
-//inSta.factory('getUserDataFactory', function ($http) {
-//    this.getUserData = function () {
-//        return $http.get()
-//    }
-//    return this;
-//});
 
 // Example code ---------------------------------------------------
 /*inSta.config(['$routeProvider', function($routeProvider) {
@@ -126,7 +120,7 @@ module.exports = function ($scope, $filter, $http, dataShare) {
                 data[i].growth = data[i].followers - data[i - 1].followers;
             }
         }
-    };    
+    };
 }
 
 
