@@ -27,7 +27,7 @@ var request = require("request");
 
 // configuration ===============================================================
 var settingsObj = {
-    desiredTime: [04, 05],
+    desiredTime: [11, 45],
     usernames: ['stazzmatazz', 'lukatarman', 'instagram', 'taylorswift', 'selenagomez', 'kimkardashian'],
     source: "http://iconosquare.com/",
     selector: [
@@ -110,8 +110,6 @@ app.use(bodyParser.json());
 //                res.json(docs);
 //            }
 //        });
-    });
-
 db.instagram.find(
         {
             'ig_user': 'dummy',
@@ -129,6 +127,8 @@ db.instagram.find(
         log(JSON.stringify(docs, 'null', '\t'));
     }
 });
+    });
+
 
 // start app ===================================================================
 app.listen(settingsObj.port, settingsObj.ipaddress, function () {
@@ -141,7 +141,7 @@ loop();
 function loop() {
     var iterations = 1;
     var settings = {
-        desiredTime: [04, 05],
+        desiredTime: [13, 15],
         usernames: ['stazzmatazz', 'instagram', 'taylorswift', 'selenagomez', 'kimkardashian'],
         source: "http://iconosquare.com/",
         selector: [
@@ -180,8 +180,8 @@ function getRemoteData(source, username, selector, callback) {
                     var timestamp = new Date();
                     var newData = {
                         timestamp: timestamp.getTime().toString(),
-                        followers: $(selector[0]).html().toString(),
-                        followings: $(selector[1]).html().toString()
+                        followers: parseInt($(selector[0]).html()),
+                        followings: parseInt($(selector[1]).html())
                     };
 
                     // print data to console

@@ -23,9 +23,37 @@ var bodyParser = require("body-parser");
 
 var db = mongojs(connection_string, ['instagram']);
 
-//deleteDummyDoc();
-function deleteDummyDoc() {
-    db.instagram.remove({ 'ig_user' : 'dummy'}, function (err, doc) {
+//deleteDoc('dummy');
+//deleteDoc('stazzmatazz');
+function deleteDoc(username) {
+    db.instagram.remove({ 'ig_user' : username}, function (err, doc) {
+        if (err) {
+            error(err.message);
+        }
+        log(JSON.stringify(doc, null, '\t'));
+    });
+}
+
+createDoc('dummy', 30);
+//createDoc('stazzmatazz', 7);
+// n > 0 !
+function createDoc(username, n) {
+    var igUserId = new Date();
+    var newDoc = {
+        "ig_user": username,
+        "ig_user_id": igUserId.getTime().toString(),
+        "ig_user_statistics": []
+    };
+    
+    for (var i = 0; i < n; i++) {
+        newDoc.ig_user_statistics.push({
+            "followers": (i + 1) * 10,
+            "followings": i + 10,
+            "timestamp": String(1452624753720 - (86400000 * (n - i)))
+        });
+    }
+    
+    db.instagram.insert(newDoc, function (err, doc) {
         if (err) {
             error(err.message);
         }
@@ -44,8 +72,8 @@ function pushNdummyEntries(n) {
 
     for (var i = 0; i < n; i++) {
         dummyDoc.ig_user_statistics.push({
-            "followers": String((i + 1) * 10),
-            "followings": String(i + 10),
+            "followers": (i + 1) * 10,
+            "followings": i + 10,
             "timestamp": String(1452624753720 - (86400000 * (n - i)))
         });
     }
@@ -110,3 +138,4 @@ function popLastElementFromArray() {
             db.close();
         });
 }
+
