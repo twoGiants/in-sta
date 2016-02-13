@@ -1,6 +1,28 @@
-{{shizzle.user1['2016'][0]}}
+<!--{{shizzle.user1['2016'][0]}}-->
 <ul class="nav navbar-nav navbar-left">
     <li ng-repeat="username in usernames">
         <a href="#{{ username.ig_user }}" ng-click="sendDataFromNavigationCtrl(username.ig_user)">{{ username.ig_user }}</a>
+    </li>
+</ul>
+
+<ul class="nav navbar-nav navbar-left">
+    <li ng-repeat="(username, years) in shizzle">
+        <a href="#" ng-click="">
+            {{ username }}
+        </a>
+        <ul class="nav navbar-nav navbar-left">
+            <li ng-repeat="(year, months) in years">
+                <a href="#" ng-click="">
+                    {{ year }}
+                </a>
+                <ul class="nav navbar-nav navbar-left">
+                    <li ng-repeat="month in months">
+                        <a href="#{{ username + '/' + year + '/' + month}}" ng-click="TESTsendDataFromNavigationCtrl(username + '/' + year + '/' + month)">
+                            {{ month }}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </li>
 </ul>

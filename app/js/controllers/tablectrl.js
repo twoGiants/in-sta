@@ -5,7 +5,7 @@ module.exports = function ($scope, $filter, $http, dataShare) {
     $http.get('/statistics').success(function (response) {
         // setup --------------------------------------------------------
         $scope.data = response[1]; // select which collection to display
-        $scope.quantity = 21;      // how many rows to display
+//        $scope.quantity = 21;      // how many rows to display
         $scope.calcGrowth($scope.data.ig_user_statistics); // calc growth    
 
         // sort the table
@@ -28,6 +28,19 @@ module.exports = function ($scope, $filter, $http, dataShare) {
             console.error('response.data: ' + response.data);
             console.error('response.status: ' + response.status);
         });
+    });
+    
+    // TEST
+    $scope.$on('TESTdata_shared', function () {
+        var TESTitem = dataShare.getData();
+        console.log(TESTitem);
+//        $http.get('/test/' + item).success(function (response) {
+//            console.log('Got the shizzle I requested from /test/' + item + '.');
+//            $scope.data = response[0];
+//        }, function (response) { // error callback
+//            console.error('response.data: ' + response.data);
+//            console.error('response.status: ' + response.status);
+//        });
     });
     
     // calculate growth

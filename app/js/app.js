@@ -27,6 +27,10 @@ inSta.factory('dataShare', function ($rootScope) {
         this.data = data;
         $rootScope.$broadcast('data_shared');
     };
+    service.TESTsendData = function (TESTdata) {
+        this.data = TESTdata;
+        $rootScope.$broadcast('TESTdata_shared');
+    };
     service.getData = function () {
         return this.data;
     };

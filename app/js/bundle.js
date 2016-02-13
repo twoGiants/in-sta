@@ -30,6 +30,10 @@ inSta.factory('dataShare', function ($rootScope) {
         this.data = data;
         $rootScope.$broadcast('data_shared');
     };
+    service.TESTsendData = function (TESTdata) {
+        this.data = TESTdata;
+        $rootScope.$broadcast('TESTdata_shared');
+    };
     service.getData = function () {
         return this.data;
     };
@@ -66,7 +70,13 @@ module.exports = function ($scope, $http, dataShare) {
 
     // broadcast selected navigation item
     $scope.sendDataFromNavigationCtrl = function (item) {
+        console.log('Sending from navigationCtrl: ' + item);
         dataShare.sendData(item);
+    }
+    
+    $scope.TESTsendDataFromNavigationCtrl = function (TESTitem) {
+        console.log('Sending TESTitem from navigationCtrl: ' + TESTitem);
+        dataShare.TESTsendData(TESTitem);
     }
 
     // requests usernames for navigation from the be
@@ -77,28 +87,24 @@ module.exports = function ($scope, $http, dataShare) {
         // error handling
         console.log('Error: ' + error_response.status);
     });
-    
-    var testMenuObj = {
-        "user1": {
-            "2016": ["January", "February", "March"]
+
+    var TESTMenuObj = {
+        "stazzmatazz": {
+            "2016": [
+                "February"
+            ]
         },
-        "user2": {
-            "2016": ["January", "February", "March"],
-            "2015": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-        },
+        "dummy": {
+            "2015": [
+                "December"
+            ],
+            "2016": [
+                "January"
+            ]
+        }
     };
-    $scope.shizzle = testMenuObj;
+    $scope.shizzle = TESTMenuObj;
 }
-
-
-
-
-
-
-
-
-
-
 },{}],4:[function(require,module,exports){
 'use strict';
 
@@ -107,7 +113,7 @@ module.exports = function ($scope, $filter, $http, dataShare) {
     $http.get('/statistics').success(function (response) {
         // setup --------------------------------------------------------
         $scope.data = response[1]; // select which collection to display
-        $scope.quantity = 21;      // how many rows to display
+//        $scope.quantity = 21;      // how many rows to display
         $scope.calcGrowth($scope.data.ig_user_statistics); // calc growth    
 
         // sort the table
@@ -130,6 +136,19 @@ module.exports = function ($scope, $filter, $http, dataShare) {
             console.error('response.data: ' + response.data);
             console.error('response.status: ' + response.status);
         });
+    });
+    
+    // TEST
+    $scope.$on('TESTdata_shared', function () {
+        var TESTitem = dataShare.getData();
+        console.log(TESTitem);
+//        $http.get('/test/' + item).success(function (response) {
+//            console.log('Got the shizzle I requested from /test/' + item + '.');
+//            $scope.data = response[0];
+//        }, function (response) { // error callback
+//            console.error('response.data: ' + response.data);
+//            console.error('response.status: ' + response.status);
+//        });
     });
     
     // calculate growth
