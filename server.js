@@ -70,9 +70,9 @@ app.use(bodyParser.json());
     });
 
     // get only the user=item from the db
-    app.get('/test/:item', function (req, res) {
+    app.get('/statistics/:item', function (req, res) {
         var item = req.params.item;
-        log('I received a GET request from /test/' + item + '.');
+        log('I received a GET request from /statistics/' + item + '.');
 
         db.instagram.find({
                 'ig_user': item
@@ -96,6 +96,39 @@ app.use(bodyParser.json());
             }
         });
     });
+
+    app.get('/TEST/:TESTitem', function (req, res) {
+        var TESTitem = req.params.TESTitem;
+        log('I received a GET request from /TEST/' + TESTitem + '.');
+
+//        db.instagram.find({
+//                'ig_user': item
+//        }, function (err, docs) {
+//            if (err) {
+//                error(err.message);
+//            } else {
+//                res.json(docs);
+//            }
+//        });
+    });
+
+db.instagram.find(
+        {
+            'ig_user': 'dummy',
+            'ig_user_statistics': {
+                '$elemMatch': {
+                    'followers': '10'
+                }
+            }
+        },
+        {'ig_user': 1, 'ig_user_id': 1, 'ig_user_statistics.followers': 1}
+, function (err, docs) {
+    if (err) {
+        error(err.message);
+    } else {
+        log(JSON.stringify(docs, 'null', '\t'));
+    }
+});
 
 // start app ===================================================================
 app.listen(settingsObj.port, settingsObj.ipaddress, function () {

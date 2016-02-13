@@ -21,8 +21,8 @@ module.exports = function ($scope, $filter, $http, dataShare) {
     // call when navigation is used
     $scope.$on('data_shared', function () {
         var item = dataShare.getData();
-        $http.get('/test/' + item).success(function (response) {
-            console.log('Got the shizzle I requested from /test/' + item + '.');
+        $http.get('/statistics/' + item).success(function (response) {
+            console.log('Got the shizzle I requested from /statistics/' + item + '.');
             $scope.data = response[0];
         }, function (response) { // error callback
             console.error('response.data: ' + response.data);
@@ -34,13 +34,13 @@ module.exports = function ($scope, $filter, $http, dataShare) {
     $scope.$on('TESTdata_shared', function () {
         var TESTitem = dataShare.getData();
         console.log(TESTitem);
-//        $http.get('/test/' + item).success(function (response) {
-//            console.log('Got the shizzle I requested from /test/' + item + '.');
-//            $scope.data = response[0];
-//        }, function (response) { // error callback
-//            console.error('response.data: ' + response.data);
-//            console.error('response.status: ' + response.status);
-//        });
+        $http.get('/TEST/' + TESTitem).success(function (response) {
+            console.log('Got the shizzle I requested from /TESTitem/' + TESTitem + '.');
+            $scope.data = response[0];
+        }, function (response) { // error callback
+            console.error('response.data: ' + response.data);
+            console.error('response.status: ' + response.status);
+        });
     });
     
     // calculate growth
