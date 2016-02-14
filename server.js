@@ -101,32 +101,33 @@ app.use(bodyParser.json());
         var TESTitem = req.params.TESTitem;
         log('I received a GET request from /TEST/' + TESTitem + '.');
 
-//        db.instagram.find({
-//                'ig_user': item
-//        }, function (err, docs) {
-//            if (err) {
-//                error(err.message);
-//            } else {
-//                res.json(docs);
-//            }
-//        });
-db.instagram.find(
-        {
+        //        db.instagram.find({
+        //                'ig_user': item
+        //        }, function (err, docs) {
+        //            if (err) {
+        //                error(err.message);
+        //            } else {
+        //                res.json(docs);
+        //            }
+        //        });
+        db.instagram.find({
             'ig_user': 'dummy',
             'ig_user_statistics': {
                 '$elemMatch': {
                     'followers': '10'
                 }
             }
-        },
-        {'ig_user': 1, 'ig_user_id': 1, 'ig_user_statistics.followers': 1}
-, function (err, docs) {
-    if (err) {
-        error(err.message);
-    } else {
-        log(JSON.stringify(docs, 'null', '\t'));
-    }
-});
+        }, {
+            'ig_user': 1,
+            'ig_user_id': 1,
+            'ig_user_statistics.followers': 1
+        }, function (err, docs) {
+            if (err) {
+                error(err.message);
+            } else {
+                log(JSON.stringify(docs, 'null', '\t'));
+            }
+        });
     });
 
 

@@ -23,6 +23,44 @@ var bodyParser = require("body-parser");
 
 var db = mongojs(connection_string, ['instagram']);
 
+getDataForMonth();
+
+function getDataForMonth() {
+    db.instagram.aggregate([
+        {
+            $match: {
+                'ig_user': 'zarputin'
+            }
+        },
+        { 
+            $match: {
+                'ig_user_statistics.followers': { $gt: 200 }
+            }
+        },
+        {
+            $unwind: '$ig_user_statistics'
+        },
+        {
+            $match: {
+                'ig_user_statistics.followers': { $gt: 200 }
+            }
+        },
+        {
+            $group: {
+                '_id': '$_id',
+                'ig_user': {'$first':'$ig_user'},
+                'followers': { '$push': '$ig_user_statistics.followers'}
+            }
+        }
+    ], function (err, docs) {
+        if (err) {
+            error(err.message);
+        } else {
+            log(JSON.stringify(docs, 'null', '\t'));
+        }
+    });
+}
+
 
 function main() {
     setTimeout(function(){
