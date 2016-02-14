@@ -141,7 +141,7 @@ loop();
 function loop() {
     var iterations = 1;
     var settings = {
-        desiredTime: [13, 15],
+        desiredTime: [09, 29],
         usernames: ['stazzmatazz', 'instagram', 'taylorswift', 'selenagomez', 'kimkardashian'],
         source: "http://iconosquare.com/",
         selector: [
@@ -179,7 +179,7 @@ function getRemoteData(source, username, selector, callback) {
                     var $ = cheerio.load(body);
                     var timestamp = new Date();
                     var newData = {
-                        timestamp: timestamp.getTime().toString(),
+                        date: new Date(),
                         followers: parseInt($(selector[0]).html()),
                         followings: parseInt($(selector[1]).html())
                     };
@@ -209,7 +209,7 @@ function saveData(newData, username) {
         update: {
             $push: {
                 ig_user_statistics: {
-                    "timestamp": newData.timestamp,
+                    "date": newData.date,
                     "followers": newData.followers,
                     "followings": newData.followings
                 }

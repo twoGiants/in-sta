@@ -123,7 +123,7 @@ module.exports = function ($scope, $filter, $http, dataShare) {
             $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
             $scope.data.ig_user_statistics = orderBy($scope.data.ig_user_statistics, predicate, $scope.reverse);
         };
-        $scope.order('timestamp', true);
+        $scope.order('date', true);
     });
     
     // call when navigation is used

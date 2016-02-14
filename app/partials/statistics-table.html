@@ -1,10 +1,9 @@
-{{data.ig_user_statistics[0].date | date: 'EEE, dd.MM.yyyy'}}
 <table class="table">
     <caption class="text-left">
         <h1>Statistics: {{ data.ig_user }}</h1></caption>
     <tr class="table-header">
         <th>
-            <a href="" ng-click="order('timestamp')" ng-class="{reverse:reverse}">Date</a>
+            <a href="" ng-click="order('date')" ng-class="{reverse:reverse}">Date</a>
         </th>
         <th class="number">
             <a href="" ng-click="order('followers')" ng-class="{reverse:reverse}">Followers</a>
