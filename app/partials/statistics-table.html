@@ -1,3 +1,4 @@
+{{data.ig_user_statistics[0].date | date: 'EEE, dd.MM.yyyy'}}
 <table class="table">
     <caption class="text-left">
         <h1>Statistics: {{ data.ig_user }}</h1></caption>
@@ -17,7 +18,7 @@
     </tr>
     <tr class="data-row" ng-class-even="'even'" ng-repeat="row in data.ig_user_statistics | limitTo: quantity">
         <td>
-            {{ row.timestamp | date: 'EEE, dd.MM.yyyy' }}
+            {{ row.date | date: 'EEE, dd.MM.yyyy' }}
         </td>
         <td class="number">
             {{ row.followers | number }}

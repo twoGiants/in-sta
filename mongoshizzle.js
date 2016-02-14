@@ -23,8 +23,26 @@ var bodyParser = require("body-parser");
 
 var db = mongojs(connection_string, ['instagram']);
 
-//deleteDoc('dummy');
-//deleteDoc('stazzmatazz');
+main();
+
+function main() {
+    setTimeout(function(){
+        deleteDoc('obamasan');
+    }, 500);
+    
+    setTimeout(function(){
+        deleteDoc('zarputin');
+    }, 1000);
+    
+    setTimeout(function(){
+        createDoc2('obamasan', 5);
+    }, 1500);
+
+    setTimeout(function(){
+        createDoc2('zarputin', 30);
+    }, 2000);
+}
+
 function deleteDoc(username) {
     db.instagram.remove({ 'ig_user' : username}, function (err, doc) {
         if (err) {
@@ -34,22 +52,60 @@ function deleteDoc(username) {
     });
 }
 
-createDoc('dummy', 30);
+function deleteDocByObjectId(objectId) {
+    db.instagram.remove({
+        '_id': mongojs.ObjectId(objectId)
+    }, function (err, doc) {
+        if (err) {
+            error(err.message);
+        }
+        log(JSON.stringify(doc, null, '\t'));
+    });
+}
+
+//createDoc('dummy', 30);
 //createDoc('stazzmatazz', 7);
 // n > 0 !
 function createDoc(username, n) {
     var igUserId = new Date();
     var newDoc = {
-        "ig_user": username,
-        "ig_user_id": igUserId.getTime().toString(),
-        "ig_user_statistics": []
+        'ig_user': username,
+        'ig_user_id': igUserId.getTime().toString(),
+        'ig_user_statistics': []
     };
     
     for (var i = 0; i < n; i++) {
         newDoc.ig_user_statistics.push({
-            "followers": (i + 1) * 10,
-            "followings": i + 10,
-            "timestamp": String(1452624753720 - (86400000 * (n - i)))
+            'followers': (i + 1) * 10,
+            'followings': i + 10,
+            'timestamp': String(1452624753720 - (86400000 * (n - i)))
+        });
+    }
+    
+    db.instagram.insert(newDoc, function (err, doc) {
+        if (err) {
+            error(err.message);
+        }
+        log(JSON.stringify(doc, null, '\t'));
+    });
+}
+
+// creates documents with the date object, instead of a timestamp string
+function createDoc2(username, n) {
+    var igUserId = new Date();
+    var startDate = new Date(2014, 11, 15, 13, 45, 26);
+    var newDoc = {
+        'ig_user': username,
+        'ig_user_id': igUserId.getTime().toString(),
+        'ig_user_statistics': []
+    };
+    
+    for (var i = 0; i < n; i++) {
+        var newDate = startDate.setDate(startDate.getDate() + 1);
+        newDoc.ig_user_statistics.push({
+            'followers': (i + 1) * 10,
+            'followings': i + 10,
+            'date': new Date(newDate)
         });
     }
     
