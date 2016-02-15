@@ -23,9 +23,24 @@ var bodyParser = require("body-parser");
 
 var db = mongojs(connection_string, ['instagram']);
 
-getDataForMonth();
+getDataForMonthFind();
 
-function getDataForMonth() {
+function getDataForMonthFind() {
+    db.instagram.find({
+        'ig_user_statistics.followers': { $gt: 100 }
+    }, {
+        'ig_user_statistics.$.date': 1,
+        'ig_user': 1
+    }, function (err, docs) {
+        if (err) {
+            error(err.message);
+        } else {
+            log(JSON.stringify(docs, 'null', '\t'));
+        }
+    });
+}
+
+function getDataForMonthAggregate() {
     db.instagram.aggregate([
         {
             $match: {
