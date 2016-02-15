@@ -23,8 +23,6 @@ var bodyParser = require("body-parser");
 
 var db = mongojs(connection_string, ['instagram']);
 
-getDataForMonthFind();
-
 function getDataForMonthFind() {
     db.instagram.find({
         'ig_user_statistics.followers': { $gt: 100 }
@@ -39,6 +37,8 @@ function getDataForMonthFind() {
         }
     });
 }
+
+getDataForMonthAggregate();
 
 function getDataForMonthAggregate() {
     db.instagram.aggregate([
@@ -63,8 +63,19 @@ function getDataForMonthAggregate() {
         {
             $group: {
                 '_id': '$_id',
-                'ig_user': {'$first':'$ig_user'},
-                'followers': { '$push': '$ig_user_statistics.followers'}
+                'ig_user': {
+                    '$first': '$ig_user'
+                },
+                'ig_user_id': {
+                    '$first': '$ig_user_id'
+                },
+                'ig_user_statistics': { 
+                    '$push': {
+                        'date': '$ig_user_statistics.date',
+                        'followers': '$ig_user_statistics.followers',
+                        'followings': '$ig_user_statistics.followings'
+                    }
+                }
             }
         }
     ], function (err, docs) {
