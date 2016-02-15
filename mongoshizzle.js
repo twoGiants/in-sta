@@ -41,6 +41,10 @@ function getDataForMonthFind() {
 getDataForMonthAggregate();
 
 function getDataForMonthAggregate() {
+    var start = new Date('2015-01-8'),
+        end = new Date('2015-01-14');
+    
+    
     db.instagram.aggregate([
         {
             $match: {
@@ -49,7 +53,10 @@ function getDataForMonthAggregate() {
         },
         { 
             $match: {
-                'ig_user_statistics.followers': { $gt: 200 }
+                'ig_user_statistics.date': { 
+                    $gt: start,
+                    $lt: end
+                }
             }
         },
         {
@@ -57,7 +64,10 @@ function getDataForMonthAggregate() {
         },
         {
             $match: {
-                'ig_user_statistics.followers': { $gt: 200 }
+                'ig_user_statistics.date': { 
+                    $gt: start,
+                    $lt: end
+                }
             }
         },
         {
