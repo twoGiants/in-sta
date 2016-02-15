@@ -27,7 +27,7 @@ var request = require("request");
 
 // configuration ===============================================================
 var settingsObj = {
-    desiredTime: [11, 45],
+    desiredTime: [09, 42],
     usernames: ['stazzmatazz', 'lukatarman', 'instagram', 'taylorswift', 'selenagomez', 'kimkardashian'],
     source: "http://iconosquare.com/",
     selector: [
@@ -141,24 +141,15 @@ loop();
 // get data from iconosquare
 function loop() {
     var iterations = 1;
-    var settings = {
-        desiredTime: [09, 29],
-        usernames: ['stazzmatazz', 'instagram', 'taylorswift', 'selenagomez', 'kimkardashian'],
-        source: "http://iconosquare.com/",
-        selector: [
-            'a[class="followers user-action-btn"] span[class=chiffre]',
-            'a[class="followings user-action-btn"] span[class=chiffre]'
-        ]
-    };
 
     // LOOP: grab data from source
     async.forever(function (next) {
         log('Loop running the ' + iterations++ + ' time.');
-        log('Delay: ' + delayInMs(settings.desiredTime) + 'ms.');
+        log('Delay: ' + delayInMs(settingsObj.desiredTime) + 'ms.');
         setTimeout(function() {
             log('...grabbing data.');
-            getRemoteData(settings.source, settings.usernames[0], settings.selector, next);
-        }, delayInMs(settings.desiredTime)); // 5000 delayInMs(settings.desiredTime)
+            getRemoteData(settingsObj.source, settingsObj.usernames[0], settingsObj.selector, next);
+        }, delayInMs(settingsObj.desiredTime)); // 5000 delayInMs(settingsObj.desiredTime)
     }, function (err) {
         // error handling
         error(err.message);
