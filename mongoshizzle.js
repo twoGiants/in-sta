@@ -23,78 +23,122 @@ var bodyParser = require("body-parser");
 
 var db = mongojs(connection_string, ['instagram']);
 
-function getDataForMonthFind() {
-    db.instagram.find({
-        'ig_user_statistics.followers': { $gt: 100 }
-    }, {
-        'ig_user_statistics.$.date': 1,
-        'ig_user': 1
-    }, function (err, docs) {
-        if (err) {
-            error(err.message);
-        } else {
-            log(JSON.stringify(docs, 'null', '\t'));
+//getDataForMonthAggregate();
+/*
+I get the string: username-month-year
+I put the data in queryObj
+I run the query with queryObj
+I send the data back to the fe
+1 case: correct navItem
+    => works
+2 case: wrong navItem
+*/
+
+
+//query string must be: 'username-month-year'
+function getDataForMonthAggregate(navItem) {
+    var errorHappened = false;
+    var monthList = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    
+    /*
+        Cases:
+            + navItem === string?
+            + string consists of three parts?
+            + is first part a a valid username? /^[a-zA-Z0-9_.]*$/
+            + is the second part a month?
+            + is third part a number and a valid year?
+    */ 
+    try {
+        //Error case
+        if (typeof navItem != 'string') {
+            throw new Error('Query string must be a string, not -> ' + typeof navItem);
         }
-    });
-}
-
-getDataForMonthAggregate();
-
-function getDataForMonthAggregate() {
-    var start = new Date('2015-01-8'),
-        end = new Date('2015-01-14');
+        
+        //Error case
+        var res = navItem.split('-');
+        if (res.length != 3) {
+            throw new Error('Query string length must be 3, not -> ' + res.length);
+        }
+        
+        //Error case
+        if (!(/^[a-zA-Z0-9_.]+$/.test(res[0]))) {
+            throw new Error('First query value must be a valid username -> ' + res[0]);
+        }
+        
+        //Error case
+        if (typeof res[1] != 'string') {
+            throw new Error('Second query value is not a string -> ' + typeof res[1]);
+        }
+        
+        //Error case
+        if (monthList.indexOf(res[1]) === -1){
+            throw new Error('Second query value is not a month -> ' + res[1]);
+        }
+        
+        //Error case
+        if (!(/^[0-9]{4}/.test(res[2]))) {
+            throw new Error('Third query value is not a 4 digit number -> ' + res[2]);
+        }
     
+        //Error case
+        res[2] = parseInt(res[2]);
+        var today = new Date();
+        if (res[2] < 2010 || res[2] > today.getFullYear()) {
+            throw new Error('Third query value is not a valid year -> ' + res[2]);
+        }   
+    } catch (err) {
+        error(err.name + ': ' +err.message);
+        errorHappened = true;
+    }
     
-    db.instagram.aggregate([
-        {
-            $match: {
-                'ig_user': 'zarputin'
-            }
-        },
-        { 
-            $match: {
-                'ig_user_statistics.date': { 
-                    $gt: start,
-                    $lt: end
+    if(!errorHappened) {
+        var start = new Date(res[1] + ' ' + res[2]);
+        var end = new Date(start);
+        end.setMonth(end.getMonth() + 1);
+        
+        db.instagram.aggregate([
+            {
+                $match: {
+                    'ig_user': res[0]
                 }
-            }
-        },
-        {
-            $unwind: '$ig_user_statistics'
-        },
-        {
-            $match: {
-                'ig_user_statistics.date': { 
-                    $gt: start,
-                    $lt: end
+            },
+            {
+                $unwind: '$ig_user_statistics'
+            },
+            {
+                $match: {
+                    'ig_user_statistics.date': { 
+                        $gte: start,
+                        $lt: end
+                    }
                 }
-            }
-        },
-        {
-            $group: {
-                '_id': '$_id',
-                'ig_user': {
-                    '$first': '$ig_user'
-                },
-                'ig_user_id': {
-                    '$first': '$ig_user_id'
-                },
-                'ig_user_statistics': { 
-                    '$push': {
-                        'date': '$ig_user_statistics.date',
-                        'followers': '$ig_user_statistics.followers',
-                        'followings': '$ig_user_statistics.followings'
+            },
+            {
+                $group: {
+                    '_id': '$_id',
+                    'ig_user': {
+                        '$first': '$ig_user'
+                    },
+                    'ig_user_id': {
+                        '$first': '$ig_user_id'
+                    },
+                    'ig_user_statistics': { 
+                        '$push': {
+                            'date': '$ig_user_statistics.date',
+                            'followers': '$ig_user_statistics.followers',
+                            'followings': '$ig_user_statistics.followings'
+                        }
                     }
                 }
             }
-        }
-    ], function (err, docs) {
-        if (err) {
-            error(err.message);
-        } else {
-            log(JSON.stringify(docs, 'null', '\t'));
-        }
-    });
+        ], function (err, docs) {
+            if (err) {
+                error(err.message);
+            } else {
+                log(JSON.stringify(docs, 'null', '\t'));
+            }
+        });
+    }   
 }
 
 
@@ -243,5 +287,45 @@ function popLastElementFromArray() {
             }
             db.close();
         });
+}
+
+function jlog(docs) {
+    log(JSON.stringify(docs, 'null', '\t'));
+}
+
+function test_getDataForMonthAggregate() {
+    //Test cases
+    // - navItem === string?
+    getDataForMonthAggregate(1);
+    getDataForMonthAggregate({ test: 1 });
+    getDataForMonthAggregate(new Date());
+    getDataForMonthAggregate(function () { var i = 'blub'; });
+    getDataForMonthAggregate([1, 2, 3]);
+    // - string consists of three parts?
+    getDataForMonthAggregate('');
+    getDataForMonthAggregate('asd-asd');
+    getDataForMonthAggregate('asd-asd-asd-asd');
+    getDataForMonthAggregate('asd-asd-asd');
+    getDataForMonthAggregate('--');
+    // - is first part a valid username?
+    getDataForMonthAggregate('121a-asd-asd');
+    getDataForMonthAggregate('-asd-asd');
+    getDataForMonthAggregate(':-June-2011');
+    // - is the second part a month?
+    getDataForMonthAggregate('asd-12-asd');
+    getDataForMonthAggregate('asd--asd');
+    // - is third part a number and a valid year?
+    getDataForMonthAggregate('asd-June-2s15');
+    getDataForMonthAggregate('asd-asd-9');
+    getDataForMonthAggregate('asd-June-2010');
+    // - random
+    getDataForMonthAggregate('zarputin-2014-December');
+    getDataForMonthAggregate('zarputin-December-2009');
+    getDataForMonthAggregate('sdsa.aee');
+    getDataForMonthAggregate(1);
+    getDataForMonthAggregate(new Date());
+    getDataForMonthAggregate('December.2009');
+    getDataForMonthAggregate('2009.December');
+    getDataForMonthAggregate('zarputin-December-2014');
 }
 
