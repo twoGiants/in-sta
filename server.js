@@ -98,36 +98,111 @@ app.use(bodyParser.json());
     });
 
     app.get('/TEST/:TESTitem', function (req, res) {
-        var TESTitem = req.params.TESTitem;
-        log('I received a GET request from /TEST/' + TESTitem + '.');
+        var navItem = req.params.TESTitem;
+        log('I received a GET request from /TEST/' + navItem + '.');
 
-        //        db.instagram.find({
-        //                'ig_user': item
-        //        }, function (err, docs) {
-        //            if (err) {
-        //                error(err.message);
-        //            } else {
-        //                res.json(docs);
-        //            }
-        //        });
-        db.instagram.find({
-            'ig_user': 'dummy',
-            'ig_user_statistics': {
-                '$elemMatch': {
-                    'followers': '10'
+        var errorHappened = false;
+        var monthList = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+        /*
+            Cases:
+                + navItem === string?
+                + string consists of three parts?
+                + is first part a a valid username? /^[a-zA-Z0-9_.]*$/
+                + is the second part a month?
+                + is third part a number and a valid year?
+        */ 
+        try {
+            //Error case
+            if (typeof navItem != 'string') {
+                throw new Error('Query string must be a string, not -> ' + typeof navItem);
+            }
+
+            //Error case
+            var res = navItem.split('-');
+            if (res.length != 3) {
+                throw new Error('Query string length must be 3, not -> ' + res.length);
+            }
+
+            //Error case
+            if (!(/^[a-zA-Z0-9_.]+$/.test(res[0]))) {
+                throw new Error('First query value must be a valid username -> ' + res[0]);
+            }
+
+            //Error case
+            if (typeof res[1] != 'string') {
+                throw new Error('Second query value is not a string -> ' + typeof res[1]);
+            }
+
+            //Error case
+            if (monthList.indexOf(res[1]) === -1){
+                throw new Error('Second query value is not a month -> ' + res[1]);
+            }
+
+            //Error case
+            if (!(/^[0-9]{4}/.test(res[2]))) {
+                throw new Error('Third query value is not a 4 digit number -> ' + res[2]);
+            }
+
+            //Error case
+            res[2] = parseInt(res[2]);
+            var today = new Date();
+            if (res[2] < 2010 || res[2] > today.getFullYear()) {
+                throw new Error('Third query value is not a valid year -> ' + res[2]);
+            }   
+        } catch (err) {
+            error(err.name + ': ' +err.message);
+            errorHappened = true;
+        }
+
+        if(!errorHappened) {
+            var start = new Date(res[1] + ' ' + res[2]);
+            var end = new Date(start);
+            end.setMonth(end.getMonth() + 1);
+
+            db.instagram.aggregate([
+                {
+                    $match: {
+                        'ig_user': res[0]
+                    }
+                },
+                {
+                    $unwind: '$ig_user_statistics'
+                },
+                {
+                    $match: {
+                        'ig_user_statistics.date': { 
+                            $gte: start,
+                            $lt: end
+                        }
+                    }
+                },
+                {
+                    $group: {
+                        '_id': '$_id',
+                        'ig_user': {
+                            '$first': '$ig_user'
+                        },
+                        'ig_user_id': {
+                            '$first': '$ig_user_id'
+                        },
+                        'ig_user_statistics': { 
+                            '$push': {
+                                'date': '$ig_user_statistics.date',
+                                'followers': '$ig_user_statistics.followers',
+                                'followings': '$ig_user_statistics.followings'
+                            }
+                        }
+                    }
                 }
-            }
-        }, {
-            'ig_user': 1,
-            'ig_user_id': 1,
-            'ig_user_statistics.followers': 1
-        }, function (err, docs) {
-            if (err) {
-                error(err.message);
-            } else {
-                log(JSON.stringify(docs, 'null', '\t'));
-            }
-        });
+            ], function (err, docs) {
+                if (err) {
+                    error(err.message);
+                } else {
+                    log(JSON.stringify(docs, 'null', '\t'));
+                }
+            });
+        }
     });
 
 

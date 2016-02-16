@@ -138,7 +138,7 @@ function getDataForMonthAggregate(navItem) {
                 log(JSON.stringify(docs, 'null', '\t'));
             }
         });
-    }   
+    }
 }
 
 
