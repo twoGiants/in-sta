@@ -1,9 +1,11 @@
 <!--{{shizzle.user1['2016'][0]}}-->
+<!--
 <ul class="nav navbar-nav navbar-left">
     <li ng-repeat="username in usernames">
         <a href="#{{ username.ig_user }}" ng-click="sendDataFromNavigationCtrl(username.ig_user)">{{ username.ig_user }}</a>
     </li>
 </ul>
+-->
 
 <ul class="nav navbar-nav navbar-left">
     <li ng-repeat="(username, years) in shizzle">
@@ -17,7 +19,7 @@
                 </a>
                 <ul class="nav navbar-nav navbar-left">
                     <li ng-repeat="month in months">
-                        <a href="#{{ username + '-' + month + '-' + year}}" ng-click="TESTsendDataFromNavigationCtrl(username + '-' + month + '-' + year)">
+                        <a href="#{{ username + '-' + month + '-' + year}}" ng-click="sendDataFromNavigationCtrl(username + '-' + month + '-' + year)">
                             {{ month }}
                         </a>
                     </li>

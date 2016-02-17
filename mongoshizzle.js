@@ -23,17 +23,45 @@ var bodyParser = require("body-parser");
 
 var db = mongojs(connection_string, ['instagram']);
 
-//getDataForMonthAggregate();
-/*
-I get the string: username-month-year
-I put the data in queryObj
-I run the query with queryObj
-I send the data back to the fe
-1 case: correct navItem
-    => works
-2 case: wrong navItem
-*/
-
+db.instagram.aggregate([
+    {
+        $match: {
+            'ig_user': 'zarputin'
+        }
+    },
+    {
+        $match: {
+            'ig_user_statistics.date': { $exists: true }
+        }
+    },
+    {
+        $project: {
+            'year': {
+                $year: '$date'
+            },
+            'month': {
+                $month: '$date'
+            }
+        }
+    },
+    {
+        $group: {
+            '_id': '$_id',
+            'distinctDate': {
+                $addToSet: {
+                    'year': '$year',
+                    'month': '$month'
+                }
+            }
+        }
+    }
+], function (err, docs) {
+    if (err) {
+        error(err.message);
+    } else {
+        jlog(docs);
+    }
+});
 
 //query string must be: 'username-month-year'
 function getDataForMonthAggregate(navItem) {
@@ -141,6 +169,41 @@ function getDataForMonthAggregate(navItem) {
     }
 }
 
+function test_getDataForMonthAggregate() {
+    //Test cases
+    // - navItem === string?
+    getDataForMonthAggregate(1);
+    getDataForMonthAggregate({ test: 1 });
+    getDataForMonthAggregate(new Date());
+    getDataForMonthAggregate(function () { var i = 'blub'; });
+    getDataForMonthAggregate([1, 2, 3]);
+    // - string consists of three parts?
+    getDataForMonthAggregate('');
+    getDataForMonthAggregate('asd-asd');
+    getDataForMonthAggregate('asd-asd-asd-asd');
+    getDataForMonthAggregate('asd-asd-asd');
+    getDataForMonthAggregate('--');
+    // - is first part a valid username?
+    getDataForMonthAggregate('121a-asd-asd');
+    getDataForMonthAggregate('-asd-asd');
+    getDataForMonthAggregate(':-June-2011');
+    // - is the second part a month?
+    getDataForMonthAggregate('asd-12-asd');
+    getDataForMonthAggregate('asd--asd');
+    // - is third part a number and a valid year?
+    getDataForMonthAggregate('asd-June-2s15');
+    getDataForMonthAggregate('asd-asd-9');
+    getDataForMonthAggregate('asd-June-2010');
+    // - random
+    getDataForMonthAggregate('zarputin-2014-December');
+    getDataForMonthAggregate('zarputin-December-2009');
+    getDataForMonthAggregate('sdsa.aee');
+    getDataForMonthAggregate(1);
+    getDataForMonthAggregate(new Date());
+    getDataForMonthAggregate('December.2009');
+    getDataForMonthAggregate('2009.December');
+    getDataForMonthAggregate('zarputin-December-2014');
+}
 
 function main() {
     setTimeout(function(){
@@ -293,39 +356,5 @@ function jlog(docs) {
     log(JSON.stringify(docs, 'null', '\t'));
 }
 
-function test_getDataForMonthAggregate() {
-    //Test cases
-    // - navItem === string?
-    getDataForMonthAggregate(1);
-    getDataForMonthAggregate({ test: 1 });
-    getDataForMonthAggregate(new Date());
-    getDataForMonthAggregate(function () { var i = 'blub'; });
-    getDataForMonthAggregate([1, 2, 3]);
-    // - string consists of three parts?
-    getDataForMonthAggregate('');
-    getDataForMonthAggregate('asd-asd');
-    getDataForMonthAggregate('asd-asd-asd-asd');
-    getDataForMonthAggregate('asd-asd-asd');
-    getDataForMonthAggregate('--');
-    // - is first part a valid username?
-    getDataForMonthAggregate('121a-asd-asd');
-    getDataForMonthAggregate('-asd-asd');
-    getDataForMonthAggregate(':-June-2011');
-    // - is the second part a month?
-    getDataForMonthAggregate('asd-12-asd');
-    getDataForMonthAggregate('asd--asd');
-    // - is third part a number and a valid year?
-    getDataForMonthAggregate('asd-June-2s15');
-    getDataForMonthAggregate('asd-asd-9');
-    getDataForMonthAggregate('asd-June-2010');
-    // - random
-    getDataForMonthAggregate('zarputin-2014-December');
-    getDataForMonthAggregate('zarputin-December-2009');
-    getDataForMonthAggregate('sdsa.aee');
-    getDataForMonthAggregate(1);
-    getDataForMonthAggregate(new Date());
-    getDataForMonthAggregate('December.2009');
-    getDataForMonthAggregate('2009.December');
-    getDataForMonthAggregate('zarputin-December-2014');
-}
+
 

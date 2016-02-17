@@ -4,7 +4,7 @@ module.exports = function ($scope, $filter, $http, dataShare) {
     // call on load
     $http.get('/statistics').success(function (response) {
         // setup --------------------------------------------------------
-        $scope.data = response[1]; // select which collection to display
+        $scope.data = response[2]; // select which collection to display
 //        $scope.quantity = 21;      // how many rows to display
         $scope.calcGrowth($scope.data.ig_user_statistics); // calc growth    
 
