@@ -92,12 +92,8 @@ app.use(bodyParser.json());
                 'ig_user': 'obamasan',
                 'years_months': [
                     {
-                        'year': 2015,
-                        'months': [ 1, 2, 3, 4 ]
-                    },
-                    {
                         'year': 2014,
-                        'months': [ 1, 2, 3, 4 ]
+                        'months': [ 12 ]
                     }
                 ]
             },
@@ -106,24 +102,43 @@ app.use(bodyParser.json());
                 'years_months': [
                     {
                         'year': 2015,
-                        'months': [ 1, 2, 3, 4 ]
+                        'months': [ 1 ]
                     },
                     {
                         'year': 2014,
-                        'months': [ 1, 2, 3, 4 ]
+                        'months': [ 1 ]
+                    }
+                ]
+            },
+            {
+                'ig_user': 'stazzmatazz',
+                'years_months': [
+                    {
+                        'year': 2016,
+                        'months': [ 2 ]
+                    },
+                    {
+                        'year': 2014,
+                        'months': [ 12 ]
                     }
                 ]
             }
-        ]
+        ];
+        var dummyResponse2 = {
+            'obamasan': {
+                '2014': [ 12 ]
+            },
+            'zarputin': {
+                '2015': [ 1 ],
+                '2014': [ 1 ]
+            },
+            'stazzmatazz': {
+                '2016': [ 2 ],
+                '2014': [ 12 ]
+            }   
+        };
         
-        db.instagram.find({}, { 'ig_user': 1 }, function (err, docs) {
-            if (err) {
-                error(err.message);
-            } else {
-                res.json(docs);
-                jlog(docs);
-            }
-        });
+        res.json(dummyResponse2);
     });
 
     // aggregate statistics user(month, year)

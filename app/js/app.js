@@ -19,7 +19,7 @@ inSta.controller('navigationCtrl', ['$scope', '$http' ,'dataShare', navigationCt
 inSta.directive('statisticsTable', [statisticsTable]);
 inSta.directive('navigationBar', [navigationBar]);
 
-// factory
+// factories
 inSta.factory('dataShare', function ($rootScope) {
     var service = {};
     service.data = false;
@@ -63,6 +63,13 @@ inSta.factory('statTools', function() {
     return service;
 });
 
+// filters
+inSta.filter('monthName', [function() {
+    return function (monthNumber) {
+        var monthNames = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ];
+        return monthNames[monthNumber - 1];
+    }
+}]);
 // Example code ---------------------------------------------------
 /*inSta.config(['$routeProvider', function($routeProvider) {
     $routeProvider.

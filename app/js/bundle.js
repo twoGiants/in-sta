@@ -22,7 +22,7 @@ inSta.controller('navigationCtrl', ['$scope', '$http' ,'dataShare', navigationCt
 inSta.directive('statisticsTable', [statisticsTable]);
 inSta.directive('navigationBar', [navigationBar]);
 
-// factory
+// factories
 inSta.factory('dataShare', function ($rootScope) {
     var service = {};
     service.data = false;
@@ -66,6 +66,13 @@ inSta.factory('statTools', function() {
     return service;
 });
 
+// filters
+inSta.filter('monthName', [function() {
+    return function (monthNumber) {
+        var monthNames = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ];
+        return monthNames[monthNumber - 1];
+    }
+}]);
 // Example code ---------------------------------------------------
 /*inSta.config(['$routeProvider', function($routeProvider) {
     $routeProvider.
@@ -98,30 +105,15 @@ module.exports = function ($scope, $http, dataShare) {
     }
 
     // requests username(months, years) for navigation from the be
-    $http.get('/nav').success(function (response) {
-        $scope.usernames = response;
-        console.log('Received navigation data: ' + $scope.usernames[0].ig_user);
-    }, function (error_response) {
+    $http.get('/nav').success(function (res) {
+        $scope.navigation = res;
+        
+        console.log('Received navigation data: ' + $scope.navigation);
+        
+    }, function (err) {
         // error handling
-        console.log('Error: ' + error_response.status);
+        console.log('Error: ' + err.status);
     });
-
-    var TESTMenuObj = {
-        "stazzmatazz": {
-            "2016": [
-                "February"
-            ]
-        },
-        "dummy": {
-            "2015": [
-                "December"
-            ],
-            "2016": [
-                "January"
-            ]
-        }
-    };
-    $scope.shizzle = TESTMenuObj;
 }
 },{}],4:[function(require,module,exports){
 'use strict';

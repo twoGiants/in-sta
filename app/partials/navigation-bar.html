@@ -8,7 +8,7 @@
 -->
 
 <ul class="nav navbar-nav navbar-left">
-    <li ng-repeat="(username, years) in shizzle">
+    <li ng-repeat="(username, years) in navigation">
         <a href="#" ng-click="">
             {{ username }}
         </a>
@@ -20,7 +20,7 @@
                 <ul class="nav navbar-nav navbar-left">
                     <li ng-repeat="month in months">
                         <a href="#{{ username + '-' + month + '-' + year}}" ng-click="sendDataFromNavigationCtrl(username + '-' + month + '-' + year)">
-                            {{ month }}
+                            {{ month | monthName }}
                         </a>
                     </li>
                 </ul>
