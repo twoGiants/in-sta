@@ -1,13 +1,13 @@
 'use strict';
 
-module.exports = function ($scope, $filter, $http, dataShare) {
+module.exports = function ($scope, $filter, $http, dataShare, statTools) {
     // call on load
     $http.get('/statistics').success(function (response) {
         // setup --------------------------------------------------------
         $scope.data = response[2]; // select which collection to display
 //        $scope.quantity = 21;      // how many rows to display
-        $scope.calcGrowth($scope.data.ig_user_statistics); // calc growth    
-
+        statTools.calcGrowth($scope.data.ig_user_statistics); // calc and set growt
+        
         // sort the table
         var orderBy = $filter('orderBy');
         $scope.order = function (predicate) {
@@ -43,17 +43,6 @@ module.exports = function ($scope, $filter, $http, dataShare) {
             console.error('response.status: ' + response.status);
         });
     });
-    
-    // calculate growth
-    $scope.calcGrowth = function (data) {
-        for (var i in data) {
-            if (i < 1) {
-                data[i].growth = '---';
-            } else {
-                data[i].growth = data[i].followers - data[i - 1].followers;
-            }
-        }
-    };
 }
 
 

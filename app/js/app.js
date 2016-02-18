@@ -12,7 +12,7 @@ require('./../css/app.css');
 var inSta = angular.module('inSta', ['ngRoute']);
 
 // controllers
-inSta.controller('tableCtrl', ['$scope', '$filter', '$http', 'dataShare', tableCtrl]);
+inSta.controller('tableCtrl', ['$scope', '$filter', '$http', 'dataShare', 'statTools', tableCtrl]);
 inSta.controller('navigationCtrl', ['$scope', '$http' ,'dataShare', navigationCtrl]);
 
 // directives
@@ -42,6 +42,24 @@ inSta.factory('dataShare', function ($rootScope) {
         this.data = data;
         $rootScope.$broadcast('data_shared_navigationCtrl');
     };
+    return service;
+});
+
+inSta.factory('statTools', function() {
+    var service = {};
+    var service.growth = false;
+    
+    //calc and set growth
+    service.calcGrowth = function (data) {
+        for (var i in data) {
+            if (i < 1) {
+                data[i].growth = '---';
+            } else {
+                data[i].growth = data[i].followers - data[i - 1].followers;
+            }
+        }
+    };
+    
     return service;
 });
 
