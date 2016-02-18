@@ -47,7 +47,7 @@ inSta.factory('dataShare', function ($rootScope) {
 
 inSta.factory('statTools', function() {
     var service = {};
-    var service.growth = false;
+    service.growth = false;
     
     //calc and set growth
     service.calcGrowth = function (data) {

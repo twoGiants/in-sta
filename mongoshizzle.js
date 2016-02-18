@@ -83,9 +83,12 @@ db.instagram.aggregate([
     },
     {
         $group: {
-            '_id': '$_id',
-            'years': {
-                $push: '$year'
+            '_id': '$year',
+            'user': {
+                $first: '$user'
+            },
+            'year': {
+                $first: '$year'
             },
             'months': {
                 $addToSet: '$month'

@@ -86,11 +86,42 @@ app.use(bodyParser.json());
     // get the usernames from the db
     app.get('/nav', function (req, res) {
         log('I received a GET request from navigationCtrl.');
+        
+        var dummyResponse = [
+            {
+                'ig_user': 'obamasan',
+                'years_months': [
+                    {
+                        'year': 2015,
+                        'months': [ 1, 2, 3, 4 ]
+                    },
+                    {
+                        'year': 2014,
+                        'months': [ 1, 2, 3, 4 ]
+                    }
+                ]
+            },
+            {
+                'ig_user': 'zarputin',
+                'years_months': [
+                    {
+                        'year': 2015,
+                        'months': [ 1, 2, 3, 4 ]
+                    },
+                    {
+                        'year': 2014,
+                        'months': [ 1, 2, 3, 4 ]
+                    }
+                ]
+            }
+        ]
+        
         db.instagram.find({}, { 'ig_user': 1 }, function (err, docs) {
             if (err) {
                 error(err.message);
             } else {
                 res.json(docs);
+                jlog(docs);
             }
         });
     });
@@ -211,7 +242,9 @@ app.listen(settingsObj.port, settingsObj.ipaddress, function () {
 });
 monkeyBiz.gogogo(settingsObj, db); 
 
-
+function jlog(docs) {
+    log(JSON.stringify(docs, 'null', '\t'));
+}
 // Example code ---------------------------------------------------
 /*var db_test = mongojs("contactlist", ["contactlist"]);
 app.get("/statistics_", function (req, res) {

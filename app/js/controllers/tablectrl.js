@@ -24,7 +24,7 @@ module.exports = function ($scope, $filter, $http, dataShare, statTools) {
         $http.get('/statistics/' + item).success(function (response) {
             console.log('Got the shizzle I requested from /statistics/' + item + '.');
             $scope.data = response[0];
-            $scope.calcGrowth($scope.data.ig_user_statistics);
+            statTools.calcGrowth($scope.data.ig_user_statistics);
         }, function (response) { // error callback
             console.error('response.data: ' + response.data);
             console.error('response.status: ' + response.status);
