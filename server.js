@@ -106,7 +106,7 @@ app.use(bodyParser.json());
                     },
                     {
                         'year': 2014,
-                        'months': [ 1 ]
+                        'months': [ 12 ]
                     }
                 ]
             },
@@ -124,6 +124,7 @@ app.use(bodyParser.json());
                 ]
             }
         ];
+        
         var dummyResponse2 = {
             'obamasan': {
                 '2014': [ 12 ]
@@ -138,7 +139,7 @@ app.use(bodyParser.json());
             }   
         };
         
-        res.json(dummyResponse2);
+        res.json(dummyResponse);
     });
 
     // aggregate statistics user(month, year)

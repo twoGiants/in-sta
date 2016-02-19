@@ -22,7 +22,7 @@ module.exports = function ($scope, $filter, $http, dataShare, statTools) {
     $scope.$on('data_shared', function () {
         var item = dataShare.getData();
         $http.get('/statistics/' + item).success(function (response) {
-            console.log('Got the shizzle I requested from /statistics/' + item + '.');
+            console.log('Got the data I requested for /statistics/' + item + '.');
             $scope.data = response[0];
             statTools.calcGrowth($scope.data.ig_user_statistics);
         }, function (response) { // error callback

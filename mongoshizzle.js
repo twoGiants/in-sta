@@ -61,8 +61,9 @@ var db = mongojs(connection_string, ['instagram']);
 //    jlog(doc);
 //});
 
-getDistinctYearsMonths();
 //deleteDocByObjectId('56c458f805cd7bda4054939d');
+
+// works
 function getDistinctYearsMonths() {
     db.instagram.aggregate([
         {
