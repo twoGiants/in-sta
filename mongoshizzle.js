@@ -23,102 +23,8 @@ var bodyParser = require("body-parser");
 
 var db = mongojs(connection_string, ['instagram']);
 
-//db.instagram.aggregate([
-//    {
-//        $match: {
-//            'dateArray': { $exists: true }
-//        }
-//    },
-//    {
-//        $unwind: '$dateArray'
-//    },
-//    {
-//        $project: {
-//            'year': {
-//                $year: '$dateArray.date'
-//            },
-//            'month': {
-//                $month: '$dateArray.date'
-//            }
-//        }
-//    },
-//    {
-//        $group: {
-//            '_id': '$_id',
-//            'distinctDate': {
-//                $addToSet: {
-//                    'year': '$year',
-//                    'month': '$month'
-//                }
-//            }
-//        }
-//    }
-//], function (err, docs) {
-//    if (err) {
-//        error(err.message);
-//    } else {
-//        jlog(docs);
-//    }
-//});
-
-// YOU ARE HERE
-db.instagram.aggregate([
-    {
-        $match: {
-            'user': { $exists: true }
-        }
-    },
-    {
-        $unwind: '$dateArray'
-    },
-     {
-        $project: {
-            'user': 1,
-            'year': {
-                $year: '$dateArray.date'
-            },
-            'month': {
-                $month: '$dateArray.date'
-            }
-        }
-    },
-    {
-        $group: {
-            '_id': '$year',
-            'user': {
-                $first: '$user'
-            },
-            'year': {
-                $first: '$year'
-            },
-            'months': {
-                $addToSet: '$month'
-            }
-        }
-    }
-], function (err, docs) {
-    if (err) {
-        error(err.message);
-    } else {
-        jlog(docs);
-    }
-});
-
-//{
-//    'user': [
-//        {
-//            'year': 2015,
-//            'months': [ 1, 2, 3, 4, 6 ]
-//        },
-//        {
-//            'year': 2014,
-//            'months': [ 6, 7, 8, 9, 10 ]
-//        }
-//    ]
-//}
-
 //db.instagram.insert({
-//    user: 'robot',
+//    user: 'human',
 //    dateArray: [
 //        {
 //            date: new Date(2010, 1, 1)
@@ -152,10 +58,68 @@ db.instagram.aggregate([
 //    if (err) {
 //        error(err.message);
 //    }
-//    log(JSON.stringify(doc, null, '\t'));
+//    jlog(doc);
 //});
 
+getDistinctYearsMonths();
 //deleteDocByObjectId('56c458f805cd7bda4054939d');
+function getDistinctYearsMonths() {
+    db.instagram.aggregate([
+        {
+            $match: {
+                'ig_user': { $exists: true }
+            }
+        },
+        {
+            $unwind: '$ig_user_statistics'
+        },
+        {
+            $project: {
+                'ig_user': 1,
+                'year': {
+                    $year: '$ig_user_statistics.date'
+                },
+                'month': {
+                    $month: '$ig_user_statistics.date'
+                }
+            }
+        },
+        {
+            $group: {
+                '_id': {
+                    'year': '$year',
+                    'ig_user': '$ig_user'
+                },
+                'ig_user': {
+                    $first: '$ig_user'
+                },
+                'year': {
+                    $first: '$year'
+                },
+                'months': {
+                    $addToSet: '$month'
+                }
+            }
+        },
+        {
+            $group: {
+                '_id': '$ig_user',
+                'years_months': {
+                    $push: {
+                        'year': '$year',
+                        'months': '$months'
+                    }
+                }
+            }
+        }
+    ], function (err, docs) {
+        if (err) {
+            error(err.message);
+        } else {
+            jlog(docs);
+        }
+    });
+}
 
 //query string must be: 'username-month-year'
 function getDataForMonthAggregate(navItem) {
