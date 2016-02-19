@@ -130,7 +130,7 @@ app.use(bodyParser.json());
             },
             'zarputin': {
                 '2015': [ 1 ],
-                '2014': [ 1 ]
+                '2014': [ 12 ]
             },
             'stazzmatazz': {
                 '2016': [ 2 ],
@@ -147,14 +147,13 @@ app.use(bodyParser.json());
         log('I received a GET request from /statistics/' + navItem + '.');
 
         var errorHappened = false;
-        var monthList = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
         /*
             Cases:
                 + navItem === string?
                 + string consists of three parts?
                 + is first part a a valid username? /^[a-zA-Z0-9_.]*$/
-                + is the second part a month?
+                + is the second part a month i.e. 0<x<13?
                 + is third part a number and a valid year?
         */ 
         try {
@@ -175,12 +174,13 @@ app.use(bodyParser.json());
             }
 
             //Error case
-            if (typeof navItemArr[1] != 'string') {
-                throw new Error('Second query value is not a string -> ' + typeof navItemArr[1]);
+            navItemArr[1] = parseInt(navItemArr[1]);
+            if (isNaN(navItemArr[1])) {
+                throw new Error('Second query value is not a number -> ' + navItemArr[1]);
             }
 
             //Error case
-            if (monthList.indexOf(navItemArr[1]) === -1){
+            if (navItemArr[1] < 1 || navItemArr[1] > 12){
                 throw new Error('Second query value is not a month -> ' + navItemArr[1]);
             }
 
@@ -196,12 +196,12 @@ app.use(bodyParser.json());
                 throw new Error('Third query value is not a valid year -> ' + navItemArr[2]);
             }   
         } catch (err) {
-            error(err.name + ': ' +err.message);
+            error(err.name + ': ' + err.message);
             errorHappened = true;
         }
 
         if(!errorHappened) {
-            var start = new Date(navItemArr[1] + ' ' + navItemArr[2]);
+            var start = new Date(navItemArr[2], navItemArr[1] - 1);
             var end = new Date(start);
             end.setMonth(end.getMonth() + 1);
 

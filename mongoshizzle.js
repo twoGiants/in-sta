@@ -61,6 +61,7 @@ var db = mongojs(connection_string, ['instagram']);
 //    }
 //});
 
+// YOU ARE HERE
 db.instagram.aggregate([
     {
         $match: {
@@ -159,7 +160,6 @@ db.instagram.aggregate([
 //query string must be: 'username-month-year'
 function getDataForMonthAggregate(navItem) {
     var errorHappened = false;
-    var monthList = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     
     /*
         Cases:
@@ -176,51 +176,52 @@ function getDataForMonthAggregate(navItem) {
         }
         
         //Error case
-        var res = navItem.split('-');
-        if (res.length != 3) {
-            throw new Error('Query string length must be 3, not -> ' + res.length);
+        var navItemArr = navItem.split('-');
+        if (navItemArr.length != 3) {
+            throw new Error('Query string length must be 3, not -> ' + navItemArr.length);
         }
         
         //Error case
-        if (!(/^[a-zA-Z0-9_.]+$/.test(res[0]))) {
-            throw new Error('First query value must be a valid username -> ' + res[0]);
+        if (!(/^[a-zA-Z0-9_.]+$/.test(navItemArr[0]))) {
+            throw new Error('First query value must be a valid username -> ' + navItemArr[0]);
         }
         
         //Error case
-        if (typeof res[1] != 'string') {
-            throw new Error('Second query value is not a string -> ' + typeof res[1]);
+        navItemArr[1] = parseInt(navItemArr[1]);
+        if (isNaN(navItemArr[1])) {
+            throw new Error('Second query value is not a number -> ' + navItemArr[1]);
         }
         
         //Error case
-        if (monthList.indexOf(res[1]) === -1){
-            throw new Error('Second query value is not a month -> ' + res[1]);
+        if (navItemArr[1] < 1 || navItemArr[1] > 12){
+            throw new Error('Second query value is not a month -> ' + navItemArr[1]);
         }
         
         //Error case
-        if (!(/^[0-9]{4}/.test(res[2]))) {
-            throw new Error('Third query value is not a 4 digit number -> ' + res[2]);
+        if (!(/^[0-9]{4}/.test(navItemArr[2]))) {
+            throw new Error('Third query value is not a 4 digit number -> ' + navItemArr[2]);
         }
     
         //Error case
-        res[2] = parseInt(res[2]);
+        navItemArr[2] = parseInt(navItemArr[2]);
         var today = new Date();
-        if (res[2] < 2010 || res[2] > today.getFullYear()) {
-            throw new Error('Third query value is not a valid year -> ' + res[2]);
+        if (navItemArr[2] < 2010 || navItemArr[2] > today.getFullYear()) {
+            throw new Error('Third query value is not a valid year -> ' + navItemArr[2]);
         }   
     } catch (err) {
-        error(err.name + ': ' +err.message);
+        error(err.name + ': ' + err.message);
         errorHappened = true;
     }
     
     if(!errorHappened) {
-        var start = new Date(res[1] + ' ' + res[2]);
+        var start = new Date(navItemArr[2], navItemArr[1] - 1);
         var end = new Date(start);
         end.setMonth(end.getMonth() + 1);
         
         db.instagram.aggregate([
             {
                 $match: {
-                    'ig_user': res[0]
+                    'ig_user': navItemArr[0]
                 }
             },
             {
@@ -256,7 +257,7 @@ function getDataForMonthAggregate(navItem) {
             if (err) {
                 error(err.message);
             } else {
-                log(JSON.stringify(docs, 'null', '\t'));
+                jlog(docs);
             }
         });
     }
@@ -284,18 +285,20 @@ function test_getDataForMonthAggregate() {
     getDataForMonthAggregate('asd-12-asd');
     getDataForMonthAggregate('asd--asd');
     // - is third part a number and a valid year?
-    getDataForMonthAggregate('asd-June-2s15');
+    getDataForMonthAggregate('asd-2-2s15');
     getDataForMonthAggregate('asd-asd-9');
-    getDataForMonthAggregate('asd-June-2010');
+    getDataForMonthAggregate('asd-1-2010');
     // - random
     getDataForMonthAggregate('zarputin-2014-December');
-    getDataForMonthAggregate('zarputin-December-2009');
+    getDataForMonthAggregate('zarputin-3-2009');
+    getDataForMonthAggregate('zarputin-03-2009');
     getDataForMonthAggregate('sdsa.aee');
     getDataForMonthAggregate(1);
     getDataForMonthAggregate(new Date());
-    getDataForMonthAggregate('December.2009');
+    getDataForMonthAggregate('12.2009');
     getDataForMonthAggregate('2009.December');
-    getDataForMonthAggregate('zarputin-December-2014');
+    getDataForMonthAggregate('zarputin-12-2014');
+    getDataForMonthAggregate('zarputin-1-2014');
 }
 
 function main() {
