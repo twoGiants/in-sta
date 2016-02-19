@@ -83,7 +83,7 @@ app.use(bodyParser.json());
 //        });
 //    });
 
-    // get the usernames from the db
+    // get the navigation menu data, i.e. usernames(years, months)
     app.get('/nav', function (req, res) {
         log('I received a GET request from navigationCtrl.');
         
@@ -139,7 +139,64 @@ app.use(bodyParser.json());
             }   
         };
         
-        res.json(dummyResponse);
+        db.instagram.aggregate([
+            {
+                $match: {
+                    'ig_user': { $exists: true }
+                }
+            },
+            {
+                $unwind: '$ig_user_statistics'
+            },
+            {
+                $project: {
+                    'ig_user': 1,
+                    'year': {
+                        $year: '$ig_user_statistics.date'
+                    },
+                    'month': {
+                        $month: '$ig_user_statistics.date'
+                    }
+                }
+            },
+            {
+                $group: {
+                    '_id': {
+                        'year': '$year',
+                        'ig_user': '$ig_user'
+                    },
+                    'ig_user': {
+                        $first: '$ig_user'
+                    },
+                    'year': {
+                        $first: '$year'
+                    },
+                    'months': {
+                        $addToSet: '$month'
+                    }
+                }
+            },
+            {
+                $group: {
+                    '_id': '$ig_user',
+                    'ig_user': {
+                        $first: '$ig_user'
+                    },
+                    'years_months': {
+                        $push: {
+                            'year': '$year',
+                            'months': '$months'
+                        }
+                    }
+                }
+            }
+        ], function (err, docs) {
+            if (err) {
+                error(err.message);
+            } else {
+                res.json(docs);
+            }
+        });
     });
 
     // aggregate statistics user(month, year)
