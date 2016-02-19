@@ -23,7 +23,117 @@ var bodyParser = require("body-parser");
 
 var db = mongojs(connection_string, ['instagram']);
 
+main();
 
+function main() {
+    if (process.argv[2] === 'delete' && (process.argv[3] != undefined)) {
+        log('Deleting user: ' + process.argv[3]);
+        deleteDocByObjectId(process.argv[3]);
+    }
+    
+    if (process.argv[2] === 'createStazz') {
+        log('Adding user stazzmatazz to db.');
+        createNewStazzDoc();
+    }
+    /*setTimeout(function(){
+        deleteDoc('obamasan');
+    }, 500);
+    
+    setTimeout(function(){
+        deleteDoc('zarputin');
+    }, 1000);
+    
+    setTimeout(function(){
+        createDoc('obamasan', 5);
+    }, 1500);
+
+    setTimeout(function(){
+        createDoc('zarputin', 30);
+    }, 2000);
+    
+    setTimeout(function(){
+        createDoc('stazzmatazz', 1);
+    }, 2500);*/
+}
+
+// works
+function createNewStazzDoc() {
+    var newDoc = {
+        "ig_user" : "stazzmatazz",
+        "ig_user_id" : "739298907",
+        "ig_user_statistics" : [
+            {
+                "date" : new Date(1454900706621),
+                "followers" : 39440,
+                "followings" : 3699
+            },
+            {
+                "date" : new Date(1454987110866),
+                "followers" : 39740,
+                "followings" : 3740
+            },
+            {
+                "date" : new Date(1455073516926),
+                "followers" : 40048,
+                "followings" : 3760
+            },
+            {
+                "date" : new Date(1455159925768),
+                "followers" : 40361,
+                "followings" : 3736
+            },
+            {
+                "date" : new Date(1455246329503),
+                "followers" : 40686,
+                "followings" : 3716
+            },
+            {
+                "date" : new Date(1455332734290),
+                "followers" : 40939,
+                "followings" : 3729
+            },
+            {
+                "date" : new Date(1455419138616),
+                "followers" : 41246,
+                "followings" : 3731
+            },
+            {
+                "date" : new Date(1455505542811),
+                "followers" : 41530,
+                "followings" : 3718
+            },
+            {
+                "date" : new Date(1455591947085),
+                "followers" : 41808,
+                "followings" : 3805
+            },
+            {
+                "date" : new Date(1455678351737),
+                "followers" : 42115,
+                "followings" : 3806
+            },
+            {
+                "date" : new Date(1455764756273),
+                "followers" : 42369,
+                "followings" : 3737
+            },
+            {
+                "date" : new Date(1455851160426),
+                "followers" : 42659,
+                "followings" : 3713
+            }
+        ]
+    };
+    
+    db.instagram.insert(newDoc, function (err, doc) {
+        if (err) {
+            error(err.message);
+        }
+        jlog(doc);
+    });
+}
+
+// works
 function getDistinctYearsMonths() {
     db.instagram.aggregate([
         {
@@ -229,28 +339,6 @@ function test_getDataForMonthAggregate() {
     getDataForMonthAggregate('zarputin-1-2014');
 }
 
-function main() {
-    setTimeout(function(){
-        deleteDoc('obamasan');
-    }, 500);
-    
-    setTimeout(function(){
-        deleteDoc('zarputin');
-    }, 1000);
-    
-    setTimeout(function(){
-        createDoc('obamasan', 5);
-    }, 1500);
-
-    setTimeout(function(){
-        createDoc('zarputin', 30);
-    }, 2000);
-    
-    setTimeout(function(){
-        createDoc('stazzmatazz', 1);
-    }, 2500);
-}
-
 function deleteDoc(username) {
     db.instagram.remove({ 'ig_user' : username}, function (err, doc) {
         if (err) {
@@ -267,7 +355,7 @@ function deleteDocByObjectId(objectId) {
         if (err) {
             error(err.message);
         }
-        log(JSON.stringify(doc, null, '\t'));
+        jlog(doc);
     });
 }
 
