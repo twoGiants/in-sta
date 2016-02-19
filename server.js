@@ -67,77 +67,9 @@ app.use(bodyParser.json());
         });
     });
 
-    // get only the user=item from the db
-//    app.get('/statistics/:item', function (req, res) {
-//        var item = req.params.item;
-//        log('I received a GET request from /statistics/' + item + '.');
-//
-//        db.instagram.find({
-//                'ig_user': item
-//        }, function (err, docs) {
-//            if (err) {
-//                error(err.message);
-//            } else {
-//                res.json(docs);
-//            }
-//        });
-//    });
-
-    // get the navigation menu data, i.e. usernames(years, months)
+    // get navigation menu data
     app.get('/nav', function (req, res) {
         log('I received a GET request from navigationCtrl.');
-        
-        var dummyResponse = [
-            {
-                'ig_user': 'obamasan',
-                'years_months': [
-                    {
-                        'year': 2014,
-                        'months': [ 12 ]
-                    }
-                ]
-            },
-            {
-                'ig_user': 'zarputin',
-                'years_months': [
-                    {
-                        'year': 2015,
-                        'months': [ 1 ]
-                    },
-                    {
-                        'year': 2014,
-                        'months': [ 12 ]
-                    }
-                ]
-            },
-            {
-                'ig_user': 'stazzmatazz',
-                'years_months': [
-                    {
-                        'year': 2016,
-                        'months': [ 2 ]
-                    },
-                    {
-                        'year': 2014,
-                        'months': [ 12 ]
-                    }
-                ]
-            }
-        ];
-        
-        var dummyResponse2 = {
-            'obamasan': {
-                '2014': [ 12 ]
-            },
-            'zarputin': {
-                '2015': [ 1 ],
-                '2014': [ 12 ]
-            },
-            'stazzmatazz': {
-                '2016': [ 2 ],
-                '2014': [ 12 ]
-            }   
-        };
         
         db.instagram.aggregate([
             {
@@ -307,7 +239,6 @@ app.use(bodyParser.json());
             });
         }
     });
-
 
 // start app ===================================================================
 app.listen(settingsObj.port, settingsObj.ipaddress, function () {
