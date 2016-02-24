@@ -4,12 +4,19 @@ var css = "/*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize
 'use strict';
 
 var angular = require('angular');
+// TODO
 require('angular-route');
+// TODO
 var tableCtrl = require('./controllers/tablectrl');
+// TODO
 var navigationCtrl = require('./controllers/navigationctrl');
+// TODO
 var statisticsTable = require('./directives/statisticstable');
+// TODO
 var navigationBar = require('./directives/navigationbar');
+
 var dataShareService = require('./services/datashare.service');
+
 require('jquery');
 require('./../css/app.css');
 
@@ -26,21 +33,6 @@ inSta.directive('navigationBar', [navigationBar]);
 // factories
 inSta.factory('dataShareService', ['$rootScope', dataShareService]);
 
-//inSta.factory('dataShare', function ($rootScope) {
-//    var service = {};
-//    service.data = false;
-//    
-//    service.sendData = function (data) {
-//        this.data = data;
-//        $rootScope.$broadcast('data_shared');
-//    };
-//    
-//    service.getData = function () {
-//        return this.data;
-//    };
-//    
-//    return service;
-//});
 
 inSta.factory('statTools', function() {
     var service = {};
@@ -229,19 +221,23 @@ module.exports = function() {
 'use strict';
 
 module.exports = function ($rootScope) {
-    var service = {};
-    service.data = false;
-    
-    service.sendData = function (data) {
-        this.data = data;
-        $rootScope.$broadcast('data_shared');
+    var service = {
+        data: false,
+        sendData: sendData,
+        getData: getData
     };
-    
-    service.getData = function () {
-        return this.data;
-    };
-    
     return service;
+    
+    //////////////////
+    
+    function sendData (data) {
+        service.data = data;
+        $rootScope.$broadcast('data_shared');
+    }
+    
+    function getData () {
+        return service.data;
+    }
 }
 
 // Example code ---------------------------------------------------

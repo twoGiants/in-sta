@@ -1,19 +1,23 @@
 'use strict';
 
 module.exports = function ($rootScope) {
-    var service = {};
-    service.data = false;
-    
-    service.sendData = function (data) {
-        this.data = data;
-        $rootScope.$broadcast('data_shared');
+    var service = {
+        data: false,
+        sendData: sendData,
+        getData: getData
     };
-    
-    service.getData = function () {
-        return this.data;
-    };
-    
     return service;
+    
+    //////////////////
+    
+    function sendData (data) {
+        service.data = data;
+        $rootScope.$broadcast('data_shared');
+    }
+    
+    function getData () {
+        return service.data;
+    }
 }
 
 // Example code ---------------------------------------------------
