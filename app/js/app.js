@@ -18,7 +18,26 @@ var statToolsService = require('./services/stattools.service');
 require('jquery');
 require('./../css/app.css');
 
-var inSta = angular.module('inSta', ['ngRoute']);
+angular
+    .module('inSta', [
+        'ngRoute'
+    ]);
+
+angular
+    .module('inSta')
+    .controller('tableCtrl', tableCtrl)
+    .controller('navigationCtrl', navigationCtrl)
+    .directive('statisticsTable', statisticsTable)
+    .directive('navigationBar', navigationBar)
+    .factory('dataShareService', dataShareService)
+    .factory('statToolsService', statToolsService)
+    .filter('monthName', monthName);
+
+tableCtrl.$inject = ['$scope', '$filter', '$http', 'dataShareService', 'statToolsService'];
+navigationCtrl.$inject = ['$scope', '$http' ,'dataShareService'];
+dataShareService.$inject = ['$rootScope'];
+
+/*var inSta = angular.module('inSta', ['ngRoute']);
 
 // controllers
 inSta.controller('tableCtrl', ['$scope', '$filter', '$http', 'dataShareService', 'statToolsService', tableCtrl]);
@@ -33,7 +52,7 @@ inSta.factory('dataShareService', ['$rootScope', dataShareService]);
 inSta.factory('statToolsService', [statToolsService]);
 
 // filters
-inSta.filter('monthName', monthName);
+inSta.filter('monthName', monthName);*/
 
 function monthName() {
     return function (monthNumber) {
