@@ -26,25 +26,16 @@ inSta.directive('navigationBar', [navigationBar]);
 inSta.factory('dataShare', function ($rootScope) {
     var service = {};
     service.data = false;
+    
     service.sendData = function (data) {
         this.data = data;
         $rootScope.$broadcast('data_shared');
     };
-    service.TESTsendData = function (TESTdata) {
-        this.data = TESTdata;
-        $rootScope.$broadcast('TESTdata_shared');
-    };
+    
     service.getData = function () {
         return this.data;
     };
-    service.sendDataFromTableCtrl = function (data) {
-        this.data = data;
-        $rootScope.$broadcast('data_shared_tableCtrl');
-    };
-    service.sendDataFromNavigationCtrl = function (data) {
-        this.data = data;
-        $rootScope.$broadcast('data_shared_navigationCtrl');
-    };
+    
     return service;
 });
 
@@ -73,6 +64,7 @@ inSta.filter('monthName', [function() {
         return monthNames[monthNumber - 1];
     }
 }]);
+
 // Example code ---------------------------------------------------
 /*inSta.config(['$routeProvider', function($routeProvider) {
     $routeProvider.
@@ -97,11 +89,6 @@ module.exports = function ($scope, $http, dataShare) {
     $scope.sendDataFromNavigationCtrl = function (item) {
         console.log('Sending from navigationCtrl: ' + item);
         dataShare.sendData(item);
-    }
-    
-    $scope.TESTsendDataFromNavigationCtrl = function (TESTitem) {
-        console.log('Sending TESTitem from navigationCtrl: ' + TESTitem);
-        dataShare.TESTsendData(TESTitem);
     }
 
     // requests username(months, years) for navigation from the be
@@ -143,19 +130,6 @@ module.exports = function ($scope, $filter, $http, dataShare, statTools) {
             console.log('Got the data I requested for /statistics/' + item + '.');
             $scope.data = response[0];
             statTools.calcGrowth($scope.data.ig_user_statistics);
-        }, function (response) { // error callback
-            console.error('response.data: ' + response.data);
-            console.error('response.status: ' + response.status);
-        });
-    });
-    
-    // TEST
-    $scope.$on('TESTdata_shared', function () {
-        var TESTitem = dataShare.getData();
-        console.log(TESTitem);
-        $http.get('/TEST/' + TESTitem).success(function (response) {
-            console.log('Got the shizzle I requested from /TESTitem/' + TESTitem + '.');
-            $scope.data = response[0];
         }, function (response) { // error callback
             console.error('response.data: ' + response.data);
             console.error('response.status: ' + response.status);

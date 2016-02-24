@@ -23,25 +23,16 @@ inSta.directive('navigationBar', [navigationBar]);
 inSta.factory('dataShare', function ($rootScope) {
     var service = {};
     service.data = false;
+    
     service.sendData = function (data) {
         this.data = data;
         $rootScope.$broadcast('data_shared');
     };
-    service.TESTsendData = function (TESTdata) {
-        this.data = TESTdata;
-        $rootScope.$broadcast('TESTdata_shared');
-    };
+    
     service.getData = function () {
         return this.data;
     };
-    service.sendDataFromTableCtrl = function (data) {
-        this.data = data;
-        $rootScope.$broadcast('data_shared_tableCtrl');
-    };
-    service.sendDataFromNavigationCtrl = function (data) {
-        this.data = data;
-        $rootScope.$broadcast('data_shared_navigationCtrl');
-    };
+    
     return service;
 });
 
@@ -70,6 +61,7 @@ inSta.filter('monthName', [function() {
         return monthNames[monthNumber - 1];
     }
 }]);
+
 // Example code ---------------------------------------------------
 /*inSta.config(['$routeProvider', function($routeProvider) {
     $routeProvider.
