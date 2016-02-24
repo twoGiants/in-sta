@@ -36,12 +36,14 @@ inSta.factory('dataShareService', ['$rootScope', dataShareService]);
 inSta.factory('statToolsService', [statToolsService]);
 
 // filters
-inSta.filter('monthName', [function() {
+inSta.filter('monthName', monthName);
+
+function monthName() {
     return function (monthNumber) {
         var monthNames = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ];
         return monthNames[monthNumber - 1];
     }
-}]);
+}
 
 // Example code ---------------------------------------------------
 /*inSta.config(['$routeProvider', function($routeProvider) {
