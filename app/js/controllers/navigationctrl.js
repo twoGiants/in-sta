@@ -1,11 +1,11 @@
 'use strict';
 
-module.exports = function ($scope, $http, dataShare) {
+module.exports = function ($scope, $http, dataShareService) {
 
     // broadcast selected navigation item
     $scope.sendDataFromNavigationCtrl = function (item) {
         console.log('Sending from navigationCtrl: ' + item);
-        dataShare.sendData(item);
+        dataShareService.sendData(item);
     }
 
     // requests username(months, years) for navigation from the be

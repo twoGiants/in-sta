@@ -1,9 +1,23 @@
 'use strict';
 
-// NOTHING HERE
+module.exports = function ($rootScope) {
+    var service = {};
+    service.data = false;
+    
+    service.sendData = function (data) {
+        this.data = data;
+        $rootScope.$broadcast('data_shared');
+    };
+    
+    service.getData = function () {
+        return this.data;
+    };
+    
+    return service;
+}
 
 // Example code ---------------------------------------------------
-var inStaServices = angular.module('inStaServices', ['ngResource']);
+/*var inStaServices = angular.module('inStaServices', ['ngResource']);
 
 inStaServices.factory('Statistics', ['$resource', function ($resource) {
     console.log('Hello');
@@ -40,4 +54,4 @@ inStaServices.service('calcService', function (mathService) {
     this.cube = function (a) {
         return mathService.multiply(a, mathService.multiply(a, a));
     };
-});
+});*/

@@ -6,35 +6,38 @@ var tableCtrl = require('./controllers/tablectrl');
 var navigationCtrl = require('./controllers/navigationctrl');
 var statisticsTable = require('./directives/statisticstable');
 var navigationBar = require('./directives/navigationbar');
+var dataShareService = require('./services/datashare.service');
 require('jquery');
 require('./../css/app.css');
 
 var inSta = angular.module('inSta', ['ngRoute']);
 
 // controllers
-inSta.controller('tableCtrl', ['$scope', '$filter', '$http', 'dataShare', 'statTools', tableCtrl]);
-inSta.controller('navigationCtrl', ['$scope', '$http' ,'dataShare', navigationCtrl]);
+inSta.controller('tableCtrl', ['$scope', '$filter', '$http', 'dataShareService', 'statTools', tableCtrl]);
+inSta.controller('navigationCtrl', ['$scope', '$http' ,'dataShareService', navigationCtrl]);
 
 // directives
 inSta.directive('statisticsTable', [statisticsTable]);
 inSta.directive('navigationBar', [navigationBar]);
 
 // factories
-inSta.factory('dataShare', function ($rootScope) {
-    var service = {};
-    service.data = false;
-    
-    service.sendData = function (data) {
-        this.data = data;
-        $rootScope.$broadcast('data_shared');
-    };
-    
-    service.getData = function () {
-        return this.data;
-    };
-    
-    return service;
-});
+inSta.factory('dataShareService', ['$rootScope', dataShareService]);
+
+//inSta.factory('dataShare', function ($rootScope) {
+//    var service = {};
+//    service.data = false;
+//    
+//    service.sendData = function (data) {
+//        this.data = data;
+//        $rootScope.$broadcast('data_shared');
+//    };
+//    
+//    service.getData = function () {
+//        return this.data;
+//    };
+//    
+//    return service;
+//});
 
 inSta.factory('statTools', function() {
     var service = {};

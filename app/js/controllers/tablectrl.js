@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function ($scope, $filter, $http, dataShare, statTools) {
+module.exports = function ($scope, $filter, $http, dataShareService, statTools) {
     // call on load
     $http.get('/statistics').success(function (response) {
         // setup --------------------------------------------------------
@@ -20,7 +20,7 @@ module.exports = function ($scope, $filter, $http, dataShare, statTools) {
     
     // call when navigation is used
     $scope.$on('data_shared', function () {
-        var item = dataShare.getData();
+        var item = dataShareService.getData();
         $http.get('/statistics/' + item).success(function (response) {
             console.log('Got the data I requested for /statistics/' + item + '.');
             $scope.data = response[0];
