@@ -1,12 +1,12 @@
 'use strict';
 
-module.exports = function ($scope, $filter, $http, dataShareService, statTools) {
+module.exports = function ($scope, $filter, $http, dataShareService, statToolsService) {
     // call on load
     $http.get('/statistics').success(function (response) {
         // setup --------------------------------------------------------
         $scope.data = response[0]; // select which collection to display
 //        $scope.quantity = 21;      // how many rows to display
-        statTools.calcGrowth($scope.data.ig_user_statistics); // calc and set growt
+        statToolsService.calcGrowth($scope.data.ig_user_statistics); // calc and set growt
         
         // sort the table
         var orderBy = $filter('orderBy');
@@ -24,7 +24,7 @@ module.exports = function ($scope, $filter, $http, dataShareService, statTools) 
         $http.get('/statistics/' + item).success(function (response) {
             console.log('Got the data I requested for /statistics/' + item + '.');
             $scope.data = response[0];
-            statTools.calcGrowth($scope.data.ig_user_statistics);
+            statToolsService.calcGrowth($scope.data.ig_user_statistics);
         }, function (response) { // error callback
             console.error('response.data: ' + response.data);
             console.error('response.status: ' + response.status);

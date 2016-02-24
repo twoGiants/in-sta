@@ -13,6 +13,7 @@ var statisticsTable = require('./directives/statisticstable');
 var navigationBar = require('./directives/navigationbar');
 
 var dataShareService = require('./services/datashare.service');
+var statToolsService = require('./services/stattools.service');
 
 require('jquery');
 require('./../css/app.css');
@@ -20,7 +21,7 @@ require('./../css/app.css');
 var inSta = angular.module('inSta', ['ngRoute']);
 
 // controllers
-inSta.controller('tableCtrl', ['$scope', '$filter', '$http', 'dataShareService', 'statTools', tableCtrl]);
+inSta.controller('tableCtrl', ['$scope', '$filter', '$http', 'dataShareService', 'statToolsService', tableCtrl]);
 inSta.controller('navigationCtrl', ['$scope', '$http' ,'dataShareService', navigationCtrl]);
 
 // directives
@@ -29,25 +30,7 @@ inSta.directive('navigationBar', [navigationBar]);
 
 // factories
 inSta.factory('dataShareService', ['$rootScope', dataShareService]);
-
-
-inSta.factory('statTools', function() {
-    var service = {};
-    service.growth = false;
-    
-    //calc and set growth
-    service.calcGrowth = function (data) {
-        for (var i in data) {
-            if (i < 1) {
-                data[i].growth = '---';
-            } else {
-                data[i].growth = data[i].followers - data[i - 1].followers;
-            }
-        }
-    };
-    
-    return service;
-});
+inSta.factory('statToolsService', [statToolsService]);
 
 // filters
 inSta.filter('monthName', [function() {
