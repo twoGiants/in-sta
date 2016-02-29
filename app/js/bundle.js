@@ -38,7 +38,7 @@ angular
     .filter('monthName', monthName);
 
 TableController.$inject = ['$scope', '$filter', '$http', 'dataShareService', 'statToolsService'];
-NavigationController.$inject = ['$scope', '$http' ,'dataShareService'];
+NavigationController.$inject = ['$http' ,'dataShareService'];
 dataShareService.$inject = ['$rootScope'];
 
 
@@ -64,22 +64,33 @@ dataShareService.$inject = ['$rootScope'];
 },{"./../css/app.css":1,"./controllers/navigation.controller":3,"./controllers/table.controller":4,"./directives/navigationbar":5,"./directives/statisticstable":6,"./filters/monthName":7,"./services/datashare.service":8,"./services/stattools.service":9,"angular":13,"angular-route":11,"jquery":15}],3:[function(require,module,exports){
 'use strict';
 
-module.exports = function ($scope, $http, dataShareService) {
-
+module.exports = function ($http, dataShareService) {
+    var vm = this;
+    
+    vm.navigation = [];
+    vm.sendDataFromNavigationController = sendDataFromNavigationController;
+    vm.loadNavigation = loadNavigation;
+    
+    loadNavigation();
+    
+    ////////////
+    
     // broadcast selected navigation item
-    $scope.sendDataFromNavigationController = function (item) {
+    function sendDataFromNavigationController(item) {
         console.log('Sending from NavigationController: ' + item);
         dataShareService.sendData(item);
     }
-
+    
     // requests username(months, years) for navigation from the be
-    $http.get('/nav').success(function (res) {
-        $scope.navigation = res;
-        console.log('Received navigation data: ' + $scope.navigation);
-    }, function (err) {
-        // error handling
-        console.log('Error: ' + err.status);
-    });
+    function loadNavigation() {
+        $http.get('/nav').success(function (res) {
+            vm.navigation = res;
+            console.log('Received navigation data: ' + vm.navigation);
+        }, function (err) {
+            // error handling
+            console.log('Error: ' + err.status);
+        });
+    }
 }
 },{}],4:[function(require,module,exports){
 'use strict';
@@ -188,7 +199,9 @@ module.exports = function() {
     return {
         restrict: 'E',
         templateUrl: 'partials/navigation-bar.html',
-        controller: 'NavigationController'
+        controller: 'NavigationController',
+        controllerAs: 'vm',
+        bindToController: true
     }
 }
 },{}],6:[function(require,module,exports){

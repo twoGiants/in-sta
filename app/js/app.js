@@ -35,7 +35,7 @@ angular
     .filter('monthName', monthName);
 
 TableController.$inject = ['$scope', '$filter', '$http', 'dataShareService', 'statToolsService'];
-NavigationController.$inject = ['$scope', '$http' ,'dataShareService'];
+NavigationController.$inject = ['$http' ,'dataShareService'];
 dataShareService.$inject = ['$rootScope'];
 
 

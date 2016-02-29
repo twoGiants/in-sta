@@ -1,19 +1,30 @@
 'use strict';
 
-module.exports = function ($scope, $http, dataShareService) {
-
+module.exports = function ($http, dataShareService) {
+    var vm = this;
+    
+    vm.navigation = [];
+    vm.sendDataFromNavigationController = sendDataFromNavigationController;
+    vm.loadNavigation = loadNavigation;
+    
+    loadNavigation();
+    
+    ////////////
+    
     // broadcast selected navigation item
-    $scope.sendDataFromNavigationController = function (item) {
+    function sendDataFromNavigationController(item) {
         console.log('Sending from NavigationController: ' + item);
         dataShareService.sendData(item);
     }
-
+    
     // requests username(months, years) for navigation from the be
-    $http.get('/nav').success(function (res) {
-        $scope.navigation = res;
-        console.log('Received navigation data: ' + $scope.navigation);
-    }, function (err) {
-        // error handling
-        console.log('Error: ' + err.status);
-    });
+    function loadNavigation() {
+        $http.get('/nav').success(function (res) {
+            vm.navigation = res;
+            console.log('Received navigation data: ' + vm.navigation);
+        }, function (err) {
+            // error handling
+            console.log('Error: ' + err.status);
+        });
+    }
 }
