@@ -10,7 +10,7 @@
                 </a>
                 <ul class="nav navbar-nav navbar-left">
                     <li ng-repeat="month in element.months">
-                        <a href="#{{ user.ig_user + '-' + month + '-' + element.year }}" ng-click="sendDataFromNavigationCtrl(user.ig_user + '-' + month + '-' + element.year)">
+                        <a href="#{{ user.ig_user + '-' + month + '-' + element.year }}" ng-click="sendDataFromNavigationController(user.ig_user + '-' + month + '-' + element.year)">
                             {{ month | monthName }}
                         </a>
                     </li>

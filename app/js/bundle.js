@@ -9,7 +9,7 @@ require('angular-route');
 // TODO
 var TableController = require('./controllers/table.controller');
 // TODO
-var navigationCtrl = require('./controllers/navigationctrl');
+var NavigationController = require('./controllers/navigation.controller');
 // TODO
 var statisticsTable = require('./directives/statisticstable');
 // TODO
@@ -30,7 +30,7 @@ angular
 angular
     .module('inSta')
     .controller('TableController', TableController)
-    .controller('navigationCtrl', navigationCtrl)
+    .controller('NavigationController', NavigationController)
     .directive('statisticsTable', statisticsTable)
     .directive('navigationBar', navigationBar)
     .factory('dataShareService', dataShareService)
@@ -38,7 +38,7 @@ angular
     .filter('monthName', monthName);
 
 TableController.$inject = ['$scope', '$filter', '$http', 'dataShareService', 'statToolsService'];
-navigationCtrl.$inject = ['$scope', '$http' ,'dataShareService'];
+NavigationController.$inject = ['$scope', '$http' ,'dataShareService'];
 dataShareService.$inject = ['$rootScope'];
 
 
@@ -61,23 +61,21 @@ dataShareService.$inject = ['$rootScope'];
         redirectTo: '/view1'
     });
 }]);*/
-},{"./../css/app.css":1,"./controllers/navigationctrl":3,"./controllers/table.controller":4,"./directives/navigationbar":5,"./directives/statisticstable":6,"./filters/monthName":7,"./services/datashare.service":8,"./services/stattools.service":9,"angular":13,"angular-route":11,"jquery":15}],3:[function(require,module,exports){
+},{"./../css/app.css":1,"./controllers/navigation.controller":3,"./controllers/table.controller":4,"./directives/navigationbar":5,"./directives/statisticstable":6,"./filters/monthName":7,"./services/datashare.service":8,"./services/stattools.service":9,"angular":13,"angular-route":11,"jquery":15}],3:[function(require,module,exports){
 'use strict';
 
 module.exports = function ($scope, $http, dataShareService) {
 
     // broadcast selected navigation item
-    $scope.sendDataFromNavigationCtrl = function (item) {
-        console.log('Sending from navigationCtrl: ' + item);
+    $scope.sendDataFromNavigationController = function (item) {
+        console.log('Sending from NavigationController: ' + item);
         dataShareService.sendData(item);
     }
 
     // requests username(months, years) for navigation from the be
     $http.get('/nav').success(function (res) {
         $scope.navigation = res;
-        
         console.log('Received navigation data: ' + $scope.navigation);
-        
     }, function (err) {
         // error handling
         console.log('Error: ' + err.status);
@@ -190,7 +188,7 @@ module.exports = function() {
     return {
         restrict: 'E',
         templateUrl: 'partials/navigation-bar.html',
-        controller: 'navigationCtrl'
+        controller: 'NavigationController'
     }
 }
 },{}],6:[function(require,module,exports){

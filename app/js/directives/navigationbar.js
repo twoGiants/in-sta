@@ -4,6 +4,6 @@ module.exports = function() {
     return {
         restrict: 'E',
         templateUrl: 'partials/navigation-bar.html',
-        controller: 'navigationCtrl'
+        controller: 'NavigationController'
     }
 }

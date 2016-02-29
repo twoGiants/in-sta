@@ -6,7 +6,7 @@ require('angular-route');
 // TODO
 var TableController = require('./controllers/table.controller');
 // TODO
-var navigationCtrl = require('./controllers/navigationctrl');
+var NavigationController = require('./controllers/navigation.controller');
 // TODO
 var statisticsTable = require('./directives/statisticstable');
 // TODO
@@ -27,7 +27,7 @@ angular
 angular
     .module('inSta')
     .controller('TableController', TableController)
-    .controller('navigationCtrl', navigationCtrl)
+    .controller('NavigationController', NavigationController)
     .directive('statisticsTable', statisticsTable)
     .directive('navigationBar', navigationBar)
     .factory('dataShareService', dataShareService)
@@ -35,7 +35,7 @@ angular
     .filter('monthName', monthName);
 
 TableController.$inject = ['$scope', '$filter', '$http', 'dataShareService', 'statToolsService'];
-navigationCtrl.$inject = ['$scope', '$http' ,'dataShareService'];
+NavigationController.$inject = ['$scope', '$http' ,'dataShareService'];
 dataShareService.$inject = ['$rootScope'];
 
 
