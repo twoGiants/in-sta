@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function ($http, dataShareService) {
+module.exports = function ($http, dataShareService, userDataService) {   
     var vm = this;
     
     vm.navigation = [];
@@ -19,12 +19,6 @@ module.exports = function ($http, dataShareService) {
     
     // requests username(months, years) for navigation from the be
     function loadNavigation() {
-        $http.get('/nav').success(function (res) {
-            vm.navigation = res;
-            console.log('Received navigation data: ' + vm.navigation);
-        }, function (err) {
-            // error handling
-            console.log('Error: ' + err.status);
-        });
+        vm.navigation = userDataService.nav();
     }
 }
