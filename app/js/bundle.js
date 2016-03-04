@@ -8,14 +8,13 @@ var angular = require('angular');
 require('angular-route');
 
 // TODO
-var TableController = require('./controllers/table.controller');
-// TODO
 var statisticsTable = require('./directives/statisticstable');
 // TODO
 var navigationBar = require('./directives/navigationbar');
 
 require('angular-resource');
 
+var TableController = require('./controllers/table.controller');
 var NavigationController = require('./controllers/navigation.controller');
 
 var dataShareService = require('./services/datashare.service');
@@ -44,8 +43,8 @@ angular
     .factory('userDataService', userDataService)
     .filter('monthName', monthName);
 
-TableController.$inject = ['$scope', '$filter', '$http', 'dataShareService', 'statToolsService'];
-NavigationController.$inject = ['$http' ,'dataShareService', 'userDataService'];
+TableController.$inject = ['$scope', '$http', 'dataShareService', 'statToolsService'];
+NavigationController.$inject = ['dataShareService', 'userDataService'];
 dataShareService.$inject = ['$rootScope'];
 userDataService.$inject = ['$resource'];
 
@@ -72,7 +71,7 @@ userDataService.$inject = ['$resource'];
 },{"./../css/app.css":1,"./controllers/navigation.controller":3,"./controllers/table.controller":4,"./directives/navigationbar":5,"./directives/statisticstable":6,"./filters/monthName":7,"./services/datashare.service":8,"./services/stattools.service":9,"./services/userdata.service":10,"angular":16,"angular-resource":12,"angular-route":14,"jquery":18}],3:[function(require,module,exports){
 'use strict';
 
-module.exports = function ($http, dataShareService, userDataService) {   
+module.exports = function (dataShareService, userDataService) {   
     var vm = this;
     
     vm.navigation = [];
@@ -97,36 +96,46 @@ module.exports = function ($http, dataShareService, userDataService) {
 },{}],4:[function(require,module,exports){
 'use strict';
 
-module.exports = function ($scope, $filter, $http, dataShareService, statToolsService) {
-    // call on load
-    $http.get('/statistics').success(function (response) {
-        // setup --------------------------------------------------------
-        $scope.data = response[0]; // select which collection to display
-//        $scope.quantity = 21;      // how many rows to display
-        statToolsService.calcGrowth($scope.data.ig_user_statistics); // calc and set growt
-        
-        // sort the table
-        var orderBy = $filter('orderBy');
-        $scope.order = function (predicate) {
-            $scope.predicate = predicate;
-            $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
-            $scope.data.ig_user_statistics = orderBy($scope.data.ig_user_statistics, predicate, $scope.reverse);
-        };
-        $scope.order('date', true);
-    });
+module.exports = function ($scope, $http, dataShareService, statToolsService) {
+    var table = this;
     
+    table.data = [];
+    table.loadTable = loadTable;
+    table.predicate = 'date';
+    table.reverse = true;
+    table.order = order;
+    
+    loadTable();
+    
+    ////////////
+    
+    function loadTable() {
+        $http.get('/statistics').success(function (response) {
+            table.data = response[0]; // select which collection to display
+            table.quantity = 14;      // how many rows to display
+            statToolsService.calcGrowth(table.data.ig_user_statistics); // calc and set growth
+        });
+    }
+    
+    function order(predicate) {
+        table.reverse = (table.predicate === predicate) ? !table.reverse : false;
+        table.predicate = predicate;
+    }
+    
+// OLD ==============================================================================    
     // call when navigation is used
     $scope.$on('data_shared', function () {
         var item = dataShareService.getData();
         $http.get('/statistics/' + item).success(function (response) {
             console.log('Got the data I requested for /statistics/' + item + '.');
-            $scope.data = response[0];
-            statToolsService.calcGrowth($scope.data.ig_user_statistics);
+            table.data = response[0];
+            statToolsService.calcGrowth(table.data.ig_user_statistics);
         }, function (response) { // error callback
             console.error('response.data: ' + response.data);
             console.error('response.status: ' + response.status);
         });
     });
+// OLD ==============================================================================
 }
 
 
@@ -213,7 +222,9 @@ module.exports = function() {
     return {
         restrict: 'E',
         templateUrl: 'partials/statistics-table.html',
-        controller: 'TableController'
+        controller: 'TableController',
+        controllerAs: 'table',
+        bindToController: true
     }
 }
 },{}],7:[function(require,module,exports){
@@ -297,7 +308,7 @@ module.exports = function () {
     };
     return service;
     
-    //////////////////
+    ////////////
     
     function calcGrowth (data) {
         for (var i in data) {
@@ -312,7 +323,8 @@ module.exports = function () {
 },{}],10:[function(require,module,exports){
 module.exports = function ($resource) {
     return $resource('/', {}, {
-        nav: { method: 'GET', url: '/nav', isArray: true }
+        nav: { method: 'GET', url: '/nav', isArray: true },
+        stat: { method: 'GET', url: '/statistics', isArray: true}
     });
 }
 },{}],11:[function(require,module,exports){

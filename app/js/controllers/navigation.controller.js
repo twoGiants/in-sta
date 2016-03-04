@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function ($http, dataShareService, userDataService) {   
+module.exports = function (dataShareService, userDataService) {   
     var vm = this;
     
     vm.navigation = [];

@@ -1,21 +1,21 @@
 <table class="table">
     <caption class="text-left">
-        <h1>Statistics: {{ data.ig_user }}</h1></caption>
+        <h1>Statistics: {{ table.data.ig_user }}</h1></caption>
     <tr class="table-header">
         <th>
-            <a href="" ng-click="order('date')" ng-class="{reverse:reverse}">Date</a>
+            <a href="" ng-click="table.order('date')" ng-class="{reverse:reverse}">Date</a>
         </th>
         <th class="number">
-            <a href="" ng-click="order('followers')" ng-class="{reverse:reverse}">Followers</a>
+            <a href="" ng-click="table.order('followers')" ng-class="{reverse:reverse}">Followers</a>
         </th>
         <th class="number">
-            <a href="" ng-click="order('followings')" ng-class="{reverse:reverse}">Followings</a>
+            <a href="" ng-click="table.order('followings')" ng-class="{reverse:reverse}">Followings</a>
         </th>
         <th class="number">
-            <a href="" ng-click="order('growth')" ng-class="{reverse:reverse}">Growth</a>
+            <a href="" ng-click="table.order('growth')" ng-class="{reverse:reverse}">Growth</a>
         </th>
     </tr>
-    <tr class="data-row" ng-class-even="'even'" ng-repeat="row in data.ig_user_statistics | limitTo: quantity">
+    <tr class="data-row" ng-class-even="'even'" ng-repeat="row in table.data.ig_user_statistics | orderBy:table.predicate:table.reverse | limitTo: table.quantity">
         <td>
             {{ row.date | date: 'EEE, dd.MM.yyyy' }}
         </td>

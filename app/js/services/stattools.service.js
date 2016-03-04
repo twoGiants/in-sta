@@ -7,7 +7,7 @@ module.exports = function () {
     };
     return service;
     
-    //////////////////
+    ////////////
     
     function calcGrowth (data) {
         for (var i in data) {

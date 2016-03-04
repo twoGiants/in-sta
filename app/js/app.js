@@ -5,14 +5,13 @@ var angular = require('angular');
 require('angular-route');
 
 // TODO
-var TableController = require('./controllers/table.controller');
-// TODO
 var statisticsTable = require('./directives/statisticstable');
 // TODO
 var navigationBar = require('./directives/navigationbar');
 
 require('angular-resource');
 
+var TableController = require('./controllers/table.controller');
 var NavigationController = require('./controllers/navigation.controller');
 
 var dataShareService = require('./services/datashare.service');
@@ -41,8 +40,8 @@ angular
     .factory('userDataService', userDataService)
     .filter('monthName', monthName);
 
-TableController.$inject = ['$scope', '$filter', '$http', 'dataShareService', 'statToolsService'];
-NavigationController.$inject = ['$http' ,'dataShareService', 'userDataService'];
+TableController.$inject = ['$scope', '$http', 'dataShareService', 'statToolsService'];
+NavigationController.$inject = ['dataShareService', 'userDataService'];
 dataShareService.$inject = ['$rootScope'];
 userDataService.$inject = ['$resource'];
 

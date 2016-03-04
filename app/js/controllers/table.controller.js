@@ -1,35 +1,45 @@
 'use strict';
 
-module.exports = function ($scope, $filter, $http, dataShareService, statToolsService) {
-    // call on load
-    $http.get('/statistics').success(function (response) {
-        // setup --------------------------------------------------------
-        $scope.data = response[0]; // select which collection to display
-//        $scope.quantity = 21;      // how many rows to display
-        statToolsService.calcGrowth($scope.data.ig_user_statistics); // calc and set growt
-        
-        // sort the table
-        var orderBy = $filter('orderBy');
-        $scope.order = function (predicate) {
-            $scope.predicate = predicate;
-            $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
-            $scope.data.ig_user_statistics = orderBy($scope.data.ig_user_statistics, predicate, $scope.reverse);
-        };
-        $scope.order('date', true);
-    });
+module.exports = function ($scope, $http, dataShareService, statToolsService) {
+    var table = this;
     
+    table.data = [];
+    table.loadTable = loadTable;
+    table.predicate = 'date';
+    table.reverse = true;
+    table.order = order;
+    
+    loadTable();
+    
+    ////////////
+    
+    function loadTable() {
+        $http.get('/statistics').success(function (response) {
+            table.data = response[0]; // select which collection to display
+            table.quantity = 14;      // how many rows to display
+            statToolsService.calcGrowth(table.data.ig_user_statistics); // calc and set growth
+        });
+    }
+    
+    function order(predicate) {
+        table.reverse = (table.predicate === predicate) ? !table.reverse : false;
+        table.predicate = predicate;
+    }
+    
+// OLD ==============================================================================    
     // call when navigation is used
     $scope.$on('data_shared', function () {
         var item = dataShareService.getData();
         $http.get('/statistics/' + item).success(function (response) {
             console.log('Got the data I requested for /statistics/' + item + '.');
-            $scope.data = response[0];
-            statToolsService.calcGrowth($scope.data.ig_user_statistics);
+            table.data = response[0];
+            statToolsService.calcGrowth(table.data.ig_user_statistics);
         }, function (response) { // error callback
             console.error('response.data: ' + response.data);
             console.error('response.status: ' + response.status);
         });
     });
+// OLD ==============================================================================
 }
 
 

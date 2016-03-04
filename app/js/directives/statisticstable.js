@@ -4,6 +4,8 @@ module.exports = function() {
     return {
         restrict: 'E',
         templateUrl: 'partials/statistics-table.html',
-        controller: 'TableController'
+        controller: 'TableController',
+        controllerAs: 'table',
+        bindToController: true
     }
 }
