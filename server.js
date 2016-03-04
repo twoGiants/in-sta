@@ -51,16 +51,21 @@ var db = mongojs(settingsObj.connectionString, ['instagram']);
 
 app.use(express.static(__dirname + '/app'));
 app.use(bodyParser.json());
+app.use(function (err, req, res, next) {
+    error(err);
+    res.status(500).send(err);
+});
 
 // routes ======================================================================
     // api ---------------------------------------------------------------------
     // get all data
-    app.get("/statistics", function (req, res) {
+    app.get("/statistics", function (req, res, next) {
         log("I received a GET request from tableCtrl.");
 
         db.instagram.find(function (err, docs) {
             if (err) {
                 error(err.message);
+                next(err.message);
             } else {
                 res.json(docs);
             }
@@ -132,7 +137,7 @@ app.use(bodyParser.json());
     });
 
     // aggregate statistics user(month, year)
-    app.get('/statistics/:item', function (req, res) {
+    app.get('/statistics/:item', function (req, res, next) {
         var navItem = req.params.item;
         log('I received a GET request from /statistics/' + navItem + '.');
 
@@ -188,6 +193,7 @@ app.use(bodyParser.json());
         } catch (err) {
             error(err.name + ': ' + err.message);
             errorHappened = true;
+            next(err.message);
         }
 
         if(!errorHappened) {

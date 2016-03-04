@@ -43,7 +43,7 @@ angular
     .factory('userDataService', userDataService)
     .filter('monthName', monthName);
 
-TableController.$inject = ['$scope', '$http', 'dataShareService', 'statToolsService'];
+TableController.$inject = ['$scope', 'dataShareService', 'statToolsService', 'userDataService'];
 NavigationController.$inject = ['dataShareService', 'userDataService'];
 dataShareService.$inject = ['$rootScope'];
 userDataService.$inject = ['$resource'];
@@ -84,7 +84,7 @@ module.exports = function (dataShareService, userDataService) {
     
     // broadcast selected navigation item
     function sendDataFromNavigationController(item) {
-        console.log('Sending from NavigationController: ' + item);
+        console.log('Sending request from NavigationController: ' + item);
         dataShareService.sendData(item);
     }
     
@@ -96,10 +96,11 @@ module.exports = function (dataShareService, userDataService) {
 },{}],4:[function(require,module,exports){
 'use strict';
 
-module.exports = function ($scope, $http, dataShareService, statToolsService) {
+module.exports = function ($scope, dataShareService, statToolsService, userDataService) {
     var table = this;
     
     table.data = [];
+    table.quantity = 14; // how many rows to display
     table.loadTable = loadTable;
     table.predicate = 'date';
     table.reverse = true;
@@ -110,10 +111,10 @@ module.exports = function ($scope, $http, dataShareService, statToolsService) {
     ////////////
     
     function loadTable() {
-        $http.get('/statistics').success(function (response) {
-            table.data = response[0]; // select which collection to display
-            table.quantity = 14;      // how many rows to display
-            statToolsService.calcGrowth(table.data.ig_user_statistics); // calc and set growth
+        table.data = userDataService.stat(function() {
+            statToolsService.calcGrowth(table.data[0].ig_user_statistics);
+        }, function (err) { // error callback
+            console.error('Internal Server Error: ' + err.data);
         });
     }
     
@@ -125,84 +126,19 @@ module.exports = function ($scope, $http, dataShareService, statToolsService) {
 // OLD ==============================================================================    
     // call when navigation is used
     $scope.$on('data_shared', function () {
-        var item = dataShareService.getData();
-        $http.get('/statistics/' + item).success(function (response) {
-            console.log('Got the data I requested for /statistics/' + item + '.');
-            table.data = response[0];
-            statToolsService.calcGrowth(table.data.ig_user_statistics);
-        }, function (response) { // error callback
-            console.error('response.data: ' + response.data);
-            console.error('response.status: ' + response.status);
+        var queryString = dataShareService.getData();
+        
+        table.data = userDataService.query({ item: queryString }, function () {
+            statToolsService.calcGrowth(table.data[0].ig_user_statistics);
+        }, function (err) {
+            console.error('Internal Server Error: ' + err.data);
         });
     });
 // OLD ==============================================================================
 }
 
 
-// Example code ---------------------------------------------------
-// note AddContact bugfix in the comments of the tutorial video
-/*inStaControllers.controller('view1Ctrl', ['$scope', '$http', function ($scope, $http) {
-    $scope.message = 'This is the view1 screen.';
 
-    var refresh = function () {
-        $http.get('/statistics_').success(function (response) {
-            console.log("Got the data I requested");
-            $scope.contactlist = response;
-            $scope.contact = "";
-        });
-    };
-
-    refresh();
-
-    $scope.addContact = function () {
-        console.log($scope.contact);
-        $http.post('/contactlist', $scope.contact).success(function (response) {
-            console.log(response);
-            refresh();
-        });
-    };
-
-    $scope.remove = function (id) {
-        console.log(id);
-        $http.delete('/contactlist/' + id).success(function (response) {
-            refresh();
-        });
-    };
-
-    $scope.edit = function (id) {
-        console.log(id);
-        $http.get('/contactlist/' + id).success(function (response) {
-            $scope.contact = response;
-        });
-    };
-
-    $scope.update = function () {
-        console.log($scope.contact._id);
-        $http.put('/contactlist/' + $scope.contact._id, $scope.contact).success(function (response) {
-            refresh();
-        });
-    };
-
-    $scope.deselect = function () {
-        $scope.contact = "";
-    };
-}]);
-
-inStaControllers.controller('view2Ctrl', function ($scope) {
-    $scope.message = 'This is the view2 screen.';
-});
-
-inStaControllers.controller('calcCtrl', function ($scope, calcService) {
-    $scope.formData = {};
-
-    $scope.doSquare = function () {
-        $scope.answer = calcService.square($scope.formData.number);
-    };
-
-    $scope.doCube = function (number) {
-        $scope.answer = calcService.cube($scope.formData.number);
-    };
-});*/
 },{}],5:[function(require,module,exports){
 'use strict';
 
@@ -247,7 +183,7 @@ module.exports = function ($rootScope) {
     };
     return service;
     
-    //////////////////
+    ////////////
     
     function sendData (data) {
         service.data = data;
@@ -258,46 +194,6 @@ module.exports = function ($rootScope) {
         return service.data;
     }
 }
-
-// Example code ---------------------------------------------------
-/*var inStaServices = angular.module('inStaServices', ['ngResource']);
-
-inStaServices.factory('Statistics', ['$resource', function ($resource) {
-    console.log('Hello');
-    return $resource('statistics/statistics.json', {}, {
-        get: {
-            method: 'GET'
-        }
-    });
-}]);
-
-inStaServices.service('mathService', function () {
-    this.add = function (a, b) {
-        return a + b;
-    };
-
-    this.subtract = function (a, b) {
-        return a - b;
-    };
-
-    this.multiply = function (a, b) {
-        return a * b;
-    };
-
-    this.divide = function (a, b) {
-        return a / b;
-    };
-
-});
-
-inStaServices.service('calcService', function (mathService) {
-    this.square = function (a) {
-        return mathService.multiply(a, a);
-    };
-    this.cube = function (a) {
-        return mathService.multiply(a, mathService.multiply(a, a));
-    };
-});*/
 },{}],9:[function(require,module,exports){
 'use strict';
 
@@ -324,7 +220,8 @@ module.exports = function () {
 module.exports = function ($resource) {
     return $resource('/', {}, {
         nav: { method: 'GET', url: '/nav', isArray: true },
-        stat: { method: 'GET', url: '/statistics', isArray: true}
+        stat: { method: 'GET', url: '/statistics', isArray: true },
+        query: { method: 'GET', url: '/statistics/:item', params: { item: 'ig_user' }, isArray: true }
     });
 }
 },{}],11:[function(require,module,exports){

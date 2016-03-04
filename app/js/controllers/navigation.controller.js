@@ -13,7 +13,7 @@ module.exports = function (dataShareService, userDataService) {
     
     // broadcast selected navigation item
     function sendDataFromNavigationController(item) {
-        console.log('Sending from NavigationController: ' + item);
+        console.log('Sending request from NavigationController: ' + item);
         dataShareService.sendData(item);
     }
     

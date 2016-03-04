@@ -1,6 +1,6 @@
 <table class="table">
     <caption class="text-left">
-        <h1>Statistics: {{ table.data.ig_user }}</h1></caption>
+        <h1>Statistics: {{ table.data[0].ig_user }}</h1></caption>
     <tr class="table-header">
         <th>
             <a href="" ng-click="table.order('date')" ng-class="{reverse:reverse}">Date</a>
@@ -15,7 +15,7 @@
             <a href="" ng-click="table.order('growth')" ng-class="{reverse:reverse}">Growth</a>
         </th>
     </tr>
-    <tr class="data-row" ng-class-even="'even'" ng-repeat="row in table.data.ig_user_statistics | orderBy:table.predicate:table.reverse | limitTo: table.quantity">
+    <tr class="data-row" ng-class-even="'even'" ng-repeat="row in table.data[0].ig_user_statistics | orderBy:table.predicate:table.reverse | limitTo: table.quantity">
         <td>
             {{ row.date | date: 'EEE, dd.MM.yyyy' }}
         </td>

@@ -40,7 +40,7 @@ angular
     .factory('userDataService', userDataService)
     .filter('monthName', monthName);
 
-TableController.$inject = ['$scope', '$http', 'dataShareService', 'statToolsService'];
+TableController.$inject = ['$scope', 'dataShareService', 'statToolsService', 'userDataService'];
 NavigationController.$inject = ['dataShareService', 'userDataService'];
 dataShareService.$inject = ['$rootScope'];
 userDataService.$inject = ['$resource'];
