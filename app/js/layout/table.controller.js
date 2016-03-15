@@ -19,7 +19,6 @@ module.exports = function ($scope, $log, dataShareService, statToolsService, use
     table.order = order;
     
     loadTable();
-    
     ////////////
     
     function loadTable() {
