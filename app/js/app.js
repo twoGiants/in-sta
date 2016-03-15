@@ -12,7 +12,7 @@ var navigationBar = require('./components/navigation-bar.directive');
 var dataShareService = require('./services/datashare.service');
 var statToolsService = require('./services/stattools.service');
 var userDataService = require('./services/userdata.service');
-var monthName = require('./filters/monthName');
+var monthName = require('./filters/monthname');
 
 angular
     .module('inSta', [ 
