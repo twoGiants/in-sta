@@ -5,10 +5,10 @@ require('angular-resource');
 require('./../css/app.css');
 
 var config = require('./app.config');
-var TableController = require('./controllers/table.controller');
-var NavigationController = require('./controllers/navigation.controller');
-var statisticsTable = require('./directives/statistics-table.directive');
-var navigationBar = require('./directives/navigation-bar.directive');
+var TableController = require('./layout/table.controller');
+var NavigationController = require('./layout/navigation.controller');
+var statisticsTable = require('./components/statistics-table.directive');
+var navigationBar = require('./components/navigation-bar.directive');
 var dataShareService = require('./services/datashare.service');
 var statToolsService = require('./services/stattools.service');
 var userDataService = require('./services/userdata.service');

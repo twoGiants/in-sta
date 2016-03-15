@@ -6,7 +6,7 @@
 module.exports = function() {
     return {
         restrict: 'E',
-        templateUrl: 'partials/statistics-table.directive.html',
+        templateUrl: 'js/components/statistics-table.directive.html',
         controller: 'TableController',
         controllerAs: 'table',
         bindToController: true

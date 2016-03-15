@@ -14,10 +14,10 @@ require('angular-resource');
 require('./../css/app.css');
 
 var config = require('./app.config');
-var TableController = require('./controllers/table.controller');
-var NavigationController = require('./controllers/navigation.controller');
-var statisticsTable = require('./directives/statistics-table.directive');
-var navigationBar = require('./directives/navigation-bar.directive');
+var TableController = require('./layout/table.controller');
+var NavigationController = require('./layout/navigation.controller');
+var statisticsTable = require('./components/statistics-table.directive');
+var navigationBar = require('./components/navigation-bar.directive');
 var dataShareService = require('./services/datashare.service');
 var statToolsService = require('./services/stattools.service');
 var userDataService = require('./services/userdata.service');
@@ -45,7 +45,43 @@ TableController.$inject = ['$scope', '$log', 'dataShareService', 'statToolsServi
 NavigationController.$inject = ['$log', 'dataShareService', 'userDataService'];
 dataShareService.$inject = ['$rootScope'];
 userDataService.$inject = ['$resource'];
-},{"./../css/app.css":1,"./app.config":2,"./controllers/navigation.controller":4,"./controllers/table.controller":5,"./directives/navigation-bar.directive":6,"./directives/statistics-table.directive":7,"./filters/monthName":8,"./services/datashare.service":9,"./services/stattools.service":10,"./services/userdata.service":11,"angular":15,"angular-resource":13}],4:[function(require,module,exports){
+},{"./../css/app.css":1,"./app.config":2,"./components/navigation-bar.directive":4,"./components/statistics-table.directive":5,"./filters/monthName":6,"./layout/navigation.controller":7,"./layout/table.controller":8,"./services/datashare.service":9,"./services/stattools.service":10,"./services/userdata.service":11,"angular":15,"angular-resource":13}],4:[function(require,module,exports){
+'use strict';
+
+module.exports = function() {
+    return {
+        restrict: 'E',
+        templateUrl: 'js/components/navigation-bar.directive.html',
+        controller: 'NavigationController',
+        controllerAs: 'vm',
+        bindToController: true
+    };
+};
+},{}],5:[function(require,module,exports){
+'use strict';
+
+/**
+* @example <statistics-table></statistics-table>
+*/
+module.exports = function() {
+    return {
+        restrict: 'E',
+        templateUrl: 'js/components/statistics-table.directive.html',
+        controller: 'TableController',
+        controllerAs: 'table',
+        bindToController: true
+    };
+};
+},{}],6:[function(require,module,exports){
+'use strict';
+
+module.exports = function monthName() {
+    return function (monthNumber) {
+        var monthNames = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ];
+        return monthNames[monthNumber - 1];
+    }
+} 
+},{}],7:[function(require,module,exports){
 'use strict';
 
 module.exports = function ($log, dataShareService, userDataService) {   
@@ -77,7 +113,7 @@ module.exports = function ($log, dataShareService, userDataService) {
         vm.navigation = userDataService.nav();
     }
 };
-},{}],5:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 /* I have two controllers, NavigationController and TableController. They are independent.
 TableController gets the user data from the db and displays it in a table.
 NavigationController generates a navigation menu from the user data in the db. 
@@ -129,42 +165,6 @@ module.exports = function ($scope, $log, dataShareService, statToolsService, use
 
 
 
-},{}],6:[function(require,module,exports){
-'use strict';
-
-module.exports = function() {
-    return {
-        restrict: 'E',
-        templateUrl: 'partials/navigation-bar.directive.html',
-        controller: 'NavigationController',
-        controllerAs: 'vm',
-        bindToController: true
-    };
-};
-},{}],7:[function(require,module,exports){
-'use strict';
-
-/**
-* @example <statistics-table></statistics-table>
-*/
-module.exports = function() {
-    return {
-        restrict: 'E',
-        templateUrl: 'partials/statistics-table.directive.html',
-        controller: 'TableController',
-        controllerAs: 'table',
-        bindToController: true
-    };
-};
-},{}],8:[function(require,module,exports){
-'use strict';
-
-module.exports = function monthName() {
-    return function (monthNumber) {
-        var monthNames = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ];
-        return monthNames[monthNumber - 1];
-    }
-} 
 },{}],9:[function(require,module,exports){
 'use strict';
 
