@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function (dataShareService, userDataService) {   
+module.exports = function ($log, dataShareService, userDataService) {   
     var vm = this;
     
     vm.navigation = [];
@@ -14,7 +14,7 @@ module.exports = function (dataShareService, userDataService) {
     
     // broadcast selected navigation item
     function sendDataFromNavigationController(item) {
-        console.log('Sending request from NavigationController: ' + item);
+        $log.log('Sending request from NavigationController: ' + item);
         dataShareService.sendData(item);
         blub(item);
     }

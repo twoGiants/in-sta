@@ -29,4 +29,4 @@ module.exports = function ($rootScope) {
     function getBlub () {
         return service.blub;
     }
-}
+};

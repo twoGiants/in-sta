@@ -14,12 +14,15 @@ var debug = require("debug");
 var log   = debug("server:log");
 var info  = debug("server:info");
 var error = debug("server:error");
+
 // SERVER
 var express = require("express");
 var app = express();
+
 // DB
 var mongojs = require("mongojs");
 var bodyParser = require("body-parser");
+
 // OTHER
 var monkeyBiz = require('./server/request-loop');
 
