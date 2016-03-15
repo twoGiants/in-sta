@@ -1,5 +1,5 @@
 <ul class="nav navbar-nav navbar-left">
-    <li ng-repeat="user in navigation">
+    <li ng-repeat="user in vm.navigation">
         <a href="#" ng-click="">
             {{ user.ig_user }}
         </a>
@@ -10,7 +10,7 @@
                 </a>
                 <ul class="nav navbar-nav navbar-left">
                     <li ng-repeat="month in element.months">
-                        <a href="#{{ user.ig_user + '-' + month + '-' + element.year }}" ng-click="sendDataFromNavigationCtrl(user.ig_user + '-' + month + '-' + element.year)">
+                        <a href="#{{ user.ig_user + '-' + month + '-' + element.year }}" ng-click="vm.sendDataFromNavigationController(user.ig_user + '-' + month + '-' + element.year)">
                             {{ month | monthName }}
                         </a>
                     </li>

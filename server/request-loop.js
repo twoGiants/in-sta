@@ -1,3 +1,5 @@
+"use strict";
+
 require("use-strict");
 // DEBUG
 var debug = require("debug");
@@ -26,7 +28,7 @@ module.exports.gogogo = function (settingsObj, db) {
         // error handling
         error(err.message);
     });
-}
+};
 
 // get data from source, save data to DB
 function getRemoteData(source, username, selector, callback, db) {

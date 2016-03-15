@@ -1,1 +1,0 @@
-console.error("Error: Cannot find module 'angular-route' from '/Users/Stas/Documents/Development/cloud/openshift/nodejs.git/app/js'");

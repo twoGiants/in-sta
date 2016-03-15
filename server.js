@@ -1,4 +1,4 @@
-/*jslint node: true */
+"use strict";
 /*
  READ THIS IF YOU HAVEN'T SEEN THIS CODE IN A WHILE
  - the webserver stuff starts from the "// SERVER" comment
@@ -14,18 +14,21 @@ var debug = require("debug");
 var log   = debug("server:log");
 var info  = debug("server:info");
 var error = debug("server:error");
+
 // SERVER
 var express = require("express");
 var app = express();
+
 // DB
 var mongojs = require("mongojs");
 var bodyParser = require("body-parser");
+
 // OTHER
-var monkeyBiz = require('./server/request-loop'); 
+var monkeyBiz = require('./server/request-loop');
 
 // configuration ===============================================================
 var settingsObj = {
-    desiredTime: [09, 58], 
+    desiredTime: [4, 5],
     usernames: ['stazzmatazz', 'lukatarman', 'instagram', 'taylorswift', 'selenagomez', 'kimkardashian'],
     source: "http://iconosquare.com/",
     selector: [
@@ -51,16 +54,21 @@ var db = mongojs(settingsObj.connectionString, ['instagram']);
 
 app.use(express.static(__dirname + '/app'));
 app.use(bodyParser.json());
+app.use(function (err, req, res, next) {
+    error(err);
+    res.status(500).send(err);
+});
 
 // routes ======================================================================
     // api ---------------------------------------------------------------------
     // get all data
-    app.get("/statistics", function (req, res) {
+    app.get("/statistics", function (req, res, next) {
         log("I received a GET request from tableCtrl.");
 
         db.instagram.find(function (err, docs) {
             if (err) {
                 error(err.message);
+                next(err.message);
             } else {
                 res.json(docs);
             }
@@ -132,11 +140,12 @@ app.use(bodyParser.json());
     });
 
     // aggregate statistics user(month, year)
-    app.get('/statistics/:item', function (req, res) {
+    app.get('/statistics/:item', function (req, res, next) {
         var navItem = req.params.item;
         log('I received a GET request from /statistics/' + navItem + '.');
 
         var errorHappened = false;
+        var navItemArr = '';
 
         /*
             Cases:
@@ -153,7 +162,7 @@ app.use(bodyParser.json());
             }
 
             //Error case
-            var navItemArr = navItem.split('-');
+            navItemArr = navItem.split('-');
             if (navItemArr.length != 3) {
                 throw new Error('Query string length must be 3, not -> ' + navItemArr.length);
             }
@@ -188,6 +197,7 @@ app.use(bodyParser.json());
         } catch (err) {
             error(err.name + ': ' + err.message);
             errorHappened = true;
+            next(err.message);
         }
 
         if(!errorHappened) {
@@ -249,77 +259,3 @@ monkeyBiz.gogogo(settingsObj, db);
 function jlog(docs) {
     log(JSON.stringify(docs, 'null', '\t'));
 }
-// Example code ---------------------------------------------------
-/*var db_test = mongojs("contactlist", ["contactlist"]);
-app.get("/statistics_", function (req, res) {
-    log("I received a GET request");
-
-    db_test.contactlist.find(function (err, docs) {
-        //        log(docs);
-        res.json(docs);
-    });
-});
-
-app.post("/contactlist", function (req, res) {
-    log(req.body);
-    db_test.contactlist.insert(req.body, function (err, doc) {
-        res.json(doc);
-    });
-});
-
-app.delete("/contactlist/:id", function (req, res) {
-    var id = req.params.id;
-    console.log(id);
-    db_test.contactlist.remove({
-        _id: mongojs.ObjectId(id)
-    }, function (err, doc) {
-        res.json(doc);
-    })
-});
-
-app.get("/contactlist/:id", function (req, res) {
-    var id = req.params.id;
-    console.log(id);
-
-    db_test.contactlist.findOne({
-        _id: mongojs.ObjectId(id)
-    }, function (err, doc) {
-        res.json(doc);
-    });
-});
-
-app.put('/contactlist/:id', function (req, res) {
-    var id = req.params.id;
-    log(req.body.name);
-    db_test.contactlist.findAndModify({
-        query: {
-            _id: mongojs.ObjectId(id)
-        },
-        update: {
-            $set: {
-                name: req.body.name,
-                email: req.body.email,
-                number: req.body.number
-            }
-        },
-        new: true
-    }, function (err, doc) {
-        res.json(doc);
-
-    });
-});*/
-
-// ----- old stuff before settingsObj ------
-//process.env.TZ = 'Europe/Berlin';
-//var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
-//var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
-//var connectionStringMongoDB;
-//if (process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
-//    connectionStringMongoDB = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ':' +
-//        process.env.OPENSHIFT_MONGODB_DB_PASSWORD + '@' +
-//        process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
-//        process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
-//        process.env.OPENSHIFT_APP_NAME;
-//} else {
-//    connectionStringMongoDB = '127.0.0.1:27017/nodejs';
-//}
