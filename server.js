@@ -1,4 +1,4 @@
-/*jslint node: true */
+"use strict";
 /*
  READ THIS IF YOU HAVEN'T SEEN THIS CODE IN A WHILE
  - the webserver stuff starts from the "// SERVER" comment
@@ -21,11 +21,11 @@ var app = express();
 var mongojs = require("mongojs");
 var bodyParser = require("body-parser");
 // OTHER
-var monkeyBiz = require('./server/request-loop'); 
+var monkeyBiz = require('./server/request-loop');
 
 // configuration ===============================================================
 var settingsObj = {
-    desiredTime: [09, 58], 
+    desiredTime: [4, 5],
     usernames: ['stazzmatazz', 'lukatarman', 'instagram', 'taylorswift', 'selenagomez', 'kimkardashian'],
     source: "http://iconosquare.com/",
     selector: [
@@ -142,6 +142,7 @@ app.use(function (err, req, res, next) {
         log('I received a GET request from /statistics/' + navItem + '.');
 
         var errorHappened = false;
+        var navItemArr = '';
 
         /*
             Cases:
@@ -158,7 +159,7 @@ app.use(function (err, req, res, next) {
             }
 
             //Error case
-            var navItemArr = navItem.split('-');
+            navItemArr = navItem.split('-');
             if (navItemArr.length != 3) {
                 throw new Error('Query string length must be 3, not -> ' + navItemArr.length);
             }

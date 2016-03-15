@@ -8,6 +8,9 @@
     "beforeEach": false,
     "afterEach": false,
     "module": false,
-    "inject": false
+    "inject": false,
+    "require": false,
+     "process": false,
+    "__dirname": false
   }
 }

@@ -8,7 +8,7 @@ When a navigation item is clicked, the TableController displays the according da
 */
 'use strict';
 
-module.exports = function ($scope, dataShareService, statToolsService, userDataService) {
+module.exports = function ($scope, $log, dataShareService, statToolsService, userDataService) {
     var table = this;
     
     table.data = [];
@@ -26,7 +26,7 @@ module.exports = function ($scope, dataShareService, statToolsService, userDataS
         table.data = userDataService.stat(function() {
             statToolsService.calcGrowth(table.data[0].ig_user_statistics);
         }, function (err) { // error callback
-            console.error('Internal Server Error: ' + err.data);
+            $log.error('Internal Server Error: ' + err.data);
         });
     }
     
@@ -42,9 +42,9 @@ module.exports = function ($scope, dataShareService, statToolsService, userDataS
         table.data = userDataService.query({ item: queryString }, function () {
             statToolsService.calcGrowth(table.data[0].ig_user_statistics);
         }, function (err) {
-            console.error('Internal Server Error: ' + err.data);
+            $log.error('Internal Server Error: ' + err.data);
         });
     });
-}
+};
 
 

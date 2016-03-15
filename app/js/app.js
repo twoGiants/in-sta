@@ -1,15 +1,14 @@
 'use strict';
 
-var angular = require('angular');
-// TODO
-require('angular-route');
+require('angular');
+require('angular-resource');
+
+var config = require('./app.config');
 
 // TODO
 var statisticsTable = require('./directives/statisticstable');
 // TODO
 var navigationBar = require('./directives/navigationbar');
-
-require('angular-resource');
 
 var TableController = require('./controllers/table.controller');
 var NavigationController = require('./controllers/navigation.controller');
@@ -25,12 +24,12 @@ require('./../css/app.css');
 
 angular
     .module('inSta', [ 
-        'ngRoute', 
         'ngResource' 
     ]);
 
 angular
     .module('inSta')
+    .config(config)
     .controller('TableController', TableController)
     .controller('NavigationController', NavigationController)
     .directive('statisticsTable', statisticsTable)
@@ -40,7 +39,8 @@ angular
     .factory('userDataService', userDataService)
     .filter('monthName', monthName);
 
-TableController.$inject = ['$scope', 'dataShareService', 'statToolsService', 'userDataService'];
+config.$inject = ['$logProvider'];
+TableController.$inject = ['$scope', '$log', 'dataShareService', 'statToolsService', 'userDataService'];
 NavigationController.$inject = ['dataShareService', 'userDataService'];
 dataShareService.$inject = ['$rootScope'];
 userDataService.$inject = ['$resource'];

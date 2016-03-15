@@ -28,4 +28,4 @@ module.exports = function (dataShareService, userDataService) {
     function loadNavigation() {
         vm.navigation = userDataService.nav();
     }
-}
+};
