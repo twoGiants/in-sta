@@ -2,6 +2,7 @@
 
 require('angular');
 require('angular-resource');
+require('angular-material');
 require('./../css/app.css');
 
 var config = require('./app.config');
@@ -14,9 +15,12 @@ var statToolsService = require('./services/stattools.service');
 var userDataService = require('./services/userdata.service');
 var monthName = require('./filters/monthname');
 
+var UserController = require('./layout/user.controller');
+
 angular
     .module('inSta', [ 
-        'ngResource' 
+        'ngResource',
+        'ngMaterial'
     ]);
 
 angular
@@ -29,10 +33,13 @@ angular
     .factory('dataShareService', dataShareService)
     .factory('statToolsService', statToolsService)
     .factory('userDataService', userDataService)
-    .filter('monthName', monthName);
+    .filter('monthName', monthName)
+    .controller('UserController', UserController);
 
-config.$inject = ['$logProvider'];
+config.$inject = ['$logProvider', '$mdThemingProvider'];
 TableController.$inject = ['$scope', '$log', 'dataShareService', 'statToolsService', 'userDataService'];
 NavigationController.$inject = ['$log', 'dataShareService', 'userDataService'];
 dataShareService.$inject = ['$rootScope'];
 userDataService.$inject = ['$resource'];
+
+UserController.$inject = ['$log'];
