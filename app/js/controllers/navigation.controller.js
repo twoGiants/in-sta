@@ -6,6 +6,7 @@ module.exports = function (dataShareService, userDataService) {
     vm.navigation = [];
     vm.sendDataFromNavigationController = sendDataFromNavigationController;
     vm.loadNavigation = loadNavigation;
+    vm.blub = dataShareService.getBlub();
     
     loadNavigation();
     
@@ -15,6 +16,12 @@ module.exports = function (dataShareService, userDataService) {
     function sendDataFromNavigationController(item) {
         console.log('Sending request from NavigationController: ' + item);
         dataShareService.sendData(item);
+        blub(item);
+    }
+    
+    function blub(item) {
+        dataShareService.setBlub(item);
+        vm.blub = dataShareService.getBlub();
     }
     
     // requests username(months, years) for navigation from the be

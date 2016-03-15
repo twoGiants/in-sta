@@ -3,8 +3,11 @@
 module.exports = function ($rootScope) {
     var service = {
         data: false,
+        blub: '',
         sendData: sendData,
-        getData: getData
+        getData: getData,
+        setBlub: setBlub,
+        getBlub: getBlub
     };
     return service;
     
@@ -17,5 +20,13 @@ module.exports = function ($rootScope) {
     
     function getData () {
         return service.data;
+    }
+    
+    function setBlub (newBlub) {
+        service.blub = newBlub;
+    }
+    
+    function getBlub () {
+        return service.blub;
     }
 }

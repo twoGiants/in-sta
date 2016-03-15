@@ -1,3 +1,11 @@
+/* I have two controllers, NavigationController and TableController. They are independent.
+TableController gets the user data from the db and displays it in a table.
+NavigationController generates a navigation menu from the user data in the db. 
+Each item in the navigation menu represents different user data. When a navigation item is clicked it emits an event and the TableController gets the according data from the db and displays it in the table.
+
+WANT
+When a navigation item is clicked, the TableController displays the according data, without using events.
+*/
 'use strict';
 
 module.exports = function ($scope, dataShareService, statToolsService, userDataService) {
@@ -27,7 +35,6 @@ module.exports = function ($scope, dataShareService, statToolsService, userDataS
         table.predicate = predicate;
     }
     
-// OLD ==============================================================================    
     // call when navigation is used
     $scope.$on('data_shared', function () {
         var queryString = dataShareService.getData();
@@ -38,7 +45,6 @@ module.exports = function ($scope, dataShareService, statToolsService, userDataS
             console.error('Internal Server Error: ' + err.data);
         });
     });
-// OLD ==============================================================================
 }
 
 

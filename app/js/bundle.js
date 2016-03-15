@@ -48,26 +48,6 @@ NavigationController.$inject = ['dataShareService', 'userDataService'];
 dataShareService.$inject = ['$rootScope'];
 userDataService.$inject = ['$resource'];
 
-
-
-
-
-
-// Example code ---------------------------------------------------
-/*inSta.config(['$routeProvider', function($routeProvider) {
-    $routeProvider.
-    when('/view1', {
-        templateUrl: 'partials/view1.html',
-        controller: 'view1Ctrl'
-    }).
-    when('/view2', {
-        templateUrl: 'partials/view2.html',
-        controller: 'view2Ctrl'
-    }).
-    otherwise({
-        redirectTo: '/view1'
-    });
-}]);*/
 },{"./../css/app.css":1,"./controllers/navigation.controller":3,"./controllers/table.controller":4,"./directives/navigationbar":5,"./directives/statisticstable":6,"./filters/monthName":7,"./services/datashare.service":8,"./services/stattools.service":9,"./services/userdata.service":10,"angular":16,"angular-resource":12,"angular-route":14,"jquery":18}],3:[function(require,module,exports){
 'use strict';
 
@@ -77,6 +57,7 @@ module.exports = function (dataShareService, userDataService) {
     vm.navigation = [];
     vm.sendDataFromNavigationController = sendDataFromNavigationController;
     vm.loadNavigation = loadNavigation;
+    vm.blub = dataShareService.getBlub();
     
     loadNavigation();
     
@@ -86,6 +67,12 @@ module.exports = function (dataShareService, userDataService) {
     function sendDataFromNavigationController(item) {
         console.log('Sending request from NavigationController: ' + item);
         dataShareService.sendData(item);
+        blub(item);
+    }
+    
+    function blub(item) {
+        dataShareService.setBlub(item);
+        vm.blub = dataShareService.getBlub();
     }
     
     // requests username(months, years) for navigation from the be
@@ -94,6 +81,14 @@ module.exports = function (dataShareService, userDataService) {
     }
 }
 },{}],4:[function(require,module,exports){
+/* I have two controllers, NavigationController and TableController. They are independent.
+TableController gets the user data from the db and displays it in a table.
+NavigationController generates a navigation menu from the user data in the db. 
+Each item in the navigation menu represents different user data. When a navigation item is clicked it emits an event and the TableController gets the according data from the db and displays it in the table.
+
+WANT
+When a navigation item is clicked, the TableController displays the according data, without using events.
+*/
 'use strict';
 
 module.exports = function ($scope, dataShareService, statToolsService, userDataService) {
@@ -123,7 +118,6 @@ module.exports = function ($scope, dataShareService, statToolsService, userDataS
         table.predicate = predicate;
     }
     
-// OLD ==============================================================================    
     // call when navigation is used
     $scope.$on('data_shared', function () {
         var queryString = dataShareService.getData();
@@ -134,7 +128,6 @@ module.exports = function ($scope, dataShareService, statToolsService, userDataS
             console.error('Internal Server Error: ' + err.data);
         });
     });
-// OLD ==============================================================================
 }
 
 
@@ -178,8 +171,11 @@ module.exports = function monthName() {
 module.exports = function ($rootScope) {
     var service = {
         data: false,
+        blub: '',
         sendData: sendData,
-        getData: getData
+        getData: getData,
+        setBlub: setBlub,
+        getBlub: getBlub
     };
     return service;
     
@@ -192,6 +188,14 @@ module.exports = function ($rootScope) {
     
     function getData () {
         return service.data;
+    }
+    
+    function setBlub (newBlub) {
+        service.blub = newBlub;
+    }
+    
+    function getBlub () {
+        return service.blub;
     }
 }
 },{}],9:[function(require,module,exports){
