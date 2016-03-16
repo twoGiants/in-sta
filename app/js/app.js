@@ -42,4 +42,4 @@ NavigationController.$inject = ['$log', 'dataShareService', 'userDataService'];
 dataShareService.$inject = ['$rootScope'];
 userDataService.$inject = ['$resource'];
 
-UserController.$inject = ['$log'];
+UserController.$inject = ['$log', 'userDataService'];

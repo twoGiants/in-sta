@@ -8,5 +8,4 @@ tmp
 db
 _insta/
 nodemon.json
-aggregation_example.txt
 app/js/bundle.js

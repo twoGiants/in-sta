@@ -1,5 +1,5 @@
 @import url('node_modules/normalize.css/normalize.css');
-@import url('node_modules/bootstrap/dist/css/bootstrap.css');
+/*@import url('node_modules/bootstrap/dist/css/bootstrap.css');*/
 @import url('node_modules/angular-material/angular-material.css');
 
 /*in-sta*/
@@ -40,4 +40,11 @@ tr:hover {
 
 .number {
     text-align: right;
+}
+
+/* Toolbar area */
+/* Sidenav area */
+md-list-item > button {
+    width: 100%;
+    text-align: left !important;
 }

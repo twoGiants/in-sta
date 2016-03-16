@@ -8,20 +8,33 @@
 </head>
 
 <body ng-app="inSta" layout="column" ng-controller="UserController as ul">
-    
-    <!--  Angular Material test  -->
-    <md-toolbar layout="row">
-        <h3>Angular Material - {{ ul.appName }} App</h3>
+    <md-toolbar layout="row" layout-align="center center" class="md-whiteframe-z1">
+        <span>{{ ul.appName }}</span>
     </md-toolbar>
-    <!--  END  -->
     
-    <div class="container">
-        <navigation-bar></navigation-bar>
-    </div>
-
-    <div class="container">
-        <!--  Statistics  -->
-        <statistics-table></statistics-table>
+    <div class="container" layout="row" flex>
+        <md-sidenav md-is-locked-open="$mdMedia('gt-sm')"
+                    md-component-id="left"
+                    ng-click="ul.toggleList()"
+                    class="md-whiteframe-z2">
+            <md-list>
+                <md-list-item ng-repeat="it in ul.navigation">
+                    <md-button ng-click="ul.selectUser(it.ig_user)"
+                               ng-class="{ 'selected': it.ig_user === selected }"
+                               aria-label="Select {{ it.ig_user }}">
+                        {{ it.ig_user }}
+                    </md-button>
+                </md-list-item>
+            </md-list>
+            <navigation-bar></navigation-bar>
+        </md-sidenav>
+        
+        <md-content flex>
+            <h2>{{ ul. selected }}</h2>
+            
+            
+            <statistics-table></statistics-table>
+        </md-content>
     </div>
 </body>
 

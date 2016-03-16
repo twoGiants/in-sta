@@ -1,9 +1,28 @@
 'use strict';
 
-module.exports = function ($log) {
-    var user = this;
+module.exports = function ($log, userDataService) {
+    var self = this;
     
-    user.appName = 'InSta';
+    self.navigation = [];
+    self.appName = 'Instagram Statistics';
+    self.selected = null;
+    self.selectUser = selectUser;
     
-    $log.log('Hello W!');
+    // Load the navigation menu
+    loadNavigation();
+    
+    ////////////
+    
+    function loadNavigation() {
+        self.navigation = userDataService.nav(function() {
+            self.selected = self.navigation[0].ig_user;
+        }, function (err) { // error callback
+            $log.error('Internal Server Error: ' + err.data);
+        });
+    }
+    
+    function selectUser(user) {
+        self.selected = user;
+        $log.debug(user);
+    }
 };
