@@ -1,6 +1,9 @@
 @import url('node_modules/normalize.css/normalize.css');
 /*@import url('node_modules/bootstrap/dist/css/bootstrap.css');*/
 @import url('node_modules/angular-material/angular-material.css');
+@import url('node_modules/angular-material-data-table/dist/md-data-table.css');
+@import url('node_modules/angular-material-sidemenu/dest/angular-material-sidemenu.css');
+
 
 /*in-sta*/
 /*
@@ -12,6 +15,7 @@ body {
     padding-top: 20px;
 }
 */
+/*
 
 table {
     width: 100%;
@@ -41,6 +45,7 @@ tr:hover {
 .number {
     text-align: right;
 }
+*/
 
 /* Toolbar area */
 /* Sidenav area */
@@ -48,3 +53,5 @@ md-list-item > button {
     width: 100%;
     text-align: left !important;
 }
+
+/* md-table */

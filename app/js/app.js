@@ -3,6 +3,8 @@
 require('angular');
 require('angular-resource');
 require('angular-material');
+require('angular-material-data-table');
+require('angular-material-sidemenu');
 require('./../css/app.css');
 
 var config = require('./app.config');
@@ -14,13 +16,16 @@ var dataShareService = require('./services/datashare.service');
 var statToolsService = require('./services/stattools.service');
 var userDataService = require('./services/userdata.service');
 var monthName = require('./filters/monthname');
+var capitalize = require('./filters/capitalize');
 
 var UserController = require('./layout/user.controller');
 
 angular
     .module('inSta', [ 
         'ngResource',
-        'ngMaterial'
+        'ngMaterial',
+        'md.data.table',
+        'ngMaterialSidemenu'
     ]);
 
 angular
@@ -34,6 +39,7 @@ angular
     .factory('statToolsService', statToolsService)
     .factory('userDataService', userDataService)
     .filter('monthName', monthName)
+    .filter('capitalize', capitalize)
     .controller('UserController', UserController);
 
 config.$inject = ['$logProvider', '$mdThemingProvider'];

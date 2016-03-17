@@ -3,7 +3,7 @@
 
 <head>
     <title>Instagram Statistics</title>
-    <link href="../node_modules/angular-material/angular-material.cssangular-material.css" type="text/css" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="js/bundle.js"></script>
 </head>
 
@@ -17,24 +17,60 @@
                     md-component-id="left"
                     ng-click="ul.toggleList()"
                     class="md-whiteframe-z2">
-            <md-list>
-                <md-list-item ng-repeat="it in ul.navigation">
-                    <md-button ng-click="ul.selectUser(it.ig_user)"
-                               ng-class="{ 'selected': it.ig_user === selected }"
-                               aria-label="Select {{ it.ig_user }}">
-                        {{ it.ig_user }}
-                    </md-button>
-                </md-list-item>
-            </md-list>
-            <navigation-bar></navigation-bar>
+<!--            <navigation-bar></navigation-bar>-->
+            
+            <md-sidemenu locked="true">
+                <md-sidemenu-group>
+                    <md-subheader class="md-no-sticky">USERS</md-subheader>
+                    <md-sidemenu-content ng-repeat="it in ul.navigation"
+                                         ng-click="ul.selectUser(it.ig_user)"
+                                         ng-class="{ 'selected': it.ig_user === selected }"
+                                         aria-label="Select {{ it.ig_user }}"
+                                         md-heading="{{ it.ig_user | capitalize }}"
+                                         md-arrow="true">
+                        <span ng-repeat="element in it.years_months">
+                            <md-sidemenu-button href="#{{ it.ig_user + '-' + month + '-' + element.year }}" 
+                                                ng-repeat="month in element.months"
+                                                ng-click="ul.queryUserData(it.ig_user + '-' + month + '-' + element.year)">
+                                {{ month | monthName }}{{ ' ' + element.year }}
+                            </md-sidemenu-button>
+                        </span>
+                    </md-sidemenu-content>
+                    <md-divider></md-divider>
+                </md-sidemenu-group>
+            </md-sidemenu>
+            
         </md-sidenav>
         
-        <md-content flex>
-            <h2>{{ ul. selected }}</h2>
+        <md-card flex>
+            <md-toolbar class="md-table-toolbar md-default">
+              <div class="md-toolbar-tools">
+                <span>{{ ul.selected | capitalize }}</span>
+              </div>
+            </md-toolbar>
             
-            
-            <statistics-table></statistics-table>
-        </md-content>
+            <md-table-container>
+                <table md-table md-row-select>
+                    <thead md-head>
+                      <tr md-row>
+                        <th md-column><span>Date</span></th>
+                        <th md-column md-numeric>Followers</th>
+                        <th md-column md-numeric>Followings</th>
+                        <th md-column md-numeric>Growth</th>
+                      </tr>
+                    </thead>
+                    <tbody md-body>
+                      <tr md-row ng-repeat="row in ul.userData[0].ig_user_statistics">
+                        <td md-cell>{{ row.date | date: 'EEE, dd.MM.yyyy' }}</td>
+                        <td md-cell>{{ row.followers | number }}</td>
+                        <td md-cell>{{ row.followings | number }}</td>
+                        <td md-cell>{{ row.growth }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+            </md-table-container>
+<!--            <statistics-table></statistics-table>-->
+        </md-card>
     </div>
 </body>
 
