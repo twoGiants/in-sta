@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function ($log, userDataService) {
+module.exports = function ($log, userDataService, statToolsService) {
     var self = this;
     
     self.navigation = [];
@@ -17,10 +17,15 @@ module.exports = function ($log, userDataService) {
     ////////////
     function loadNavigation() {
         self.navigation = userDataService.nav(function() {
+            var queryString = '';
+            
             self.selected = self.navigation[0].ig_user;
+            queryString = 'obamasan-12-2014';
+            
             // get table data for selected user
-            self.userData = userDataService.query({ item: 'obamasan-12-2014' }, function () {
+            self.userData = userDataService.query({ item: queryString }, function () {
                 // calc growth
+                statToolsService.calcGrowth(self.userData[0].ig_user_statistics);
             }, function (err) {
                 $log.error('Internal Server Error: ' + err.data);
             });
@@ -33,6 +38,7 @@ module.exports = function ($log, userDataService) {
         self.temp = queryString;
         self.userData = userDataService.query({ item: queryString }, function () {
             // calc growth
+            statToolsService.calcGrowth(self.userData[0].ig_user_statistics);
         }, function (err) {
             $log.error('Internal Server Error: ' + err.data);
         });
