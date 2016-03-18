@@ -60,7 +60,10 @@ md-list-item > button {
 span > .md-button.active {
     background-color: rgba(158, 158, 158, 0.2);
 }
-
-.selected {
-    background-color: red;
+.site-sidenav,
+.site-sidenav.md-locked-open-add-active,
+.site-sidenav.md-locked-open {
+  width:     272px;
+  min-width: 272px;
+  max-width: 272px;
 }
