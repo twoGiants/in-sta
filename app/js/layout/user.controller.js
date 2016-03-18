@@ -9,6 +9,7 @@ module.exports = function ($log, userDataService) {
     self.selectUser = selectUser;
     self.userData = null;
     self.queryUserData = queryUserData;
+    self.temp = null;
     
     // Load the navigation menu
     loadNavigation();
@@ -29,6 +30,7 @@ module.exports = function ($log, userDataService) {
     }
     
     function queryUserData(queryString) {
+        self.temp = queryString;
         self.userData = userDataService.query({ item: queryString }, function () {
             // calc growth
         }, function (err) {

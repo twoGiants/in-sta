@@ -18,22 +18,20 @@
                     ng-click="ul.toggleList()"
                     class="md-whiteframe-z2">
 <!--            <navigation-bar></navigation-bar>-->
-            
             <md-sidemenu locked="true">
                 <md-sidemenu-group>
                     <md-subheader class="md-no-sticky">USERS</md-subheader>
                     <md-sidemenu-content ng-repeat="it in ul.navigation"
                                          ng-click="ul.selectUser(it.ig_user)"
-                                         ng-class="{ 'selected': it.ig_user === selected }"
                                          aria-label="Select {{ it.ig_user }}"
                                          md-heading="{{ it.ig_user | capitalize }}"
                                          md-arrow="true">
                         <span ng-repeat="element in it.years_months">
-                            <md-sidemenu-button href="#{{ it.ig_user + '-' + month + '-' + element.year }}" 
-                                                ng-repeat="month in element.months"
-                                                ng-click="ul.queryUserData(it.ig_user + '-' + month + '-' + element.year)">
+                            <md-button ng-repeat="month in element.months"
+                                       ng-click="ul.queryUserData(it.ig_user + '-' + month + '-' + element.year)"
+                                       ng-class="{ 'active': ul.temp === it.ig_user + '-' + month + '-' + element.year}">
                                 {{ month | monthName }}{{ ' ' + element.year }}
-                            </md-sidemenu-button>
+                            </md-button>
                         </span>
                     </md-sidemenu-content>
                     <md-divider></md-divider>
@@ -42,13 +40,7 @@
             
         </md-sidenav>
         
-        <md-card flex>
-            <md-toolbar class="md-table-toolbar md-default">
-              <div class="md-toolbar-tools">
-                <span>{{ ul.selected | capitalize }}</span>
-              </div>
-            </md-toolbar>
-            
+        <md-card flex>            
             <md-table-container>
                 <table md-table md-row-select>
                     <thead md-head>
