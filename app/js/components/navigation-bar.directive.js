@@ -4,8 +4,8 @@ module.exports = function() {
     return {
         restrict: 'E',
         templateUrl: 'js/components/navigation-bar.directive.html',
-        controller: 'NavigationController',
-        controllerAs: 'vm',
+        controller: 'UserController',
+        controllerAs: 'ul',
         bindToController: true
     };
 };

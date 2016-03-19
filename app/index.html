@@ -13,33 +13,7 @@
     </md-toolbar>
     
     <div class="container" layout="row" flex>
-        <md-sidenav md-is-locked-open="$mdMedia('gt-sm')"
-                    md-component-id="left"
-                    ng-click="ul.toggleList()"
-                    class="md-whiteframe-z2 site-sidenav">
-<!--            <navigation-bar></navigation-bar>-->
-            <md-sidemenu locked="true">
-                <md-sidemenu-group>
-                    <md-subheader class="md-no-sticky">USERS</md-subheader>
-                    <md-sidemenu-content ng-repeat="it in ul.navigation"
-                                         ng-click="ul.selectUser(it.ig_user)"
-                                         aria-label="Select {{ it.ig_user }}"
-                                         md-heading="{{ it.ig_user | capitalize }}"
-                                         md-arrow="true">
-                        <span ng-repeat="element in it.years_months">
-                            <md-button ng-repeat="month in element.months"
-                                       ng-click="ul.queryUserData(it.ig_user + '-' + month + '-' + element.year)"
-                                       ng-class="{ 'active': ul.temp === it.ig_user + '-' + month + '-' + element.year}">
-                                {{ month | monthName }}{{ ' ' + element.year }}
-                            </md-button>
-                        </span>
-                    </md-sidemenu-content>
-                    <md-divider></md-divider>
-                </md-sidemenu-group>
-            </md-sidemenu>
-            
-        </md-sidenav>
-        
+        <navigation-bar></navigation-bar>
         <md-card flex>
             <md-table-container>
                 <table md-table>

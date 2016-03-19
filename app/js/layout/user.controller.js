@@ -6,10 +6,9 @@ module.exports = function ($log, userDataService, statToolsService) {
     self.navigation = [];
     self.appName = 'Instagram Statistics';
     self.selected = null;
-    self.selectUser = selectUser;
     self.userData = null;
+    self.selectUser = selectUser;
     self.queryUserData = queryUserData;
-    self.temp = null;
     
     // Load the navigation menu
     loadNavigation();
@@ -35,7 +34,6 @@ module.exports = function ($log, userDataService, statToolsService) {
     }
     
     function queryUserData(queryString) {
-        self.temp = queryString;
         self.userData = userDataService.query({ item: queryString }, function () {
             // calc growth
             statToolsService.calcGrowth(self.userData[0].ig_user_statistics);

@@ -68,3 +68,11 @@ span > .md-button.active {
   min-width: 272px;
   max-width: 272px;
 }
+
+/* sidenav custom directive height fix */
+body, 
+body>div,
+navigation-bar,
+md-sidenav {
+    height: 100%;
+}
