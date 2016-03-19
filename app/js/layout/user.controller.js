@@ -4,16 +4,18 @@ module.exports = function ($log, userDataService, statToolsService) {
     var self = this;
     
     self.navigation = [];
-    self.appName = 'Instagram Statistics';
+    self.appName = '';
     self.selected = null;
     self.userData = null;
     self.selectUser = selectUser;
     self.queryUserData = queryUserData;
     
-    // Load the navigation menu
+    // Load the navigation menu when the app starts
     loadNavigation();
+    self.appName = 'Instagram Statistics';
     
     ////////////
+    
     function loadNavigation() {
         self.navigation = userDataService.nav(function() {
             var queryString = '';
