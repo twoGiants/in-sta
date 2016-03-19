@@ -10,6 +10,20 @@ module.exports = function ($log, userDataService, statToolsService) {
     self.selectUser = selectUser;
     self.queryUserData = queryUserData;
     
+    // table stuff
+    self.selecte2 = [];
+    self.options = {
+        autoSelect: true,
+        boundaryLinks: false,
+        pageSelector: false,
+        rowSelection: true
+    };
+    self.query = {
+        order: 'Date',
+        limit: 5,
+        page: 1
+    };
+    
     // Load the navigation menu when the app starts
     loadNavigation();
     self.appName = 'Instagram Statistics';

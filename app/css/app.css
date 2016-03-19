@@ -1,53 +1,9 @@
 @import url('node_modules/normalize.css/normalize.css');
-/*@import url('node_modules/bootstrap/dist/css/bootstrap.css');*/
 @import url('node_modules/angular-material/angular-material.css');
 @import url('node_modules/angular-material-data-table/dist/md-data-table.css');
 @import url('node_modules/angular-material-sidemenu/dest/angular-material-sidemenu.css');
 
 
-/*in-sta*/
-/*
-body {
-    font-family: Arial, Verdana, sans-serif;
-    color: #111;
-    width: 600px;
-    margin: 0 auto;
-    padding-top: 20px;
-}
-*/
-/*
-
-table {
-    width: 100%;
-}
-
-th, td {
-    padding: 7px 10px 10px 10px;
-}
-
-th {
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: 90%;
-    border-bottom: 2px solid #111;
-    border-top: 1px solid #999;
-    text-align: left;
-}
-
-tr.even {
-    background-color: #efefef;
-}
-
-tr:hover {
-    background-color: #c3e6e5;
-}
-
-.number {
-    text-align: right;
-}
-*/
-
-/* Toolbar area */
 /* Sidenav area */
 md-list-item > button {
     width: 100%;
@@ -66,12 +22,3 @@ span > .md-button.active {
   min-width: 272px;
   max-width: 272px;
 }
-
-/* sidenav custom directive height fix */
-/*
-body, 
-body>div,
-navigation-bar,
-md-sidenav {
-    height: 100%;
-}*/

@@ -42,17 +42,20 @@
         <md-content flex>
             <md-card>
                 <md-table-container>
-                    <table md-table>
-                        <thead md-head>
+                    <table md-table md-row-select="ul.options.rowSelection" ng-model="ul.selected2">
+                        <thead md-head md-order="ul.query.order">
                             <tr md-row>
-                                <th md-column><span>Date</span></th>
+                                <th md-column md-order-by="date"><span>Date</span></th>
                                 <th md-column md-numeric>Followers</th>
                                 <th md-column md-numeric>Followings</th>
                                 <th md-column md-numeric>Growth</th>
                             </tr>
                         </thead>
                         <tbody md-body>
-                            <tr md-row ng-repeat="row in ul.userData[0].ig_user_statistics">
+                            <tr md-row 
+                                md-select="row" 
+                                md-auto-select="ul.options.autoSelect" 
+                                ng-repeat="row in ul.userData[0].ig_user_statistics | orderBy: ul.query.order">
                                 <td md-cell>{{ row.date | date: 'EEE, dd.MM.yyyy' }}</td>
                                 <td md-cell>{{ row.followers | number }}</td>
                                 <td md-cell>{{ row.followings | number }}</td>
