@@ -9,24 +9,12 @@ module.exports = function ($log, userDataService, statToolsService) {
     self.userData = null;
     self.selectUser = selectUser;
     self.queryUserData = queryUserData;
+    self.tableOrder = '';
     
-    // table stuff
-    self.selecte2 = [];
-    self.options = {
-        autoSelect: true,
-        boundaryLinks: false,
-        pageSelector: false,
-        rowSelection: true
-    };
-    self.query = {
-        order: 'Date',
-        limit: 5,
-        page: 1
-    };
-    
-    // Load the navigation menu when the app starts
+    // init
     loadNavigation();
     self.appName = 'Instagram Statistics';
+    self.tableOrder = 'date';
     
     ////////////
     

@@ -22,3 +22,8 @@ span > .md-button.active {
   min-width: 272px;
   max-width: 272px;
 }
+
+/* table */
+table.md-table tbody.md-body > tr.md-row:not([disabled]):hover {
+  background-color: #eeeeee !important;
+}
