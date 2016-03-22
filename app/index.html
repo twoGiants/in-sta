@@ -46,29 +46,34 @@
         </md-toolbar>
         
         <md-content flex>
-            <md-card>
-                <md-table-container>
-                    <table md-table>
-                        <thead md-head md-order="ul.tableOrder">
-                            <tr md-row>
-                                <th md-column md-order-by="date"><span>Date</span></th>
-                                <th md-column md-order-by="followers" md-numeric>Followers</th>
-                                <th md-column md-order-by="followings" md-numeric>Followings</th>
-                                <th md-column md-order-by="growth" md-numeric>Growth</th>
-                            </tr>
-                        </thead>
-                        <tbody md-body>
-                            <tr md-row
-                                ng-repeat="row in ul.userData[0].ig_user_statistics | orderBy: ul.tableOrder">
-                                <td md-cell>{{ row.date | date: 'EEE, dd.MM.yyyy' }}</td>
-                                <td md-cell>{{ row.followers | number }}</td>
-                                <td md-cell>{{ row.followings | number }}</td>
-                                <td md-cell>{{ row.growth }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </md-table-container>
-            </md-card>
+            <div class="inset"></div>
+            <div layout="row" layout-align="center center">
+                <md-card flex="90">
+                    <md-card-content>
+                        <md-table-container>
+                            <table md-table>
+                                <thead md-head md-order="ul.tableOrder">
+                                    <tr md-row>
+                                        <th md-column md-order-by="date"><span>Date</span></th>
+                                        <th md-column md-order-by="followers" md-numeric>Followers</th>
+                                        <th md-column md-order-by="followings" md-numeric>Followings</th>
+                                        <th md-column md-order-by="growth" md-numeric>Growth</th>
+                                    </tr>
+                                </thead>
+                                <tbody md-body>
+                                    <tr md-row
+                                        ng-repeat="row in ul.userData[0].ig_user_statistics | orderBy: ul.tableOrder">
+                                        <td md-cell>{{ row.date | date: 'EEE, dd.MM.yyyy' }}</td>
+                                        <td md-cell>{{ row.followers | number }}</td>
+                                        <td md-cell>{{ row.followings | number }}</td>
+                                        <td md-cell>{{ row.growth }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </md-table-container>
+                    </md-card-content>
+                </md-card>
+            </div>
         </md-content>
     </div>
 </body>

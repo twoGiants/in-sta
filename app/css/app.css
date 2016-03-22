@@ -3,7 +3,6 @@
 @import url('node_modules/angular-material-data-table/dist/md-data-table.css');
 @import url('node_modules/angular-material-sidemenu/dest/angular-material-sidemenu.css');
 
-
 /* Sidenav area */
 md-list-item > button {
     width: 100%;
@@ -21,6 +20,11 @@ span > .md-button.active {
   width:     272px;
   min-width: 272px;
   max-width: 272px;
+}
+
+/* content */
+.inset {
+    padding: 10px;
 }
 
 /* table */
