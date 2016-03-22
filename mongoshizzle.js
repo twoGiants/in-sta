@@ -1,3 +1,5 @@
+"use strict";
+
 require("use-strict");
 
 // OPENSHIFT-SERVER-DB-CONFIG -------------------------------------
@@ -18,6 +20,9 @@ var log = debug("server:log");
 var info = debug("server:info");
 var error = debug("server:error");
 
+var async = require("async");
+var request = require("request");
+var cheerio = require("cheerio");
 var mongojs = require("mongojs");
 var bodyParser = require("body-parser");
 
@@ -26,7 +31,7 @@ var db = mongojs(connection_string, ['instagram']);
 main();
 
 function main() {
-    if (process.argv[2] === 'delete' && (process.argv[3] != undefined)) {
+    if (process.argv[2] === 'delete' && (process.argv[3] !== undefined)) {
         log('Deleting user: ' + process.argv[3]);
         deleteDocByObjectId(process.argv[3]);
     }
@@ -35,25 +40,71 @@ function main() {
         log('Adding user stazzmatazz to db.');
         createNewStazzDoc();
     }
-    /*setTimeout(function(){
-        deleteDoc('obamasan');
-    }, 500);
     
-    setTimeout(function(){
-        deleteDoc('zarputin');
-    }, 1000);
     
-    setTimeout(function(){
-        createDoc('obamasan', 5);
-    }, 1500);
+    // WORKING
+    var settingsObj = {
+        desiredTime: [4, 5],
+        usernames: ['taylorswift', 'selenagomez', 'kimkardashian'],
+        source: "http://iconosquare.com/",
+        selector: [
+            'a[class="followers user-action-btn"] span[class=chiffre]',
+            'a[class="followings user-action-btn"] span[class=chiffre]'
+        ]
+    };
+    var count = 0;
+    async.forever(function(outerCb) {
+        setTimeout(function() {
+            async.whilst(
+                function () { return count < settingsObj.usernames.length; },
+                function (callback) {
+                    setTimeout(function () {
+                        getRemoteData(settingsObj.source, settingsObj.usernames[count++], settingsObj.selector, callback);
+                    }, 2000);
+                },
+                function (err) {
+                    if (err) {
+                        error(err);
+                    }
+                    count = 0;
+                    outerCb();
+                }
+            );
+        }, 3000);
+    });
+}
 
-    setTimeout(function(){
-        createDoc('zarputin', 30);
-    }, 2000);
-    
-    setTimeout(function(){
-        createDoc('stazzmatazz', 1);
-    }, 2500);*/
+
+function getRemoteData(source, username, selector, callback) {
+    var userUrl = source + username;
+    // send request
+    request(userUrl, {
+            timeout: 10000
+        },
+        function (err, res, body) {
+            if (err) {
+                error(err.message);
+                callback(err);
+            } else {
+                if (res.statusCode === 200) {
+                    var $ = cheerio.load(body);
+                    var timestamp = new Date();
+                    var newData = {
+                        date: new Date(),
+                        followers: parseInt($(selector[0]).html()),
+                        followings: parseInt($(selector[1]).html())
+                    };
+
+                    // print data to console
+                    log('Source: ' + userUrl);
+                    log('Followers: ' + newData.followers);
+                    callback();
+                } else {
+                    callback(res.statusCode);
+                }
+            }
+        }
+    );
 }
 
 // works
@@ -198,7 +249,7 @@ function getDistinctYearsMonths() {
 //query string must be: 'username-month-year'
 function getDataForMonthAggregate(navItem) {
     var errorHappened = false;
-    
+    var navItemArr = '';
     /*
         Cases:
             + navItem === string?
@@ -214,7 +265,7 @@ function getDataForMonthAggregate(navItem) {
         }
         
         //Error case
-        var navItemArr = navItem.split('-');
+        navItemArr = navItem.split('-');
         if (navItemArr.length != 3) {
             throw new Error('Query string length must be 3, not -> ' + navItemArr.length);
         }
