@@ -35,3 +35,4 @@ angular
 config.$inject = ['$logProvider', '$mdThemingProvider'];
 UserController.$inject = ['$log', 'userDataService', 'statToolsService'];
 userDataService.$inject = ['$resource'];
+statToolsService.$inject = ['$log'];

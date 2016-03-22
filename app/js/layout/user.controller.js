@@ -23,7 +23,7 @@ module.exports = function ($log, userDataService, statToolsService) {
             var queryString = '';
             
             self.selected = self.navigation[0].ig_user;
-            queryString = 'obamasan-12-2014';
+            queryString = statToolsService.mostRecent(self.navigation[0]);
             
             // get table data for selected user
             self.userData = userDataService.query({ item: queryString }, function () {
