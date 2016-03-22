@@ -36,6 +36,12 @@
     <div layout="column" flex>
         <md-toolbar layout-align="left center" 
                     class="md-whiteframe-z1 md-toolbar-tools">
+            <md-button hide-gt-sm 
+                       ng-click="ul.toggleMenu()"
+                       aria-label="Menu"
+                       class="md-icon-button">
+                <md-icon md-svg-icon="menu"></md-icon>
+            </md-button>
             <span>{{ ul.appName }}</span>
         </md-toolbar>
         

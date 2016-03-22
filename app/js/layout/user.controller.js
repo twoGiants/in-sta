@@ -1,15 +1,16 @@
 'use strict';
 
-module.exports = function ($log, userDataService, statToolsService) {
+module.exports = function ($log, $mdSidenav, userDataService, statToolsService) {
     var self = this;
     
     self.navigation = [];
-    self.appName = '';
-    self.selected = null;
-    self.userData = null;
-    self.selectUser = selectUser;
-    self.queryUserData = queryUserData;
+    self.appName    = '';
     self.tableOrder = '';
+    self.selected   = null;
+    self.userData   = null;
+    self.selectUser    = selectUser;
+    self.queryUserData = queryUserData;
+    self.toggleMenu    = toggleMenu;
     
     // init
     loadNavigation();
@@ -37,6 +38,10 @@ module.exports = function ($log, userDataService, statToolsService) {
         });
     }
     
+    function selectUser(user) {
+        self.selected = user;
+    }
+    
     function queryUserData(queryString) {
         self.userData = userDataService.query({ item: queryString }, function () {
             // calc growth
@@ -46,7 +51,7 @@ module.exports = function ($log, userDataService, statToolsService) {
         });
     }
     
-    function selectUser(user) {
-        self.selected = user;
+    function toggleMenu() {
+        $mdSidenav('left').toggle();
     }
 };
