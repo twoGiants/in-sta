@@ -14,7 +14,7 @@ module.exports = function ($log, userDataService, statToolsService) {
     // init
     loadNavigation();
     self.appName = 'Instagram Statistics';
-    self.tableOrder = 'date';
+    self.tableOrder = '-date';
     
     ////////////
     
