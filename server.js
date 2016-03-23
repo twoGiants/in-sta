@@ -8,7 +8,6 @@ var log   = debug("server:log");
 var info  = debug("server:info");
 var error = debug("server:error");
 
-
 // SERVER
 var express = require("express");
 var app = express();
@@ -18,14 +17,14 @@ var mongojs    = require("mongojs");
 var bodyParser = require("body-parser");
 
 // CONFIG
-var config = require("./server/config/config");
+var conf = require("./server/config/config");
 
 // OTHER
 var monkeyBiz = require('./server/request-loop');
 var t = require("./server/tools");
 
 // configuration ===============================================================
-var db = mongojs(config.connectionString, ['instagram']);
+var db = mongojs(conf.connectionString, ['instagram']); //
 
 app.use(express.static(__dirname + '/app'));
 app.use(bodyParser.json());
@@ -226,7 +225,7 @@ app.use(function (err, req, res, next) {
     });
 
 // start app ===================================================================
-app.listen(config.port, config.ipaddress, function () {
-    log('Server running on http://' + config.ipaddress + ':' + config.port);
+app.listen(conf.port, conf.ipaddress, function () {
+    log('Server running on http://' + conf.ipaddress + ':' + conf.port);
 });
-monkeyBiz.gogogo(config, db);
+monkeyBiz.gogogo(conf, db);

@@ -4,7 +4,7 @@ process.env.TZ = 'Europe/Berlin';
 
 module.exports = {
     desiredTime: [4, 5],
-    usernames: ['stazzmatazz', 'lukatarman', 'instagram', 'taylorswift', 'selenagomez', 'kimkardashian'],
+    usernames: ['stazzmatazz', 'lukatarman', 'aya_shalkar', 'newkissontheblog'],
     source: "http://iconosquare.com/",
     selector: [
         'a[class="followers user-action-btn"] span[class=chiffre]',
@@ -21,5 +21,5 @@ module.exports = {
         process.env.OPENSHIFT_APP_NAME) : 
         '127.0.0.1:27017/nodejs',
     timezone: process.env.TZ,
-    testUsernames: ['taylorswift', 'selenagomez']
+    testUsernames: ['aya_shalkar', 'newkissontheblog']
 };

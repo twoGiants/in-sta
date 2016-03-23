@@ -18,9 +18,9 @@ var mongojs = require("mongojs");
 var bodyParser = require("body-parser");
 var t       = require("./server/tools");
 var dbTools = require("./server/db-tools");
-var config  = require("./server/config/config");
+var conf  = require("./server/config/config");
 
-var db = mongojs(config.connectionString, ['instagram']);
+var db = mongojs(conf.connectionString, ['instagram']);
 
 main();
 
@@ -46,33 +46,29 @@ function main() {
     
     
     // WORKING
-    var count = 0;
     async.forever(function(outerCb) {
-        setTimeout(function() {
-            async.whilst(
-                function () { return count < config.testUsernames.length; },
-                function (callback) {
-                    setTimeout(function () {
-                        log((count + 1) + '.)------------');
-                        getRemoteData(config.source, config.testUsernames[count++], config.selector, callback);
-                    }, 2000);
-                },
-                function (err) {
-                    if (err) {
-                        error(err);
-                    }
-                    count = 0;
-                    outerCb();
+        var count = 0;
+        async.whilst(
+            function () { return count < conf.testUsernames.length; },
+            function (innerCb) {
+                setTimeout(function () {
+                    getRemoteData(conf.source, conf.testUsernames[count++], conf.selector, innerCb);
+                }, 2000);
+            },
+            function (err) {
+                if (err) {
+                    error(err);
                 }
-            );
-        }, 3000);
+                count = 0;
+                outerCb();
+            }
+        );
     });
 }
 
 
 function getRemoteData(source, username, selector, callback) {
     var userUrl = source + username;
-    // send request
     request(userUrl, {
             timeout: 10000
         },

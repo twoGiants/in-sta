@@ -55,7 +55,6 @@ module.exports = {
                 error(err.message);
             } else {
                 log('...data saved.\n\n');
-                t.jlog(doc);
             }
         });
     }
