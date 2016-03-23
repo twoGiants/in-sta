@@ -43,59 +43,6 @@ function main() {
         log('Adding user stazzmatazz to db.');
         createNewStazzDoc();
     }
-    
-    
-    // WORKING
-    async.forever(function(outerCb) {
-        var count = 0;
-        async.whilst(
-            function () { return count < conf.testUsernames.length; },
-            function (innerCb) {
-                setTimeout(function () {
-                    getRemoteData(conf.source, conf.testUsernames[count++], conf.selector, innerCb);
-                }, 2000);
-            },
-            function (err) {
-                if (err) {
-                    error(err);
-                }
-                count = 0;
-                outerCb();
-            }
-        );
-    });
-}
-
-
-function getRemoteData(source, username, selector, callback) {
-    var userUrl = source + username;
-    request(userUrl, {
-            timeout: 10000
-        },
-        function (err, res, body) {
-            if (err) {
-                error(err.message);
-                callback(err);
-            } else {
-                if (res.statusCode === 200) {
-                    var $ = cheerio.load(body);
-                    var timestamp = new Date();
-                    var newData = {
-                        igUser: username,
-                        igUserId: $(selector[2]).attr('class').match(/\d/g).join(""),
-                        date: new Date(),
-                        followers: parseInt($(selector[0]).html()),
-                        followings: parseInt($(selector[1]).html())
-                    };
-
-                    dbTools.saveDataNew(newData, db);
-                    callback();
-                } else {
-                    callback(res.statusCode);
-                }
-            }
-        }
-    );
 }
 
 // works

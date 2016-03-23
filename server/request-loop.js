@@ -38,14 +38,12 @@ module.exports.gogogo = function (conf, db) {
                 },
                 function (err) {
                     if (err) {
-                        error(err);
+                        error('Request failed, status code: ' + err);
                     }
                     count = 0;
                     outerCb();
                 }
             );
-            //            getRemoteData(conf.source, conf.usernames[0], conf.selector, next, db);
-
         }, t.delayInMs(conf.desiredTime)); // 5000 t.delayInMs(conf.desiredTime)
     }, function (err) {
         // error handling
