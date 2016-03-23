@@ -25,6 +25,7 @@ var bodyParser = require("body-parser");
 
 // OTHER
 var monkeyBiz = require('./server/request-loop');
+var t = require("./server/tools");
 
 // configuration ===============================================================
 var settingsObj = {
@@ -254,8 +255,4 @@ app.use(function (err, req, res, next) {
 app.listen(settingsObj.port, settingsObj.ipaddress, function () {
     log('Server running on http://' + settingsObj.ipaddress + ':' + settingsObj.port);
 });
-monkeyBiz.gogogo(settingsObj, db); 
-
-function jlog(docs) {
-    log(JSON.stringify(docs, 'null', '\t'));
-}
+monkeyBiz.gogogo(settingsObj, db);

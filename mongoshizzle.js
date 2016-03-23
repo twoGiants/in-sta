@@ -52,6 +52,7 @@ function main() {
             'a[class="followings user-action-btn"] span[class=chiffre]'
         ]
     };
+    
     var count = 0;
     async.forever(function(outerCb) {
         setTimeout(function() {
@@ -59,6 +60,7 @@ function main() {
                 function () { return count < settingsObj.usernames.length; },
                 function (callback) {
                     setTimeout(function () {
+                        log((count + 1) + '.)------------');
                         getRemoteData(settingsObj.source, settingsObj.usernames[count++], settingsObj.selector, callback);
                     }, 2000);
                 },
@@ -517,6 +519,18 @@ function popLastElementFromArray() {
 
 function jlog(docs) {
     log(JSON.stringify(docs, 'null', '\t'));
+}
+
+function delayInMs(desiredTime) {
+    var currentTime = new Date();
+    var x = (currentTime.getHours() * 60 + currentTime.getMinutes()) * 60 * 1000;
+    var y = (desiredTime[0] * 60 + desiredTime[1]) * 60 * 1000;
+
+    if (x >= y) {
+        return (86400000 - x) + y;
+    } else {
+        return y - x;
+    }
 }
 
 

@@ -1,6 +1,6 @@
 "use strict";
-
 require("use-strict");
+
 // DEBUG
 var debug = require("debug");
 var log   = debug("server:log");
@@ -9,9 +9,11 @@ var error = debug("server:error");
 // DB
 var mongojs = require("mongojs");
 // OTHER
-var async = require("async");
+var async   = require("async");
 var cheerio = require("cheerio");
 var request = require("request");
+var t       = require("./tools");
+var dbTools = require("./db-tools");
 
 module.exports.gogogo = function (settingsObj, db) {
     var iterations = 1;
@@ -19,11 +21,11 @@ module.exports.gogogo = function (settingsObj, db) {
     // LOOP: grab data from source
     async.forever(function (next) {
         log('Loop running the ' + iterations++ + ' time.');
-        log('Delay: ' + delayInMs(settingsObj.desiredTime) + 'ms.');
+        log('Delay: ' + t.delayInMs(settingsObj.desiredTime) + 'ms.');
         setTimeout(function() {
             log('...grabbing data.');
             getRemoteData(settingsObj.source, settingsObj.usernames[0], settingsObj.selector, next, db);
-        }, delayInMs(settingsObj.desiredTime)); // 5000 delayInMs(settingsObj.desiredTime)
+        }, t.delayInMs(settingsObj.desiredTime)); // 5000 t.delayInMs(settingsObj.desiredTime)
     }, function (err) {
         // error handling
         error(err.message);
@@ -52,10 +54,10 @@ function getRemoteData(source, username, selector, callback, db) {
 
                     // print data to console
                     log('Source: ' + userUrl);
-                    jlog(newData);
+                    t.jlog(newData);
 
                     // save data
-                    saveData(newData, username, db);
+                    dbTools.saveData(newData, username, db);
                 } else {
                     error(res.statusCode);
                 }
@@ -64,64 +66,4 @@ function getRemoteData(source, username, selector, callback, db) {
             callback();
         }
     );
-}
-
-function saveData(newData, username, db) {
-    db.instagram.findAndModify({
-        query: {
-            ig_user: username
-        },
-        update: {
-            $push: {
-                ig_user_statistics: {
-                    "date": newData.date,
-                    "followers": newData.followers,
-                    "followings": newData.followings
-                }
-            }
-        },
-        new: true
-    }, function (err, doc) {
-        if (err) {
-            error(err.message);
-        } else {
-            log('...data saved.\n\n');
-        }
-    });
-}
-
-/*
- expects an array desiredTime = [hh, mm]
- returns the delay neccessary in ms till the desiredTime
- Formula: 
- x: current time in ms
- y: desired time in ms
- x >= y: (24 - x) + y
- x <  y: y - x
- */
-function delayInMs(desiredTime) {
-    var currentTime = new Date();
-    var x = (currentTime.getHours() * 60 + currentTime.getMinutes()) * 60 * 1000;
-    var y = (desiredTime[0] * 60 + desiredTime[1]) * 60 * 1000;
-
-    if (x >= y) {
-        return (86400000 - x) + y;
-    } else {
-        return y - x;
-    }
-}
-
-function delayInMsDEBUG(desiredTime, currentTime) {
-    var x = (currentTime[0] * 60 + currentTime[1]) * 60 * 1000;
-    var y = (desiredTime[0] * 60 + desiredTime[1]) * 60 * 1000;
-
-    if (x >= y) {
-        return (86400000 - x) + y;
-    } else {
-        return y - x;
-    }
-}
-
-function jlog(docs) {
-    log(JSON.stringify(docs, 'null', '\t'));
 }
