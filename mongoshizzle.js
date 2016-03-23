@@ -5,33 +5,33 @@ require("use-strict");
 // OPENSHIFT-SERVER-DB-CONFIG -------------------------------------
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
-var connection_string = '127.0.0.1:27017/nodejs';
-
-if (process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
-    connection_string = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ':' +
-        process.env.OPENSHIFT_MONGODB_DB_PASSWORD + '@' +
-        process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
-        process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
-        process.env.OPENSHIFT_APP_NAME;
-}
 
 var debug = require("debug");
-var log = debug("server:log");
-var info = debug("server:info");
+var log   = debug("server:log");
+var info  = debug("server:info");
 var error = debug("server:error");
 
-var async = require("async");
+var async   = require("async");
 var request = require("request");
 var cheerio = require("cheerio");
 var mongojs = require("mongojs");
 var bodyParser = require("body-parser");
 var t       = require("./server/tools");
 var dbTools = require("./server/db-tools");
-var config = require("./server/config/config");
+var config  = require("./server/config/config");
 
-var db = mongojs(connection_string, ['instagram']);
+var db = mongojs(config.connectionString, ['instagram']);
 
 main();
+
+var dummyData = {
+    igUser: 'maozedong',
+    igUserId: '1458728615280',
+    date: new Date(),
+    followers: 1,
+    followings: 1,
+};
+
 
 function main() {
     if (process.argv[2] === 'delete' && (process.argv[3] !== undefined)) {
@@ -46,25 +46,15 @@ function main() {
     
     
     // WORKING
-    var settingsObj = {
-        desiredTime: [4, 5],
-        usernames: ['taylorswift', 'selenagomez', 'kimkardashian'],
-        source: "http://iconosquare.com/",
-        selector: [
-            'a[class="followers user-action-btn"] span[class=chiffre]',
-            'a[class="followings user-action-btn"] span[class=chiffre]'
-        ]
-    };
-    
     var count = 0;
     async.forever(function(outerCb) {
         setTimeout(function() {
             async.whilst(
-                function () { return count < settingsObj.usernames.length; },
+                function () { return count < config.testUsernames.length; },
                 function (callback) {
                     setTimeout(function () {
                         log((count + 1) + '.)------------');
-                        getRemoteData(settingsObj.source, settingsObj.usernames[count++], settingsObj.selector, callback);
+                        getRemoteData(config.source, config.testUsernames[count++], config.selector, callback);
                     }, 2000);
                 },
                 function (err) {
@@ -95,14 +85,14 @@ function getRemoteData(source, username, selector, callback) {
                     var $ = cheerio.load(body);
                     var timestamp = new Date();
                     var newData = {
+                        igUser: username,
+                        igUserId: $(selector[2]).attr('class').match(/\d/g).join(""),
                         date: new Date(),
                         followers: parseInt($(selector[0]).html()),
                         followings: parseInt($(selector[1]).html())
                     };
 
-                    // print data to console
-                    log('Source: ' + userUrl);
-                    log('Followers: ' + newData.followers);
+                    dbTools.saveDataNew(newData, db);
                     callback();
                 } else {
                     callback(res.statusCode);
@@ -438,7 +428,7 @@ function createDoc(username, n) {
         if (err) {
             error(err.message);
         }
-        log(JSON.stringify(doc, null, '\t'));
+        t.jlog(doc);
     });
 }
 
