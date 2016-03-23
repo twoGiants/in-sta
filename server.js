@@ -1,57 +1,31 @@
 "use strict";
-/*
- READ THIS IF YOU HAVEN'T SEEN THIS CODE IN A WHILE
- - the webserver stuff starts from the "// SERVER" comment
- - the loop where the data is fetched from iconosquare is called after the "// OTHER" comment
-   > just comment loop(); to stop fetching data, the frontend will work
- - the DB function are after the "// DB" comment
-*/
+require("use-strict");
 
 // set up ======================================================================
-require("use-strict");
 // DEBUG
 var debug = require("debug");
 var log   = debug("server:log");
 var info  = debug("server:info");
 var error = debug("server:error");
 
+
 // SERVER
 var express = require("express");
 var app = express();
 
 // DB
-var mongojs = require("mongojs");
+var mongojs    = require("mongojs");
 var bodyParser = require("body-parser");
+
+// CONFIG
+var config = require("./server/config/config");
 
 // OTHER
 var monkeyBiz = require('./server/request-loop');
 var t = require("./server/tools");
 
 // configuration ===============================================================
-var settingsObj = {
-    desiredTime: [4, 5],
-    usernames: ['stazzmatazz', 'lukatarman', 'instagram', 'taylorswift', 'selenagomez', 'kimkardashian'],
-    source: "http://iconosquare.com/",
-    selector: [
-        'a[class="followers user-action-btn"] span[class=chiffre]',
-        'a[class="followings user-action-btn"] span[class=chiffre]'
-    ],
-    ipaddress: process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1',
-    port: process.env.OPENSHIFT_NODEJS_PORT || 8080,
-    connectionString: process.env.OPENSHIFT_MONGODB_DB_PASSWORD ?
-        (process.env.OPENSHIFT_MONGODB_DB_USERNAME + ':' +
-        process.env.OPENSHIFT_MONGODB_DB_PASSWORD + '@' +
-        process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
-        process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
-        process.env.OPENSHIFT_APP_NAME) : 
-        '127.0.0.1:27017/nodejs',
-    setTimezone: function (timezone) {
-        process.env.TZ = timezone;
-    }
-};
-settingsObj.setTimezone('Europe/Berlin');
-
-var db = mongojs(settingsObj.connectionString, ['instagram']);
+var db = mongojs(config.connectionString, ['instagram']);
 
 app.use(express.static(__dirname + '/app'));
 app.use(bodyParser.json());
@@ -252,7 +226,7 @@ app.use(function (err, req, res, next) {
     });
 
 // start app ===================================================================
-app.listen(settingsObj.port, settingsObj.ipaddress, function () {
-    log('Server running on http://' + settingsObj.ipaddress + ':' + settingsObj.port);
+app.listen(config.port, config.ipaddress, function () {
+    log('Server running on http://' + config.ipaddress + ':' + config.port);
 });
-monkeyBiz.gogogo(settingsObj, db);
+monkeyBiz.gogogo(config, db);

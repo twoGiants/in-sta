@@ -25,6 +25,9 @@ var request = require("request");
 var cheerio = require("cheerio");
 var mongojs = require("mongojs");
 var bodyParser = require("body-parser");
+var t       = require("./server/tools");
+var dbTools = require("./server/db-tools");
+var config = require("./server/config/config");
 
 var db = mongojs(connection_string, ['instagram']);
 
