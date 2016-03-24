@@ -4,7 +4,8 @@ module.exports = function ($log) {
     var service = {
         growth: false,
         calcGrowth: calcGrowth,
-        mostRecent: mostRecent
+        mostRecent: mostRecent,
+        getTableCaption: getTableCaption
     };
     return service;
 
@@ -35,7 +36,14 @@ module.exports = function ($log) {
         month = Math.max.apply(Math, obj.months);
 
         queryString = userData.ig_user + '-' + month + '-' + year;
-        
+
         return queryString;
+    }
+
+    function getTableCaption(userData) {
+        var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        var date = new Date(userData.ig_user_statistics[0].date);
+
+        return userData.ig_user + ', ' + monthNames[date.getMonth()] + ' ' + date.getFullYear();
     }
 };

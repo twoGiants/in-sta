@@ -18,7 +18,7 @@
                 <md-sidemenu-content ng-repeat="it in ul.navigation" 
                                      ng-click="ul.selectUser(it.ig_user)" 
                                      aria-label="Select {{ it.ig_user }}" 
-                                     md-heading="{{ it.ig_user | capitalize }}" 
+                                     md-heading="{{ it.ig_user }}" 
                                      md-arrow="true">
                     <span ng-repeat="element in it.years_months">
                         <md-button ng-repeat="month in element.months"
@@ -50,6 +50,12 @@
             <div layout="row" layout-align="center center">
                 <md-card flex="90">
                     <md-card-content>
+                        <md-toolbar class="md-table-toolbar md-default"
+                                    hide-gt-sm>
+                          <div class="md-toolbar-tools">
+                            <span>{{ ul.tableCaption }}</span>
+                          </div>
+                        </md-toolbar>
                         <md-table-container>
                             <table md-table>
                                 <thead md-head md-order="ul.tableOrder">

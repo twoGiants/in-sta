@@ -8,7 +8,7 @@ module.exports = function ($log, $mdSidenav, userDataService, statToolsService) 
     self.tableOrder = '';
     self.selected   = null;
     self.userData   = null;
-    self.selectedNavItem = '';
+    self.tableCaption = '';
     self.selectUser    = selectUser;
     self.queryUserData = queryUserData;
     self.toggleMenu    = toggleMenu;
@@ -31,6 +31,8 @@ module.exports = function ($log, $mdSidenav, userDataService, statToolsService) 
             self.userData = userDataService.query({ item: queryString }, function () {
                 // calc growth
                 statToolsService.calcGrowth(self.userData[0].ig_user_statistics);
+                // table caption
+                self.tableCaption = statToolsService.getTableCaption(self.userData[0]);
             }, function (err) {
                 $log.error('Internal Server Error: ' + err.data);
             });
@@ -48,6 +50,7 @@ module.exports = function ($log, $mdSidenav, userDataService, statToolsService) 
         self.userData = userDataService.query({ item: queryString }, function () {
             // calc growth
             statToolsService.calcGrowth(self.userData[0].ig_user_statistics);
+            self.tableCaption = statToolsService.getTableCaption(self.userData[0]);
         }, function (err) {
             $log.error('Internal Server Error: ' + err.data);
         });
