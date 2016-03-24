@@ -34,6 +34,16 @@ function main() {
         log('Adding user stazzmatazz to db.');
         createNewStazzDoc();
     }
+    
+    request('https://www.instagram.com/aya_shalkar/?__a=1', function(err, res, body) {
+        if (err) {
+            error(err);
+        } else {
+            var data = JSON.parse(body).user;
+
+            log(data.profile_pic_url);
+        }
+    });
 }
 
 // works

@@ -37,7 +37,7 @@
     "watch-fe": "node_modules/.bin/watchify -t browserify-css app/js/app.js -o app/js/bundle.js -d",
     "watch-be": "DEBUG=*:log,*:info,*:error nodemon server.js",
     "dev": "npm run watch-fe | npm run watch-be",
-    "moshizzle": "DEBUG=*:log,*:info,*:error node mongoshizzle.js",
+    "moshiz": "DEBUG=*:log,*:info,*:error node mongoshizzle.js",
     "start": "npm run build | DEBUG=*:log,*:info,*:error node server.js"
   },
   "main": "server.js"
