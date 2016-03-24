@@ -32,7 +32,7 @@ angular
     .filter('monthName', monthName)
     .filter('capitalize', capitalize);
 
-config.$inject = ['$logProvider', '$mdThemingProvider', '$mdIconProvider'];
+config.$inject = ['$provide', '$logProvider', '$mdThemingProvider', '$mdIconProvider'];
 UserController.$inject = ['$log', '$mdSidenav', 'userDataService', 'statToolsService'];
 userDataService.$inject = ['$resource'];
 statToolsService.$inject = ['$log'];
