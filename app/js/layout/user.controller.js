@@ -8,6 +8,7 @@ module.exports = function ($log, $mdSidenav, userDataService, statToolsService) 
     self.tableOrder = '';
     self.selected   = null;
     self.userData   = null;
+    self.selectedNavItem = '';
     self.selectUser    = selectUser;
     self.queryUserData = queryUserData;
     self.toggleMenu    = toggleMenu;
@@ -43,6 +44,7 @@ module.exports = function ($log, $mdSidenav, userDataService, statToolsService) 
     }
     
     function queryUserData(queryString) {
+        self.selectedNavItem = queryString;
         self.userData = userDataService.query({ item: queryString }, function () {
             // calc growth
             statToolsService.calcGrowth(self.userData[0].ig_user_statistics);

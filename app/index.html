@@ -23,7 +23,7 @@
                     <span ng-repeat="element in it.years_months">
                         <md-button ng-repeat="month in element.months"
                                    ng-click="ul.queryUserData(it.ig_user + '-' + month + '-' + element.year)"
-                                   ng-class="{ 'active': ul.temp === it.ig_user + '-' + month + '-' + element.year}">
+                                   ng-class="{ 'active': ul.selectedNavItem === it.ig_user + '-' + month + '-' + element.year}">
                             {{ month | monthName }}{{ ' ' + element.year }}
                         </md-button>
                     </span>

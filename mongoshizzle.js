@@ -24,15 +24,6 @@ var db = mongojs(conf.connectionString, ['instagram']);
 
 main();
 
-var dummyData = {
-    igUser: 'maozedong',
-    igUserId: '1458728615280',
-    date: new Date(),
-    followers: 1,
-    followings: 1,
-};
-
-
 function main() {
     if (process.argv[2] === 'delete' && (process.argv[3] !== undefined)) {
         log('Deleting user: ' + process.argv[3]);
