@@ -18,7 +18,7 @@ var mongojs = require("mongojs");
 var bodyParser = require("body-parser");
 var t       = require("./server/tools");
 var dbTools = require("./server/db-tools");
-var conf  = require("./server/config/config");
+var conf    = require("./server/config/config");
 
 var db = mongojs(conf.connectionString, ['instagram']);
 

@@ -108,6 +108,8 @@ app.use(function (err, req, res, next) {
             if (err) {
                 error(err.message);
             } else {
+                // for nav order
+                docs.push({ 'usernames': conf.usernames });
                 res.json(docs);
             }
         });

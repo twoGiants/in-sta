@@ -6,10 +6,8 @@ module.exports = function ($log, $mdSidenav, userDataService, statToolsService) 
     self.navigation = [];
     self.appName    = '';
     self.tableOrder = '';
-    self.selected   = null;
     self.userData   = null;
-    self.tableCaption = '';
-    self.selectUser    = selectUser;
+    self.tableCaption  = '';
     self.queryUserData = queryUserData;
     self.toggleMenu    = toggleMenu;
     
@@ -22,18 +20,21 @@ module.exports = function ($log, $mdSidenav, userDataService, statToolsService) 
     
     function loadNavigation() {
         self.navigation = userDataService.nav(function() {
-            var queryString = '';
+            var navOrder = '';
             
-            self.selected = self.navigation[0].ig_user;
-            queryString = statToolsService.mostRecent(self.navigation[0]);
-            self.selectedNavItem = queryString;
+            // order navigation
+            navOrder = self.navigation.pop();
+            statToolsService.reorder(navOrder.usernames, self.navigation);
+            // get query string from navigation object
+            self.selectedNavItem = statToolsService.mostRecent(self.navigation[0]);
             
             // get table data for selected user
-            self.userData = userDataService.query({ item: queryString }, function () {
+            self.userData = userDataService.query({ item: self.selectedNavItem }, function () {
                 // calc growth
                 statToolsService.calcGrowth(self.userData[0].ig_user_statistics);
                 // table caption
                 self.tableCaption = statToolsService.getTableCaption(self.userData[0]);
+                
             }, function (err) {
                 $log.error('Internal Server Error: ' + err.data);
             });
@@ -42,16 +43,13 @@ module.exports = function ($log, $mdSidenav, userDataService, statToolsService) 
         });
     }
     
-    function selectUser(user) {
-        self.selected = user;
-    }
-    
     function queryUserData(queryString) {
         self.selectedNavItem = queryString;
         self.userData = userDataService.query({ item: queryString }, function () {
             // calc growth
             statToolsService.calcGrowth(self.userData[0].ig_user_statistics);
             self.tableCaption = statToolsService.getTableCaption(self.userData[0]);
+            
         }, function (err) {
             $log.error('Internal Server Error: ' + err.data);
         });

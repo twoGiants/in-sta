@@ -5,7 +5,8 @@ module.exports = function ($log) {
         growth: false,
         calcGrowth: calcGrowth,
         mostRecent: mostRecent,
-        getTableCaption: getTableCaption
+        getTableCaption: getTableCaption,
+        reorder: reorder
     };
     return service;
 
@@ -24,14 +25,14 @@ module.exports = function ($log) {
     function mostRecent(userData) {
         var queryString = '';
         var month = null;
-        var year = null;
-        var obj = null;
+        var year  = null;
+        var obj   = null;
 
         year = Math.max.apply(Math, userData.years_months.map(function (o) {
             return o.year;
         }));
         obj = userData.years_months.find(function (o) {
-            return o.year == year;
+            return o.year === year;
         });
         month = Math.max.apply(Math, obj.months);
 
@@ -45,5 +46,20 @@ module.exports = function ($log) {
         var date = new Date(userData.ig_user_statistics[0].date);
 
         return userData.ig_user + ', ' + monthNames[date.getMonth()] + ' ' + date.getFullYear();
+    }
+
+    function reorder(order, arr) {
+        var orderedArr = [];
+        var arrLen  = arr.length;
+        var index   = null;
+        var current = null;
+
+        for (; arrLen--;) {
+            current = arr[arrLen];
+            index = order.indexOf(current.ig_user);
+            orderedArr[index] = current;
+        }
+
+        Array.prototype.splice.apply(arr, [0, arr.length].concat(orderedArr));
     }
 };
