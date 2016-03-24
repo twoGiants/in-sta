@@ -17,9 +17,9 @@ span > .md-button.active {
 .site-sidenav,
 .site-sidenav.md-locked-open-add-active,
 .site-sidenav.md-locked-open {
-  width:     272px;
-  min-width: 272px;
-  max-width: 272px;
+  width:     221px;
+  min-width: 221px;
+  max-width: 221px;
 }
 
 /* content */

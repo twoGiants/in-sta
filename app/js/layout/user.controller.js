@@ -26,6 +26,7 @@ module.exports = function ($log, $mdSidenav, userDataService, statToolsService) 
             
             self.selected = self.navigation[0].ig_user;
             queryString = statToolsService.mostRecent(self.navigation[0]);
+            self.selectedNavItem = queryString;
             
             // get table data for selected user
             self.userData = userDataService.query({ item: queryString }, function () {
