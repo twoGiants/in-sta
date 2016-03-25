@@ -1,5 +1,4 @@
 "use strict";
-require("use-strict");
 
 // DEBUG
 var debug = require("debug");
@@ -34,6 +33,15 @@ module.exports.gogogo = function (conf, db) {
                 function (innerCb) {
                     setTimeout(function () {
                         getRemoteData(conf.source, conf.usernames[count++], conf.selector, innerCb, db);
+                        // instAPI
+                        //  .getAccountData(conf.usernames[count++])
+                        //  .then(function (result) {
+                        //      dbTools.saveData(result);
+                        //      innerCb();
+                        //  })
+                        //  .catch(function (err) {
+                        //      innerCb(err);
+                        //  });
                     }, 2000);
                 },
                 function (err) {

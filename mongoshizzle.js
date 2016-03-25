@@ -16,9 +16,11 @@ var request = require("request");
 var cheerio = require("cheerio");
 var mongojs = require("mongojs");
 var bodyParser = require("body-parser");
+var Promise = require('promise');
 var t       = require("./server/tools");
 var dbTools = require("./server/db-tools");
 var conf    = require("./server/config/config");
+var instAPI = require("./server/instagram-api");
 
 var db = mongojs(conf.connectionString, ['instagram']);
 
@@ -29,21 +31,87 @@ function main() {
         log('Deleting user: ' + process.argv[3]);
         deleteDocByObjectId(process.argv[3]);
     }
-    
+
     if (process.argv[2] === 'createStazz') {
         log('Adding user stazzmatazz to db.');
         createNewStazzDoc();
     }
-    
-    request('https://www.instagram.com/aya_shalkar/?__a=1', function(err, res, body) {
-        if (err) {
-            error(err);
-        } else {
-            var data = JSON.parse(body).user;
 
-            log(data.profile_pic_url);
-        }
+    // API test
+    instAPI
+        .getAccountData('username')
+        .then(function (result) {
+            t.jlog(result);
+        })
+        .catch(function (err) {
+            error(err);
+        });
+}
+
+// works like a charm
+function promiseExample(uri) {
+    function asyncFunc(uri) {
+        return new Promise(function(resolve, reject) {
+            // only asyncFunc is able to resolve or reject the promise
+            request(uri, function(err, res, body) {
+                if (err) {
+                    return reject(err);
+                } else {
+                    return resolve(res.statusCode);
+                }
+            });
+        });
+    }
+    
+    asyncFunc('https://www.google.com').then(function (result) {
+        log(result);
+    }).catch(function (err) {
+        error(err);
     });
+}
+
+// works
+function asyncExample2() {
+    asyncFunc('res', myCallback);
+    
+    function myCallback(result) {
+        // do something with the result
+        log('Result: ' + result);
+    }
+    
+    function asyncFunc(value, cb) {
+        // do something here and the return the callback
+        var blub = value;
+        
+        switch(blub) {
+            case 'err':
+                return cb('err');
+            case 'res':
+                return cb('res');
+            case '':
+                return cb();
+            default:
+                log('something went wrong');
+                return cb(value);
+        }
+    }
+}
+
+// works
+function asyncExample() {
+    asyncFunc(myCallback);
+    
+    // callback which handles the result once it's there
+    function myCallback(result) {
+        log('Async result: ' + result);
+    }
+    
+    // async function which does something and once it's done, gives the result to callback
+    function asyncFunc(callback) {
+        request('https://www.google.com', function(err, res, body) {
+            return callback(res.statusCode);
+        });
+    }
 }
 
 // works
