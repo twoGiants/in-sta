@@ -132,11 +132,11 @@ module.exports = {
             }
         });
     },
-    saveData: function (data) {
+    updateData: function (data) {
         db.instagram.findAndModify({
             query: {
-                ig_user: data.igUser,
-                ig_user_id: data.igUserId
+                ig_user: data.username,
+                ig_user_id: data.userId
             },
             update: {
                 $push: {
@@ -152,7 +152,7 @@ module.exports = {
             if (err) {
                 error(err.message);
             } else {
-                log('Data saved for: ' + data.igUser + '\n\n');
+                log('Data saved for: ' + data.username + '\n\n');
             }
         });
     }

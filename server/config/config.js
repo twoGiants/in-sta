@@ -3,7 +3,7 @@
 process.env.TZ = 'Europe/Berlin';
 
 module.exports = {
-    desiredTime: [11, 39],
+    desiredTime: [4, 5],
     usernames: ['stazzmatazz', 'lukatarman', 'aya_shalkar', 'newkissontheblog'],
     source: "http://iconosquare.com/",
     selector: [

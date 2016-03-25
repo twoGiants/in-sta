@@ -15,6 +15,7 @@ var async   = require("async");
 var cheerio = require("cheerio");
 var request = require("request");
 var t       = require("./tools");
+var instAPI = require("./instagram-api");
 
 // api =========================================================================
 module.exports.gogogo = function (conf) {
@@ -36,16 +37,15 @@ module.exports.gogogo = function (conf) {
                 },
                 function (innerCb) {
                     setTimeout(function () {
-                        getRemoteData(conf.source, conf.usernames[count++], conf.selector, innerCb);
-                        // instAPI
-                        //  .getAccountData(conf.usernames[count++])
-                        //  .then(function (result) {
-                        //      dbTools.saveData(result);
-                        //      innerCb();
-                        //  })
-                        //  .catch(function (err) {
-                        //      innerCb(err);
-                        //  });
+                         instAPI
+                          .getAccountData(conf.usernames[count++])
+                          .then(function (result) {
+                              dbTools.updateData(result);
+                              innerCb();
+                          })
+                          .catch(function (err) {
+                              innerCb(err);
+                          });
                     }, 2000);
                 },
                 function (err) {
