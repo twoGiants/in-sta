@@ -13,8 +13,7 @@ var express = require("express");
 var app = express();
 
 // DB
-var mongojs    = require("mongojs");
-var bodyParser = require("body-parser");
+var dbTools = require("./server/db-tools");
 
 // CONFIG
 var conf = require("./server/config/config");
@@ -24,10 +23,7 @@ var monkeyBiz = require('./server/request-loop');
 var t = require("./server/tools");
 
 // configuration ===============================================================
-var db = mongojs(conf.connectionString, ['instagram']); //
-
 app.use(express.static(__dirname + '/app'));
-app.use(bodyParser.json());
 app.use(function (err, req, res, next) {
     error(err);
     res.status(500).send(err);
@@ -35,84 +31,11 @@ app.use(function (err, req, res, next) {
 
 // routes ======================================================================
     // api ---------------------------------------------------------------------
-    // get all data
-    app.get("/statistics", function (req, res, next) {
-        log("I received a GET request from tableCtrl.");
-
-        db.instagram.find(function (err, docs) {
-            if (err) {
-                error(err.message);
-                next(err.message);
-            } else {
-                res.json(docs);
-            }
-        });
-    });
-
     // get navigation menu data
     app.get('/nav', function (req, res) {
         log('I received a GET request from navigationCtrl.');
         
-        db.instagram.aggregate([
-            {
-                $match: {
-                    'ig_user': { $exists: true }
-                }
-            },
-            {
-                $unwind: '$ig_user_statistics'
-            },
-            {
-                $project: {
-                    'ig_user': 1,
-                    'year': {
-                        $year: '$ig_user_statistics.date'
-                    },
-                    'month': {
-                        $month: '$ig_user_statistics.date'
-                    }
-                }
-            },
-            {
-                $group: {
-                    '_id': {
-                        'year': '$year',
-                        'ig_user': '$ig_user'
-                    },
-                    'ig_user': {
-                        $first: '$ig_user'
-                    },
-                    'year': {
-                        $first: '$year'
-                    },
-                    'months': {
-                        $addToSet: '$month'
-                    }
-                }
-            },
-            {
-                $group: {
-                    '_id': '$ig_user',
-                    'ig_user': {
-                        $first: '$ig_user'
-                    },
-                    'years_months': {
-                        $push: {
-                            'year': '$year',
-                            'months': '$months'
-                        }
-                    }
-                }
-            }
-        ], function (err, docs) {
-            if (err) {
-                error(err.message);
-            } else {
-                // for nav order
-                docs.push({ 'usernames': conf.usernames });
-                res.json(docs);
-            }
-        });
+        dbTools.getNav(res, { 'usernames': conf.usernames });
     });
 
     // aggregate statistics user(month, year)
@@ -181,48 +104,7 @@ app.use(function (err, req, res, next) {
             var end = new Date(start);
             end.setMonth(end.getMonth() + 1);
 
-            db.instagram.aggregate([
-                {
-                    $match: {
-                        'ig_user': navItemArr[0]
-                    }
-                },
-                {
-                    $unwind: '$ig_user_statistics'
-                },
-                {
-                    $match: {
-                        'ig_user_statistics.date': { 
-                            $gte: start,
-                            $lt: end
-                        }
-                    }
-                },
-                {
-                    $group: {
-                        '_id': '$_id',
-                        'ig_user': {
-                            '$first': '$ig_user'
-                        },
-                        'ig_user_id': {
-                            '$first': '$ig_user_id'
-                        },
-                        'ig_user_statistics': { 
-                            '$push': {
-                                'date': '$ig_user_statistics.date',
-                                'followers': '$ig_user_statistics.followers',
-                                'followings': '$ig_user_statistics.followings'
-                            }
-                        }
-                    }
-                }
-            ], function (err, docs) {
-                if (err) {
-                    error(err.message);
-                } else {
-                    res.json(docs);
-                }
-            });
+            dbTools.getUserStatsTimeframe(res, navItemArr[0], start, end);
         }
     });
 
@@ -230,4 +112,4 @@ app.use(function (err, req, res, next) {
 app.listen(conf.port, conf.ipaddress, function () {
     log('Server running on http://' + conf.ipaddress + ':' + conf.port);
 });
-monkeyBiz.gogogo(conf, db);
+monkeyBiz.gogogo(conf);

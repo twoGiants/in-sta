@@ -1,20 +1,23 @@
 "use strict";
 
+// set up ======================================================================
 // DEBUG
 var debug = require("debug");
 var log   = debug("server:log");
 var info  = debug("server:info");
 var error = debug("server:error");
+
 // DB
-var mongojs = require("mongojs");
+var dbTools = require("./db-tools");
+
 // OTHER
 var async   = require("async");
 var cheerio = require("cheerio");
 var request = require("request");
 var t       = require("./tools");
-var dbTools = require("./db-tools");
 
-module.exports.gogogo = function (conf, db) {
+// api =========================================================================
+module.exports.gogogo = function (conf) {
     var iterations = 1;
 
     // LOOP: grab data from source
@@ -24,7 +27,8 @@ module.exports.gogogo = function (conf, db) {
         log('Delay: ' + t.delayInMs(conf.desiredTime) + 'ms.');
 
         setTimeout(function () {
-            log('...grabbing data for ' + conf.usernames.length + ' users.');
+            log('Getting data for:');
+            t.jlog(conf.usernames);
 
             async.whilst(
                 function () {
@@ -32,7 +36,7 @@ module.exports.gogogo = function (conf, db) {
                 },
                 function (innerCb) {
                     setTimeout(function () {
-                        getRemoteData(conf.source, conf.usernames[count++], conf.selector, innerCb, db);
+                        getRemoteData(conf.source, conf.usernames[count++], conf.selector, innerCb);
                         // instAPI
                         //  .getAccountData(conf.usernames[count++])
                         //  .then(function (result) {
@@ -59,7 +63,8 @@ module.exports.gogogo = function (conf, db) {
     });
 };
 
-function getRemoteData(source, username, selector, callback, db) {
+// internal functions ==========================================================
+function getRemoteData(source, username, selector, callback) {
     var userUrl = source + username;
     request(userUrl, {
             timeout: 10000
@@ -80,7 +85,7 @@ function getRemoteData(source, username, selector, callback, db) {
                         followings: parseInt($(selector[1]).html())
                     };
 
-                    dbTools.saveDataNew(newData, db);
+                    dbTools.saveData(newData);
                     callback();
                 } else {
                     callback(res.statusCode);

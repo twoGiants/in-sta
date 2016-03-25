@@ -1,39 +1,138 @@
 "use strict";
-
+// set up ======================================================================
 // DEBUG
 var debug = require("debug");
 var log   = debug("server:log");
 var info  = debug("server:info");
 var error = debug("server:error");
 
+// DB
+var mongojs    = require("mongojs");
+var bodyParser = require("body-parser");
+
 // OTHER
 var t = require("./tools");
 
+// configuration ===============================================================
+var connectionString = process.env.OPENSHIFT_MONGODB_DB_PASSWORD ? (
+        process.env.OPENSHIFT_MONGODB_DB_USERNAME + ':' +
+        process.env.OPENSHIFT_MONGODB_DB_PASSWORD + '@' +
+        process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
+        process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
+        process.env.OPENSHIFT_APP_NAME
+    ) :
+    '127.0.0.1:27017/nodejs';
+var db = mongojs(connectionString, ['instagram']);
+
+// db functions ================================================================
 module.exports = {
-    saveData: function (newData, username, db) {
-        db.instagram.findAndModify({
-            query: {
-                ig_user: username
+    getNav: function (responseCallback, usernames) {
+        db.instagram.aggregate([
+            {
+                $match: {
+                    'ig_user': { $exists: true }
+                }
             },
-            update: {
-                $push: {
-                    ig_user_statistics: {
-                        "date": newData.date,
-                        "followers": newData.followers,
-                        "followings": newData.followings
+            {
+                $unwind: '$ig_user_statistics'
+            },
+            {
+                $project: {
+                    'ig_user': 1,
+                    'year': {
+                        $year: '$ig_user_statistics.date'
+                    },
+                    'month': {
+                        $month: '$ig_user_statistics.date'
                     }
                 }
             },
-            new: true
-        }, function (err, doc) {
+            {
+                $group: {
+                    '_id': {
+                        'year': '$year',
+                        'ig_user': '$ig_user'
+                    },
+                    'ig_user': {
+                        $first: '$ig_user'
+                    },
+                    'year': {
+                        $first: '$year'
+                    },
+                    'months': {
+                        $addToSet: '$month'
+                    }
+                }
+            },
+            {
+                $group: {
+                    '_id': '$ig_user',
+                    'ig_user': {
+                        $first: '$ig_user'
+                    },
+                    'years_months': {
+                        $push: {
+                            'year': '$year',
+                            'months': '$months'
+                        }
+                    }
+                }
+            }
+        ], function (err, docs) {
             if (err) {
                 error(err.message);
             } else {
-                log('...data saved.\n\n');
+                // for nav order
+                docs.push(usernames);
+                responseCallback.json(docs);
             }
         });
     },
-    saveDataNew: function (data, db) {
+    getUserStatsTimeframe: function (responseCallback, username, start, end) {
+        db.instagram.aggregate([
+            {
+                $match: {
+                    'ig_user': username
+                }
+            },
+            {
+                $unwind: '$ig_user_statistics'
+            },
+            {
+                $match: {
+                    'ig_user_statistics.date': { 
+                        $gte: start,
+                        $lt: end
+                    }
+                }
+            },
+            {
+                $group: {
+                    '_id': '$_id',
+                    'ig_user': {
+                        '$first': '$ig_user'
+                    },
+                    'ig_user_id': {
+                        '$first': '$ig_user_id'
+                    },
+                    'ig_user_statistics': { 
+                        '$push': {
+                            'date': '$ig_user_statistics.date',
+                            'followers': '$ig_user_statistics.followers',
+                            'followings': '$ig_user_statistics.followings'
+                        }
+                    }
+                }
+            }
+        ], function (err, docs) {
+            if (err) {
+                error(err.message);
+            } else {
+                responseCallback.json(docs);
+            }
+        });
+    },
+    saveData: function (data) {
         db.instagram.findAndModify({
             query: {
                 ig_user: data.igUser,
@@ -48,13 +147,12 @@ module.exports = {
                     }
                 }
             },
-            upsert: true,
-            new: true
+            upsert: true
         }, function (err, doc) {
             if (err) {
                 error(err.message);
             } else {
-                log('...data saved.\n\n');
+                log('Data saved for: ' + data.igUser + '\n\n');
             }
         });
     }
