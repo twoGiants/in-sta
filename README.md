@@ -1,4 +1,4 @@
-# ${1:Instagram Statistic Web App}
+# Instagram Statistic Web App
 A web applications which shows daily Instagram user statistics for selected users.
 
 ## App logic
